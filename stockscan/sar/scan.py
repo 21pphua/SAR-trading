@@ -24,8 +24,7 @@ from datetime import datetime, timezone
 from typing import Callable, Optional, Sequence
 
 from stockscan.config import (SAR_TAKE_AT, SAR_REGIME_INDEXES, SAR_EARNINGS_WARN_DAYS, SAR_TREND_FILTER,
-                              SAR_REQUIRE_TIGHT_STOP, SAR_HOT_GROUP, SAR_HOT_GROUP_BONUS, SAR_RS_LEADER,
-                              SAR_REQUIRE_RS_LEADER, SAR_REQUIRE_HOT_GROUP, SAR_REQUIRE_REGIME)
+                              SAR_REQUIRE_TIGHT_STOP, SAR_HOT_GROUP, SAR_HOT_GROUP_BONUS)
 from stockscan.sar.strength import rs_raw, percentile_ranks, load_sectors, group_keys, group_ranks
 from stockscan.sar.engine import (
     Bar, SetupScore, Series, passes_filters, score_setup, market_regime,
@@ -170,12 +169,12 @@ class SarScanResult:
     coiling: list[SetupScore] = field(default_factory=list)
     counter_trend: list[SetupScore] = field(default_factory=list)
     wide_stop: list[SetupScore] = field(default_factory=list)
-    too_tight: list[SetupScore] = field(default_factory=list)
     positions: list[Position] = field(default_factory=list)
     bars: dict[str, list[Bar]] = field(default_factory=dict)
     all_scored: list[SetupScore] = field(default_factory=list)
     all_bars: dict[str, list[Bar]] = field(default_factory=dict)
     filtered_out: dict[str, str] = field(default_factory=dict)
+    live_as_of: Optional[str] = None    # "HH:MM" ET when scored on today's unfinished bar
 
     @property
     def regime_ok(self) -> Optional[bool]:
@@ -203,6 +202,25 @@ def _session_open_today() -> Optional[str]:
 def drop_partial_bar(bars: list[Bar], today: Optional[str]) -> list[Bar]:
     """Mid-session the last bar is incomplete (volume, close) — score the prior close instead."""
     return bars[:-1] if today and bars and bars[-1].date == today else bars
+
+
+def _minutes_into_session() -> int:
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("America/New_York"))
+    return max(0, min(390, (now.hour * 60 + now.minute) - (9 * 60 + 30)))
+
+
+def project_partial_bar(bars: list[Bar], today: Optional[str], minutes: int) -> list[Bar]:
+    """LIVE mode: keep today's unfinished bar, scaling its volume up to a full-day estimate.
+
+    Volume so far x (390 / minutes elapsed), with at least 30 minutes counted. Volume is
+    heavier near the open, so early-morning estimates run high — treat as a preview.
+    """
+    if not (today and bars and bars[-1].date == today):
+        return bars
+    from dataclasses import replace
+    frac = max(30, minutes) / 390
+    return bars[:-1] + [replace(bars[-1], volume=bars[-1].volume / frac)]
 
 
 def breakout_volx(bars: Sequence[Bar]) -> float:
@@ -254,37 +272,32 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
                  today: Optional[str] = "auto", earnings=lookup_earnings,
                  trend_filter: bool = SAR_TREND_FILTER,
                  positions: Optional[list[Position]] = None,
-                 require_tight_stop: bool = SAR_REQUIRE_TIGHT_STOP,
-                 require_rs_leader: bool = SAR_REQUIRE_RS_LEADER,
-                 require_hot_group: bool = SAR_REQUIRE_HOT_GROUP,
-                 require_regime: bool = SAR_REQUIRE_REGIME) -> SarScanResult:
-    """Run one SAR scan. The three ``require_*`` flags gate BREAKOUTS on signals
-    the engine already computes (relative strength, industry-group strength,
-    market regime) but that, by default (config.py's SAR_REQUIRE_*), are only
-    shown, not required -- they've never been validated as entry filters.
-    Flip one on here, or re-run ``sar-backtest`` with the matching
-    ``--require-*`` flag first to see whether it actually helps before
-    trusting it live."""
+                 require_tight_stop: bool = SAR_REQUIRE_TIGHT_STOP, live: bool = False) -> SarScanResult:
     tickers = list(dict.fromkeys(t.upper() for t in tickers))
     today = _session_open_today() if today == "auto" else today
-    data = {k: drop_partial_bar(v, today) for k, v in fetch(tickers, on_progress=on_progress).items()}
-    idx = {k: drop_partial_bar(v, today) for k, v in fetch(list(SAR_REGIME_INDEXES)).items()}
+    live_as_of = None
+    if live and today:
+        mins = _minutes_into_session()
+        from zoneinfo import ZoneInfo
+        live_as_of = datetime.now(ZoneInfo("America/New_York")).strftime("%H:%M")
+        prep = lambda v: project_partial_bar(v, today, mins)  # noqa: E731
+    else:
+        prep = lambda v: drop_partial_bar(v, today)  # noqa: E731
+    data = {k: prep(v) for k, v in fetch(tickers, on_progress=on_progress).items()}
+    idx = {k: prep(v) for k, v in fetch(list(SAR_REGIME_INDEXES)).items()}
     regime = {k: market_regime(idx.get(k, [])) for k in SAR_REGIME_INDEXES}
     positions = list(positions or [])
     missing = sorted({p.ticker for p in positions} - set(data))
     if missing:
-        data.update({k: drop_partial_bar(v, today) for k, v in fetch(missing).items()})
+        data.update({k: prep(v) for k, v in fetch(missing).items()})
     for p in positions:
         evaluate_position(p, data.get(p.ticker) or [])
-
-    regime_ok = all(v for v in regime.values() if v is not None) if any(v is not None for v in regime.values()) else None
 
     with_data = passed = 0
     breakouts: list[SetupScore] = []
     coiling: list[SetupScore] = []
     counter: list[SetupScore] = []
     wide: list[SetupScore] = []
-    too_tight: list[SetupScore] = []
     scored: list[SetupScore] = []
     filtered_out: dict[str, str] = {}
     for tk in tickers:
@@ -309,42 +322,30 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
         if trend_filter and qualifies and s.trend_ok is False:
             counter.append(s)
             continue
-        if require_regime and qualifies and s.is_breakout and regime_ok is False:
-            continue  # market regime unfavorable -- don't add a NEW breakout (still shown in all_scored)
         if s.is_breakout and s.score >= min_score and breakout_volx(bars) >= MIN_BREAKOUT_VOLX:
-            if require_tight_stop and s.wide_stop:
-                wide.append(s)
-            elif s.tight_stop:
-                too_tight.append(s)  # stop unrealistically close to entry -- see SAR_MIN_RISK_ADR
-            else:
-                breakouts.append(s)
+            (wide if require_tight_stop and s.wide_stop else breakouts).append(s)
         elif s.is_coiling or (s.is_breakout and s.score >= min_score):  # low-volume break = unconfirmed
             coiling.append(s)
 
     attach_strength(scored, data)
-    if require_rs_leader:
-        breakouts = [s for s in breakouts if (s.rs_rank or 0) >= SAR_RS_LEADER]
-    if require_hot_group:
-        breakouts = [s for s in breakouts if (s.group_rank or 0) >= SAR_HOT_GROUP]
     by_rs = lambda s: (s.rs_rank or 0, s.score)
     breakouts.sort(key=by_rs, reverse=True)
     coiling.sort(key=by_rs, reverse=True)
     counter.sort(key=lambda s: s.score, reverse=True)
     wide.sort(key=by_rs, reverse=True)
-    too_tight.sort(key=by_rs, reverse=True)
     breakouts, coiling, counter, wide = breakouts[:top], coiling[:top], counter[:top], wide[:top]
-    too_tight = too_tight[:top]
-    keep = {s.ticker for s in breakouts + coiling + wide + too_tight}
+    keep = {s.ticker for s in breakouts + coiling + wide}
     if earnings and keep:
-        _attach_earnings(breakouts + coiling + wide + too_tight, earnings(sorted(keep)))
-    return SarScanResult(
+        _attach_earnings(breakouts + coiling + wide, earnings(sorted(keep)))
+    res_ = SarScanResult(
         generated=datetime.now(timezone.utc).isoformat(timespec="seconds"),
         scanned=len(tickers), with_data=with_data, passed_filters=passed, regime=regime,
-        breakouts=breakouts, coiling=coiling, counter_trend=counter, wide_stop=wide, too_tight=too_tight,
-        positions=positions,
+        breakouts=breakouts, coiling=coiling, counter_trend=counter, wide_stop=wide, positions=positions,
         bars={t: data[t] for t in keep},
         all_scored=scored, all_bars={x.ticker: data[x.ticker] for x in scored}, filtered_out=filtered_out,
     )
+    res_.live_as_of = live_as_of
+    return res_
 
 
 def attach_strength(scored: list[SetupScore], data: dict[str, list[Bar]]) -> None:
@@ -398,20 +399,21 @@ def _previous(path: str, generated: str) -> Optional[dict]:
             "coiling": [r["ticker"] for r in res if r.get("kind") == "coiling"]}
 
 
-def write_shortlist(result: SarScanResult, path: str) -> None:
+def write_shortlist(result: SarScanResult, path: str, prev_path: Optional[str] = None,
+                    with_all: bool = True) -> None:
     """JSON the web walkthrough can load ("Load scan file")."""
-    prev = _previous(path, result.generated)
+    prev = _previous(prev_path or path, result.generated)
     doc = {
         "format": "sar-shortlist/1",
         "generated": result.generated,
+        "live": result.live_as_of,
         "scanned": result.scanned,
         "passed_filters": result.passed_filters,
         "regime": result.regime,
         "counter_trend": [{"ticker": s.ticker, "score": s.score, "why": s.trend_note} for s in result.counter_trend],
         "results": [_setup_json(s, "breakout", result.bars[s.ticker]) for s in result.breakouts]
                    + [_setup_json(s, "coiling", result.bars[s.ticker]) for s in result.coiling]
-                   + [_setup_json(s, "wide", result.bars[s.ticker]) for s in result.wide_stop]
-                   + [_setup_json(s, "too_tight", result.bars[s.ticker]) for s in result.too_tight],
+                   + [_setup_json(s, "wide", result.bars[s.ticker]) for s in result.wide_stop],
         "positions": [asdict(p) for p in result.positions],
         "previous": prev,
     }
@@ -422,7 +424,8 @@ def write_shortlist(result: SarScanResult, path: str) -> None:
             r["fired"] = r["kind"] in ("breakout", "wide") and r["ticker"] in set(prev.get("coiling", []))
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(doc, fh, indent=1)
-    write_all_scores(result, os.path.join(os.path.dirname(path) or ".", "all_scores.json"))
+    if with_all:
+        write_all_scores(result, os.path.join(os.path.dirname(path) or ".", "all_scores.json"))
 
 
 def write_all_scores(result: SarScanResult, path: str, keep_bars: int = 130) -> None:
@@ -434,7 +437,6 @@ def write_all_scores(result: SarScanResult, path: str, keep_bars: int = 130) -> 
     kinds.update({s.ticker: "coiling" for s in result.coiling})
     kinds.update({s.ticker: "counter" for s in result.counter_trend})
     kinds.update({s.ticker: "wide" for s in result.wide_stop})
-    kinds.update({s.ticker: "too_tight" for s in result.too_tight})
     doc = {
         "format": "sar-all/1",
         "generated": result.generated,

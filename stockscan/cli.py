@@ -7,7 +7,6 @@ Commands
   assess   Stage 2 on one ticker: LLM-draft -> you confirm -> pressure-test.
   scan     Full funnel: screen -> draft survivors -> confirm -> ranked report.
   sar      SAR Trading breakout scan: filters -> checklist score -> targets.
-  sar-live Intraday: poll live quotes for today's shortlist, flag real breakouts as they happen.
   sar-backtest  Replay the SAR rules over history; win rate, R stats, drawdown.
 """
 
@@ -15,11 +14,12 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+import os
 import sys
 from typing import Optional, Sequence
 
 from stockscan import __version__
-from stockscan.config import DEFAULT_TOP_N, DEFAULT_UNIVERSE, M8_MAX, SAR_TAKE_AT, SAR_RISK_PCT_PER_TRADE
+from stockscan.config import DEFAULT_TOP_N, DEFAULT_UNIVERSE, M8_MAX, SAR_TAKE_AT
 from stockscan.assess.pipeline import AssessmentInput, AssessmentResult, assess
 from stockscan.universe import resolve_universe, list_builtin_universes
 from stockscan import report
@@ -261,83 +261,27 @@ def cmd_sar(args) -> int:
                        apply_filters=not args.no_filters, on_progress=_progress,
                        trend_filter=not args.no_trend_filter,
                        positions=read_positions(args.positions),
-                       require_tight_stop=not args.allow_wide_stops,
-                       require_rs_leader=args.require_rs_leader,
-                       require_hot_group=args.require_hot_group,
-                       require_regime=args.require_regime)
+                       require_tight_stop=not args.allow_wide_stops, live=args.live)
+    if args.live and not res.live_as_of:
+        print("Market is closed; --live scored the last completed day like a normal scan.", file=sys.stderr)
     print(render_sar_scan(res))
     if args.detail:
         from stockscan.sar.render import render_setup
         for s in res.breakouts:
             print(render_setup(s))
-    if args.equity and res.breakouts:
-        from stockscan.sar.sizing import recommend_size, render_sizing
-        from stockscan.sar.strength import load_sectors, group_keys
-
-        open_tickers = [p.ticker for p in res.positions]
-        sectors = load_sectors()
-        groups = group_keys(open_tickers + [s.ticker for s in res.breakouts], sectors)
-        open_sectors = [groups.get(t, "") for t in open_tickers]
-        recs = []
-        for s in res.breakouts:
-            recs.append(recommend_size(s, args.equity, open_sectors, risk_pct=args.risk_pct))
-            open_sectors.append(s.group or sectors.get(s.ticker, ("", ""))[0])  # each new one counts for the next
-        print(render_sizing(recs))
     if args.out:
-        write_shortlist(res, args.out)
+        if args.live:
+            prev = os.path.join(os.path.dirname(args.out) or ".", "shortlist.json")
+            write_shortlist(res, args.out, prev_path=prev, with_all=False)
+        else:
+            write_shortlist(res, args.out)
         print(f"Shortlist written to {args.out} — load it in the SAR Setup Walkthrough.", file=sys.stderr)
-    return 0
-
-
-def cmd_sar_live(args) -> int:
-    import json
-    import time
-    from datetime import datetime
-    from stockscan.sar.live import (load_watchlist, fetch_live_quotes, build_live_checks,
-                                    render_live_checks, market_is_open)
-    from stockscan.sar.scan import MIN_BREAKOUT_VOLX
-
-    kinds = tuple(k.strip() for k in args.kinds.split(",") if k.strip())
-    try:
-        entries = load_watchlist(args.shortlist, kinds=kinds)
-    except FileNotFoundError:
-        print(f"No shortlist at {args.shortlist} -- run `stockscan sar --out {args.shortlist}` "
-              "before/at the open first, then rerun this to track it live.", file=sys.stderr)
-        return 1
-    except json.JSONDecodeError:
-        print(f"{args.shortlist} isn't valid JSON (partial write?) -- rerun `sar --out {args.shortlist}`.",
-              file=sys.stderr)
-        return 1
-
-    if args.tickers:
-        want = {t.strip().upper() for t in args.tickers.split(",") if t.strip()}
-        entries = [e for e in entries if e.ticker in want]
-    if not entries:
-        print(f"Nothing to watch in {args.shortlist} for kinds={','.join(kinds)}.", file=sys.stderr)
-        return 0
-
-    min_relvol = args.min_relvol if args.min_relvol is not None else MIN_BREAKOUT_VOLX
-    print(f"Watching {len(entries)} name(s) from {args.shortlist} ({','.join(kinds)}) ...", file=sys.stderr)
-    while True:
-        quotes = fetch_live_quotes([e.ticker for e in entries])
-        checks = build_live_checks(entries, quotes, min_relvol=min_relvol)
-        print(render_live_checks(checks, generated=datetime.now().strftime("%H:%M:%S")))
-        if not args.loop:
-            break
-        if not market_is_open():
-            print("Market's closed -- stopping.", file=sys.stderr)
-            break
-        try:
-            time.sleep(args.loop)
-        except KeyboardInterrupt:
-            print("\nStopped.", file=sys.stderr)
-            break
     return 0
 
 
 def cmd_sar_backtest(args) -> int:
     from stockscan.sar.scan import fetch_ohlcv
-    from stockscan.sar.backtest import run_backtest, render_backtest, render_backtest_split, write_trades_csv
+    from stockscan.sar.backtest import run_backtest, render_backtest, write_trades_csv
 
     if args.universe is None and not args.tickers:
         args.universe = "us_all" if "us_all" in list_builtin_universes() else DEFAULT_UNIVERSE
@@ -347,7 +291,7 @@ def cmd_sar_backtest(args) -> int:
                        partial=args.partial, max_risk_adr=args.max_risk_adr, on_progress=_progress,
                        trend_filter=not args.all_trends, intraday=not args.no_intraday,
                        slippage=args.slippage)
-    text = render_backtest_split(res, args.split_date) if args.split_date else render_backtest(res)
+    text = render_backtest(res)
     print(text)
     if args.out:
         with open(args.out, "w", encoding="utf-8") as fh:
@@ -413,41 +357,15 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--out", help="Write a shortlist JSON (with candles) for the web walkthrough.")
     sp.add_argument("--detail", action="store_true", help="Print the full checklist for each breakout.")
     sp.add_argument("--no-filters", action="store_true", help="Skip the price / ADR / $ volume filters.")
+    sp.add_argument("--live", action="store_true",
+                    help="Mid-session: score TODAY's unfinished bar (volume projected to a full day). Preview only.")
     sp.add_argument("--positions", default="positions.txt",
                     help="Your open trades, one per line: ticker,shares,entry,stop,date (default positions.txt).")
     sp.add_argument("--allow-wide-stops", action="store_true",
                     help="List wide-stop breakouts with the rest instead of a separate watch list.")
     sp.add_argument("--no-trend-filter", action="store_true",
                     help="Keep counter-trend setups (bounces in a downtrend) in the lists.")
-    sp.add_argument("--require-rs-leader", action="store_true",
-                    help="Only list breakouts with relative-strength rank >= SAR_RS_LEADER "
-                         "(unvalidated -- check the '+ RS 80+' row in sar-backtest's report first).")
-    sp.add_argument("--require-hot-group", action="store_true",
-                    help="Only list breakouts in a top industry group "
-                         "(unvalidated -- check the '+ hot group' row in sar-backtest's report first).")
-    sp.add_argument("--require-regime", action="store_true",
-                    help="Don't list NEW breakouts when the SPY/QQQ market regime is unfavorable "
-                         "(unvalidated -- check the '+ favorable regime only' row in sar-backtest's report first).")
-    sp.add_argument("--equity", type=float,
-                    help="Account equity (e.g. 50000): if set, print a suggested share count per "
-                         "breakout sized at --risk-pct of equity, with a sector-concentration warning.")
-    sp.add_argument("--risk-pct", type=float, default=SAR_RISK_PCT_PER_TRADE,
-                    help=f"%% of equity to risk per trade when sizing (default {SAR_RISK_PCT_PER_TRADE}).")
     sp.set_defaults(func=cmd_sar)
-
-    sp = sub.add_parser("sar-live", help="Intraday rescan: poll live quotes for today's shortlisted "
-                                         "names and flag real breakouts (crossed + real volume) as they happen.")
-    sp.add_argument("--shortlist", default="shortlist.json",
-                    help="Shortlist JSON from `sar --out` -- run that before/at the open first (default shortlist.json).")
-    sp.add_argument("--tickers", help="Only watch these tickers (comma-separated) out of the shortlist.")
-    sp.add_argument("--kinds", default="coiling",
-                    help="Which shortlist kinds to watch: coiling,breakout,wide,too_tight (default: coiling).")
-    sp.add_argument("--min-relvol", type=float, default=None,
-                    help="Pace-adjusted volume multiple needed to call a cross CONFIRMED "
-                         "(default: same bar as the daily scan's breakout-volume rule).")
-    sp.add_argument("--loop", type=int, metavar="SECONDS",
-                    help="Repoll every SECONDS until the market closes or you Ctrl+C (default: run once and exit).")
-    sp.set_defaults(func=cmd_sar_live)
 
     sp = sub.add_parser("sar-backtest", help="Replay the SAR rules over history.")
     add_universe_args(sp)
@@ -463,10 +381,6 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--no-intraday", action="store_true", help="Skip the intraday-entry simulation.")
     sp.add_argument("--slippage", type=float, default=0.002,
                     help="Slippage on intraday buy-stop entries (default 0.002 = 0.2%%).")
-    sp.add_argument("--split-date", metavar="YYYY-MM-DD",
-                    help="Walk-forward check: render TRAIN (before) and TEST (on/after) periods "
-                         "separately with the same rules, so a filter curve-fit to one period "
-                         "shows up as soon as it stops working on the other.")
     sp.set_defaults(func=cmd_sar_backtest)
 
     return p
