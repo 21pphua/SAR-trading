@@ -1,3 +1,5 @@
 # Your open trades. One per line: ticker,shares,entry,stop,date (date you bought)
 # Example: ARHS,97,10.24,9.86,2026-10-02
 ticker,shares,entry,stop,date
+TWST,11,200.87,190.91,2026-10-05
+DNA,100,14.08,12.80,2026-10-05
