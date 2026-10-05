@@ -46,7 +46,7 @@ jobs:
           fi
       - run: pip install -e '.[data]'
       - name: Build stock list + sectors
-        if: github.event.schedule != '*/30 13-20 * * 1-5' && !(github.event_name == 'workflow_dispatch' && (inputs.task == 'intraday' || inputs.task == 'live'))
+        if: github.event.schedule != '*/30 13-20 * * 1-5' && !(github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
         run: python scripts/build_us_universe.py
       - name: Intraday alert check
         if: github.event.schedule == '*/30 13-20 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
