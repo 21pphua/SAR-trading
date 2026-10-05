@@ -169,6 +169,7 @@ class SarScanResult:
     coiling: list[SetupScore] = field(default_factory=list)
     counter_trend: list[SetupScore] = field(default_factory=list)
     wide_stop: list[SetupScore] = field(default_factory=list)
+    too_tight: list[SetupScore] = field(default_factory=list)   # stop unrealistically close (SAR_MIN_RISK_ADR)
     positions: list[Position] = field(default_factory=list)
     bars: dict[str, list[Bar]] = field(default_factory=dict)
     all_scored: list[SetupScore] = field(default_factory=list)
@@ -298,6 +299,7 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
     coiling: list[SetupScore] = []
     counter: list[SetupScore] = []
     wide: list[SetupScore] = []
+    tight: list[SetupScore] = []
     scored: list[SetupScore] = []
     filtered_out: dict[str, str] = {}
     for tk in tickers:
@@ -323,7 +325,10 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
             counter.append(s)
             continue
         if s.is_breakout and s.score >= min_score and breakout_volx(bars) >= MIN_BREAKOUT_VOLX:
-            (wide if require_tight_stop and s.wide_stop else breakouts).append(s)
+            if s.tight_stop:
+                tight.append(s)
+            else:
+                (wide if require_tight_stop and s.wide_stop else breakouts).append(s)
         elif s.is_coiling or (s.is_breakout and s.score >= min_score):  # low-volume break = unconfirmed
             coiling.append(s)
 
@@ -333,14 +338,16 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
     coiling.sort(key=by_rs, reverse=True)
     counter.sort(key=lambda s: s.score, reverse=True)
     wide.sort(key=by_rs, reverse=True)
-    breakouts, coiling, counter, wide = breakouts[:top], coiling[:top], counter[:top], wide[:top]
+    tight.sort(key=lambda s: s.score, reverse=True)
+    breakouts, coiling, counter, wide, tight = breakouts[:top], coiling[:top], counter[:top], wide[:top], tight[:top]
     keep = {s.ticker for s in breakouts + coiling + wide}
     if earnings and keep:
         _attach_earnings(breakouts + coiling + wide, earnings(sorted(keep)))
     res_ = SarScanResult(
         generated=datetime.now(timezone.utc).isoformat(timespec="seconds"),
         scanned=len(tickers), with_data=with_data, passed_filters=passed, regime=regime,
-        breakouts=breakouts, coiling=coiling, counter_trend=counter, wide_stop=wide, positions=positions,
+        breakouts=breakouts, coiling=coiling, counter_trend=counter, wide_stop=wide, too_tight=tight,
+        positions=positions,
         bars={t: data[t] for t in keep},
         all_scored=scored, all_bars={x.ticker: data[x.ticker] for x in scored}, filtered_out=filtered_out,
     )
@@ -411,6 +418,8 @@ def write_shortlist(result: SarScanResult, path: str, prev_path: Optional[str] =
         "passed_filters": result.passed_filters,
         "regime": result.regime,
         "counter_trend": [{"ticker": s.ticker, "score": s.score, "why": s.trend_note} for s in result.counter_trend],
+        "too_tight": [{"ticker": s.ticker, "score": s.score, "entry": s.entry, "stop": s.stop,
+                       "risk_adr": round(s.risk_adr, 2)} for s in result.too_tight],
         "results": [_setup_json(s, "breakout", result.bars[s.ticker]) for s in result.breakouts]
                    + [_setup_json(s, "coiling", result.bars[s.ticker]) for s in result.coiling]
                    + [_setup_json(s, "wide", result.bars[s.ticker]) for s in result.wide_stop],
@@ -437,6 +446,7 @@ def write_all_scores(result: SarScanResult, path: str, keep_bars: int = 130) -> 
     kinds.update({s.ticker: "coiling" for s in result.coiling})
     kinds.update({s.ticker: "counter" for s in result.counter_trend})
     kinds.update({s.ticker: "wide" for s in result.wide_stop})
+    kinds.update({s.ticker: "tight" for s in result.too_tight})
     doc = {
         "format": "sar-all/1",
         "generated": result.generated,
