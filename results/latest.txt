@@ -1,38 +1,53 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6244 · with data 6229 · passed filters 667  (2026-10-05T14:08:59+00:00)
+Scanned 6244 · with data 6243 · passed filters 689  (2026-10-05T22:41:21+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
 
-BREAKOUTS (1)
+YOUR POSITIONS (2)
+------------------------------------------------------------------------------
+  TWST   HOLD          11 sh  last   205.00   +0.4R  +$45
+           On track. Stop 190.91. Sell on a daily close below the 10 SMA (183.07).
+  DNA    HOLD         100 sh  last    14.98   +0.7R  +$90
+           On track. Stop 12.80. Sell on a daily close below the 10 SMA (11.39).
+
+BREAKOUTS (2)
 ------------------------------------------------------------------------------
   TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
-  DDD        78  Take       3.78     3.57  5.6%     4.83     5.21  1.41  96  LOW-PRICED
+  RCEL       75  Take      13.25    12.53  5.4%    16.83    20.32  1.34  99
+  FOSL       79  Take       7.22     6.84  5.2%     9.09     9.36  1.81  96
 
-COILING — setup formed, not yet broken out (1)
+COILING — setup formed, not yet broken out (6)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  FTK      36/50      31.89  -3.0%     78%  6.0%    29.75
+  MRNA     38/50     208.90  -2.7%    224%  7.4%   193.38  WIDE STOP 1.2xADR
+  PAYS     35/50      14.93  -0.8%     69%  5.3%    13.37  WIDE STOP 1.0xADR
+  NET      37/50     367.43  -2.2%     26%  5.2%   352.63
+  FROG     40/50     100.00  -2.1%     42%  5.6%    93.28
+  SG       36/50       9.19  -1.1%     30%  6.0%     8.46
+  SEI      35/50      75.46  -0.9%     52%  5.5%    70.39
 
-WIDE STOP — watch only (2): broke out, but the stop is farther than a normal day
+WIDE STOP — watch only (4): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  SILC       89  entry 60.03  stop 54.50  (1.4x ADR)
-  NNBR       80  entry 4.51  stop 3.67  (2.6x ADR)
+  SDGR       76  entry 32.60  stop 29.56  (1.1x ADR)
+  PACB       78  entry 2.87  stop 2.51  (1.4x ADR)
+  DNA        76  entry 14.98  stop 12.48  (1.6x ADR)
+  NVAX       75  entry 12.56  stop 10.27  (2.7x ADR)
 
 SKIPPED — COUNTER-TREND (12): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  WOLF       87  50 SMA falling; -56% from 52-week high
-  OUST       78  50 SMA falling; -30% from 52-week high
-  MXL        76  50 SMA falling
-  SDEV       76  -93% from 52-week high
-  QSI        75  50 SMA falling; -50% from 52-week high
-  FCEL       70  below the 50 SMA; 50 SMA falling; -51% from 52-week high
-  AAOI       64  50 SMA falling; -51% from 52-week high
-  SMCI       58  -26% from 52-week high
-  TTMI       50  50 SMA falling; -41% from 52-week high
-  MRAM       49  50 SMA falling; -63% from 52-week high
-  BLZE       47  below the 50 SMA; 50 SMA falling; -40% from 52-week high
-  BAND       42  50 SMA falling
+  BOT        80  50 SMA falling; -46% from 52-week high
+  QTEX       77  50 SMA falling; -60% from 52-week high
+  RXRX       75  -33% from 52-week high
+  OUST       59  50 SMA falling; -31% from 52-week high
+  TENB       53  50 SMA falling
+  TTMI       53  50 SMA falling; -41% from 52-week high
+  SIMO       52  50 SMA falling
+  NTSK       51  -26% from 52-week high
+  SERV       50  50 SMA falling; below the 200 SMA; -74% from 52-week high
+  AXTI       48  -39% from 52-week high
+  CIEN       44  50 SMA falling; below the 200 SMA; -39% from 52-week high
+  ODD        41  -68% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
