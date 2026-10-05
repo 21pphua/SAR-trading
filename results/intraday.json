@@ -1,20 +1,20 @@
 {
  "format": "sar-intraday/1",
- "generated": "2026-10-05T15:12:23+00:00",
+ "generated": "2026-10-05T17:13:35+00:00",
  "session": "2026-10-05",
- "as_of_et": "11:12",
+ "as_of_et": "13:13",
  "scan_generated": "2026-10-05T14:08:59+00:00",
  "rows": [
   {
    "ticker": "FTK",
    "base_high": 31.889999389648438,
    "status": "WAITING",
-   "price": 31.21,
+   "price": 30.505,
    "orh": 31.37,
    "trigger": 31.89,
-   "low": 30.62,
-   "pace": 0.43,
-   "pct_to_trigger": 0.0218,
+   "low": 30.505,
+   "pace": 0.38,
+   "pct_to_trigger": 0.0454,
    "first_triggered": null
   }
  ],
@@ -26,15 +26,15 @@
    "stop": 190.91,
    "date": "2026-10-05",
    "status": "HOLD",
-   "action": "On track. Stop 190.91. Sell on a daily close below the 10 SMA (182.62).",
-   "last": 200.5,
+   "action": "On track. Stop 190.91. Sell on a daily close below the 10 SMA (182.72).",
+   "last": 201.52499389648438,
    "last_date": "2026-10-05",
-   "sma10": 182.61500244140626,
+   "sma10": 182.71750183105468,
    "stop_now": 190.91,
    "target_5r": 250.67000000000004,
    "hit_5r_date": "",
-   "r_now": -0.03714859437751047,
-   "pnl": -4.07000000000005,
+   "r_now": 0.06576243940606123,
+   "pnl": 7.204932861328075,
    "bars": [
     [
      "2026-07-06",
@@ -553,8 +553,8 @@
      189.97,
      203.949,
      189.25,
-     200.5,
-     936299
+     201.525,
+     1505806
     ]
    ],
    "live": true
@@ -566,15 +566,15 @@
    "stop": 12.8,
    "date": "2026-10-05",
    "status": "HOLD",
-   "action": "On track. Stop 12.80. Sell on a daily close below the 10 SMA (11.33).",
-   "last": 14.369999885559082,
+   "action": "On track. Stop 12.80. Sell on a daily close below the 10 SMA (11.34).",
+   "last": 14.451600074768066,
    "last_date": "2026-10-05",
-   "sma10": 11.332999992370606,
+   "sma10": 11.341160011291503,
    "stop_now": 12.8,
    "target_5r": 20.479999999999997,
    "hit_5r_date": "",
-   "r_now": 0.2265624105930329,
-   "pnl": 28.999988555908196,
+   "r_now": 0.290312558412552,
+   "pnl": 37.16000747680663,
    "bars": [
     [
      "2026-07-06",
@@ -1091,10 +1091,10 @@
     [
      "2026-10-05",
      12.5,
-     14.37,
+     15.1199,
      12.48,
-     14.37,
-     2451882
+     14.4516,
+     4548793
     ]
    ],
    "live": true
