@@ -49,6 +49,30 @@ stockscan sar --out shortlist.json       # after the close (defaults to us_all i
 Run after 4pm ET — mid-session the last bar is incomplete and volume/close-near-high
 reads are wrong.
 
+## Trading it intraday: premarket scan + live rescan
+
+The checklist itself only ever reads completed daily bars (that's what "run-up", "tightening
+pullback" and "volume dry-up" mean), so it can't be re-scored live. But the COILING list —
+setups that are fully formed and just haven't broken the base yet — doesn't need to wait for
+the close, and the breakout trigger (`base_high`) it already computed is exactly the level a
+live quote needs to be checked against:
+
+```bash
+stockscan sar --out shortlist.json     # ~30 min before the open: tonight's COILING list
+# ... market opens, price moves ...
+stockscan sar-live                     # polls live quotes for the COILING tickers;
+                                        # flags which ones have crossed base_high on real
+                                        # (pace-adjusted) volume, vs. a thin, unconfirmed poke
+stockscan sar-live --loop 60           # keep repolling every 60s until the close or Ctrl+C
+```
+
+`sar-live` never re-screens the universe intraday — it only tracks names the premarket scan
+already vetted (steps 01-04), so it's cheap (a handful of tickers, not hundreds) and it's only
+checking the one thing that genuinely happens live: has the price crossed the base high, and
+is the volume behind it real. A CONFIRMED line still isn't a trade signal — check the chart
+yourself before acting, same as everywhere else in this tool. `--kinds coiling,breakout` also
+lets you keep an eye on whether an already-confirmed breakout is holding up on continued volume.
+
 ## Scoring (0–100)
 
 | Step | Weight | Full marks at |

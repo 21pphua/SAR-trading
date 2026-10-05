@@ -83,6 +83,11 @@ def render_sar_scan(r: SarScanResult) -> str:
         lines += ["", f"WIDE STOP — watch only ({len(r.wide_stop)}): broke out, but the stop is farther than a normal day", "-" * 78]
         for s in r.wide_stop[:12]:
             lines.append(f"  {s.ticker:<7}{s.score:>6}  entry {s.entry:.2f}  stop {s.stop:.2f}  ({s.risk_adr:.1f}x ADR)")
+    if r.too_tight:
+        lines += ["", f"TOO TIGHT — watch only ({len(r.too_tight)}): broke out, but the stop is unrealistically close to entry",
+                  "(not a real edge -- see SAR_MIN_RISK_ADR; verify the chart before treating this as a signal)", "-" * 78]
+        for s in r.too_tight[:12]:
+            lines.append(f"  {s.ticker:<7}{s.score:>6}  entry {s.entry:.2f}  stop {s.stop:.2f}  ({s.risk_adr:.2f}x ADR)")
     if r.counter_trend:
         lines += ["", f"SKIPPED — COUNTER-TREND ({len(r.counter_trend)}): scored well, but not in a long-term uptrend", "-" * 78]
         for s in r.counter_trend[:12]:

@@ -34,7 +34,8 @@ from datetime import datetime, timezone
 from statistics import median
 from typing import Callable, Optional, Sequence
 
-from stockscan.config import SAR_TAKE_AT, SAR_REGIME_INDEXES, SAR_PULLBACK_LOOKBACK, SAR_RS_LEADER, SAR_HOT_GROUP
+from stockscan.config import (SAR_TAKE_AT, SAR_REGIME_INDEXES, SAR_PULLBACK_LOOKBACK, SAR_RS_LEADER,
+                              SAR_HOT_GROUP, SAR_MIN_RISK_ADR)
 from stockscan.sar.engine import Bar, Series, score_setup, sma, min_bars
 from stockscan.sar.strength import rs_raw_series, rank_in, load_sectors, group_keys, MIN_GROUP
 
@@ -115,7 +116,8 @@ def backtest_ticker(ticker: str, bars: Sequence[Bar], min_score: int = SAR_TAKE_
                 i += 1
                 continue
             s = score_setup(bars, i, ticker=ticker, series=S, with_targets=False)
-            if (s.score < min_score or s.risk <= 0 or (max_risk_adr and s.risk_adr > max_risk_adr)
+            if (s.score < min_score or s.risk <= 0 or s.tight_stop
+                    or (max_risk_adr and s.risk_adr > max_risk_adr)
                     or (trend_filter and s.trend_ok is False)):
                 i += 1
                 continue
@@ -134,7 +136,9 @@ def backtest_ticker(ticker: str, bars: Sequence[Bar], min_score: int = SAR_TAKE_
             stop = S.L[i]
             adr_d = p.adr_pct * p.entry if p.adr_pct else 0.0
             risk_adr = (entry - stop) / adr_d if adr_d else 0.0
-            if entry - stop <= 0 or entry > S.H[i] * (1 + slippage) or (max_risk_adr and risk_adr > max_risk_adr):
+            if (entry - stop <= 0 or entry > S.H[i] * (1 + slippage)
+                    or (max_risk_adr and risk_adr > max_risk_adr)
+                    or 0 < risk_adr < SAR_MIN_RISK_ADR):
                 i += 1
                 continue
             t = Trade(ticker, S.bars[i].date, entry, stop, p.score, round(risk_adr, 2),
@@ -248,9 +252,33 @@ class BacktestResult:
         return [("stop <= 1 ADR", summarize([t for t in ts if t.risk_adr <= 1.0])),
                 ("stop > 1 ADR", summarize([t for t in ts if t.risk_adr > 1.0]))]
 
-    def live(self, m: str = "close") -> list[Trade]:
-        """The rules the live scan uses: uptrend, score >= min, stop within 1 ADR."""
-        return [t for t in self.mode(m) if t.risk_adr <= 1.0 and t.trend_ok is not False]
+    def live(self, m: str = "close", require_rs_leader: bool = False, require_hot_group: bool = False,
+            require_regime: bool = False, rs_leader: int = SAR_RS_LEADER, hot_group: int = SAR_HOT_GROUP
+            ) -> list[Trade]:
+        """The rules the live scan uses: uptrend, score >= min, stop within 1 ADR
+        (and not below SAR_MIN_RISK_ADR -- see backtest_ticker). The three
+        ``require_*`` flags let you test the still-unvalidated RS/group/regime
+        gates (config.py's SAR_REQUIRE_* defaults) before turning them on live.
+        """
+        ts = [t for t in self.mode(m) if t.risk_adr <= 1.0 and t.trend_ok is not False]
+        if require_rs_leader:
+            ts = [t for t in ts if (t.rs_rank or 0) >= rs_leader]
+        if require_hot_group:
+            ts = [t for t in ts if (t.group_rank or 0) >= hot_group]
+        if require_regime:
+            ts = [t for t in ts if t.regime_ok is True]
+        return ts
+
+    def split(self, split_date: str) -> tuple["BacktestResult", "BacktestResult"]:
+        """Partition trades by entry_date into (train, test) for walk-forward
+        validation: tune/read filters against ``train`` only, then check the
+        SAME frozen filters against ``test`` -- a filter that only works on
+        the data it was picked from is overfit, not an edge."""
+        train = BacktestResult(self.generated, self.period, self.tickers,
+                               [t for t in self.trades if t.entry_date < split_date])
+        test = BacktestResult(self.generated, self.period, self.tickers,
+                              [t for t in self.trades if t.entry_date >= split_date])
+        return train, test
 
 
 def _attach_ranks(trades: list[Trade], by_date: dict[str, array], g_by_date: dict[str, dict[str, array]],
@@ -360,6 +388,7 @@ def render_backtest(res: BacktestResult) -> str:
         row(f"  + RS {SAR_RS_LEADER}+", summarize(lead(live))),
         row("  + hot group", summarize(hot(live))),
         row("  + RS leader & hot group", summarize(hot(lead(live)))),
+        row("  + favorable regime only", summarize([t for t in live if t.regime_ok is True])),
         row("Live rules, intraday entry", li),
         row(f"  + RS {SAR_RS_LEADER}+", summarize(lead(live_i))),
         row("  + hot group", summarize(hot(live_i))),
@@ -377,8 +406,29 @@ def render_backtest(res: BacktestResult) -> str:
         *[row(l, s) for l, s in _rs_bands(live_i)],
         row("  closed on 1.3x+ volume", summarize([t for t in live_i if t.volx >= MIN_VOLX])),
         row("  closed on light volume", summarize([t for t in live_i if t.volx < MIN_VOLX])), "",
-        "CAVEATS: today's ticker list only (survivorship bias); close fills exact, intraday fills",
+        f"CAVEATS: today's ticker list only (survivorship bias); close fills exact, intraday fills",
         "approximated from daily bars with 0.2% slippage; no commissions; trades across tickers",
-        "overlap. Treat as a rough guide, not proof.", "",
+        f"overlap; trades with a stop under {SAR_MIN_RISK_ADR} ADR are excluded (see SAR_MIN_RISK_ADR --",
+        "those produced unrealistic, unfillable R-multiples on a prior run). Treat as a rough guide,",
+        "not proof -- especially the RS/group/regime-stacked rows above, which have NOT been",
+        "walk-forward tested (run with --split-date to check a filter out-of-sample before trusting it).",
+        "",
     ]
     return "\n".join(lines)
+
+
+def render_backtest_split(res: BacktestResult, split_date: str) -> str:
+    """Walk-forward view: render the pre-split ('train') and post-split ('test')
+    periods separately, with the SAME filters in both. A row that only looks
+    good in train and falls apart in test was curve-fit to train, not a real
+    edge -- that comparison is the point of this report, read it before
+    trusting any filter combination above.
+    """
+    train, test = res.split(split_date)
+    header = (
+        f"\nWALK-FORWARD SPLIT at {split_date} -- same rules, two non-overlapping periods.\n"
+        f"Judge a filter by whether TEST still looks like TRAIN, not by TRAIN alone.\n"
+    )
+    return (header
+            + "\n" + ("=" * 20) + " TRAIN (before split) " + ("=" * 20) + render_backtest(train)
+            + "\n" + ("=" * 20) + " TEST (on/after split) " + ("=" * 20) + render_backtest(test))

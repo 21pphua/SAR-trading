@@ -24,7 +24,8 @@ from datetime import datetime, timezone
 from typing import Callable, Optional, Sequence
 
 from stockscan.config import (SAR_TAKE_AT, SAR_REGIME_INDEXES, SAR_EARNINGS_WARN_DAYS, SAR_TREND_FILTER,
-                              SAR_REQUIRE_TIGHT_STOP, SAR_HOT_GROUP, SAR_HOT_GROUP_BONUS)
+                              SAR_REQUIRE_TIGHT_STOP, SAR_HOT_GROUP, SAR_HOT_GROUP_BONUS, SAR_RS_LEADER,
+                              SAR_REQUIRE_RS_LEADER, SAR_REQUIRE_HOT_GROUP, SAR_REQUIRE_REGIME)
 from stockscan.sar.strength import rs_raw, percentile_ranks, load_sectors, group_keys, group_ranks
 from stockscan.sar.engine import (
     Bar, SetupScore, Series, passes_filters, score_setup, market_regime,
@@ -169,6 +170,7 @@ class SarScanResult:
     coiling: list[SetupScore] = field(default_factory=list)
     counter_trend: list[SetupScore] = field(default_factory=list)
     wide_stop: list[SetupScore] = field(default_factory=list)
+    too_tight: list[SetupScore] = field(default_factory=list)
     positions: list[Position] = field(default_factory=list)
     bars: dict[str, list[Bar]] = field(default_factory=dict)
     all_scored: list[SetupScore] = field(default_factory=list)
@@ -252,7 +254,17 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
                  today: Optional[str] = "auto", earnings=lookup_earnings,
                  trend_filter: bool = SAR_TREND_FILTER,
                  positions: Optional[list[Position]] = None,
-                 require_tight_stop: bool = SAR_REQUIRE_TIGHT_STOP) -> SarScanResult:
+                 require_tight_stop: bool = SAR_REQUIRE_TIGHT_STOP,
+                 require_rs_leader: bool = SAR_REQUIRE_RS_LEADER,
+                 require_hot_group: bool = SAR_REQUIRE_HOT_GROUP,
+                 require_regime: bool = SAR_REQUIRE_REGIME) -> SarScanResult:
+    """Run one SAR scan. The three ``require_*`` flags gate BREAKOUTS on signals
+    the engine already computes (relative strength, industry-group strength,
+    market regime) but that, by default (config.py's SAR_REQUIRE_*), are only
+    shown, not required -- they've never been validated as entry filters.
+    Flip one on here, or re-run ``sar-backtest`` with the matching
+    ``--require-*`` flag first to see whether it actually helps before
+    trusting it live."""
     tickers = list(dict.fromkeys(t.upper() for t in tickers))
     today = _session_open_today() if today == "auto" else today
     data = {k: drop_partial_bar(v, today) for k, v in fetch(tickers, on_progress=on_progress).items()}
@@ -265,11 +277,14 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
     for p in positions:
         evaluate_position(p, data.get(p.ticker) or [])
 
+    regime_ok = all(v for v in regime.values() if v is not None) if any(v is not None for v in regime.values()) else None
+
     with_data = passed = 0
     breakouts: list[SetupScore] = []
     coiling: list[SetupScore] = []
     counter: list[SetupScore] = []
     wide: list[SetupScore] = []
+    too_tight: list[SetupScore] = []
     scored: list[SetupScore] = []
     filtered_out: dict[str, str] = {}
     for tk in tickers:
@@ -294,25 +309,39 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
         if trend_filter and qualifies and s.trend_ok is False:
             counter.append(s)
             continue
+        if require_regime and qualifies and s.is_breakout and regime_ok is False:
+            continue  # market regime unfavorable -- don't add a NEW breakout (still shown in all_scored)
         if s.is_breakout and s.score >= min_score and breakout_volx(bars) >= MIN_BREAKOUT_VOLX:
-            (wide if require_tight_stop and s.wide_stop else breakouts).append(s)
+            if require_tight_stop and s.wide_stop:
+                wide.append(s)
+            elif s.tight_stop:
+                too_tight.append(s)  # stop unrealistically close to entry -- see SAR_MIN_RISK_ADR
+            else:
+                breakouts.append(s)
         elif s.is_coiling or (s.is_breakout and s.score >= min_score):  # low-volume break = unconfirmed
             coiling.append(s)
 
     attach_strength(scored, data)
+    if require_rs_leader:
+        breakouts = [s for s in breakouts if (s.rs_rank or 0) >= SAR_RS_LEADER]
+    if require_hot_group:
+        breakouts = [s for s in breakouts if (s.group_rank or 0) >= SAR_HOT_GROUP]
     by_rs = lambda s: (s.rs_rank or 0, s.score)
     breakouts.sort(key=by_rs, reverse=True)
     coiling.sort(key=by_rs, reverse=True)
     counter.sort(key=lambda s: s.score, reverse=True)
     wide.sort(key=by_rs, reverse=True)
+    too_tight.sort(key=by_rs, reverse=True)
     breakouts, coiling, counter, wide = breakouts[:top], coiling[:top], counter[:top], wide[:top]
-    keep = {s.ticker for s in breakouts + coiling + wide}
+    too_tight = too_tight[:top]
+    keep = {s.ticker for s in breakouts + coiling + wide + too_tight}
     if earnings and keep:
-        _attach_earnings(breakouts + coiling + wide, earnings(sorted(keep)))
+        _attach_earnings(breakouts + coiling + wide + too_tight, earnings(sorted(keep)))
     return SarScanResult(
         generated=datetime.now(timezone.utc).isoformat(timespec="seconds"),
         scanned=len(tickers), with_data=with_data, passed_filters=passed, regime=regime,
-        breakouts=breakouts, coiling=coiling, counter_trend=counter, wide_stop=wide, positions=positions,
+        breakouts=breakouts, coiling=coiling, counter_trend=counter, wide_stop=wide, too_tight=too_tight,
+        positions=positions,
         bars={t: data[t] for t in keep},
         all_scored=scored, all_bars={x.ticker: data[x.ticker] for x in scored}, filtered_out=filtered_out,
     )
@@ -381,7 +410,8 @@ def write_shortlist(result: SarScanResult, path: str) -> None:
         "counter_trend": [{"ticker": s.ticker, "score": s.score, "why": s.trend_note} for s in result.counter_trend],
         "results": [_setup_json(s, "breakout", result.bars[s.ticker]) for s in result.breakouts]
                    + [_setup_json(s, "coiling", result.bars[s.ticker]) for s in result.coiling]
-                   + [_setup_json(s, "wide", result.bars[s.ticker]) for s in result.wide_stop],
+                   + [_setup_json(s, "wide", result.bars[s.ticker]) for s in result.wide_stop]
+                   + [_setup_json(s, "too_tight", result.bars[s.ticker]) for s in result.too_tight],
         "positions": [asdict(p) for p in result.positions],
         "previous": prev,
     }
@@ -404,6 +434,7 @@ def write_all_scores(result: SarScanResult, path: str, keep_bars: int = 130) -> 
     kinds.update({s.ticker: "coiling" for s in result.coiling})
     kinds.update({s.ticker: "counter" for s in result.counter_trend})
     kinds.update({s.ticker: "wide" for s in result.wide_stop})
+    kinds.update({s.ticker: "too_tight" for s in result.too_tight})
     doc = {
         "format": "sar-all/1",
         "generated": result.generated,

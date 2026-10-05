@@ -342,3 +342,108 @@ def test_intraday_mode_runs(monkeypatch):
     for t in trades:
         assert t.mode == "intraday" and t.entry > t.stop
         assert t.false_break == (t.exit_reason == "false break")
+
+
+# --- SAR_MIN_RISK_ADR: tight-stop floor / exclusion -------------------------
+
+from stockscan.sar.engine import effective_risk_per_share
+
+
+def test_effective_risk_floors_a_near_zero_stop():
+    # entry=301.82, stop=301.69 (raw risk 0.13) with a 1% ADR: the floor
+    # (0.15 * 0.01 * 301.82 ~= 0.45) is wider than the raw stop, so sizing
+    # should use the floor, not the unrealistic raw distance.
+    floored = effective_risk_per_share(301.82, 301.69, 0.01)
+    assert floored > (301.82 - 301.69)
+    assert abs(floored - 0.15 * 0.01 * 301.82) < 1e-9
+
+
+def test_effective_risk_leaves_a_normal_stop_alone():
+    # A normal, wide-enough stop shouldn't be touched by the floor.
+    assert effective_risk_per_share(100, 90, 0.05) == 10
+
+
+def test_tight_stop_flag_on_setup_score():
+    s = score_setup(textbook())
+    # textbook() is built with a normal-width stop, not a near-zero one.
+    assert s.tight_stop is False
+    assert s.sizing_risk >= s.risk
+
+
+def _near_zero_stop_bars():
+    """A breakout whose close sits a hair above its own low (tight_stop case)."""
+    ph = _phases_textbook()
+    bars = _bars(ph[:-1])  # everything up to (not including) the "BO" phase
+    hi20 = max(b.high for b in bars[-20:])
+    p = bars[-1].close
+    o, c = p * 1.004, hi20 * 1.03
+    # low is a hair under the close -- an almost-zero stop distance.
+    tiny_bar = Bar("tiny", o, c * 1.001, c * 0.9995, c, bars[-1].volume * 3.0)
+    return bars + [tiny_bar]
+
+
+def test_backtest_excludes_tight_stop_trades(monkeypatch):
+    _loosen(monkeypatch)
+    bars = _near_zero_stop_bars()
+    bo_date = bars[-1].date
+    trades = backtest_ticker("T", bars, min_score=0, trend_filter=False)
+    # However this setup scores, it must never show up as an entered trade on
+    # the day its stop is unrealistically tight to entry.
+    assert bo_date not in [t.entry_date for t in trades]
+
+
+# --- position sizing ---------------------------------------------------------
+
+from stockscan.sar.sizing import recommend_size
+
+
+def test_recommend_size_basic():
+    s = score_setup(textbook())
+    rec = recommend_size(s, equity=100_000, open_sectors=[])
+    assert rec.shares > 0
+    assert rec.risk_dollars == 1000.0  # 1% of 100k at the default risk %
+    assert not rec.sector_cap_breached
+    assert not rec.max_positions_breached
+
+
+def test_recommend_size_flags_sector_cap():
+    s = score_setup(textbook())
+    s.group = "Semiconductors"
+    open_sectors = ["Semiconductors", "Semiconductors"]  # already 2 open -> cap is 2
+    rec = recommend_size(s, equity=100_000, open_sectors=open_sectors, max_per_sector=2)
+    assert rec.sector_cap_breached
+    assert any("Semiconductors" in n for n in rec.notes)
+
+
+def test_recommend_size_flags_max_positions():
+    s = score_setup(textbook())
+    rec = recommend_size(s, equity=100_000, open_sectors=["A", "B", "C", "D", "E", "F", "G"], max_positions=7)
+    assert rec.max_positions_breached
+
+
+def test_recommend_size_zero_equity_is_safe():
+    s = score_setup(textbook())
+    rec = recommend_size(s, equity=0, open_sectors=[])
+    assert rec.shares == 0 and rec.notes
+
+
+# --- walk-forward split -------------------------------------------------------
+
+def test_backtest_split_partitions_by_entry_date(monkeypatch):
+    _loosen(monkeypatch)
+    win = _bars(_phases_textbook() + [(0.03, 1.4, 0.04)] * 15 + [(-0.04, 1.0, 0.04)] * 10)
+    lose = _bars(_phases_textbook() + [(-0.15, 1.0, 0.05)] + [(0, 1.0, 0.05)] * 5)
+    spy = [Bar(b.date, 100 + i, 101 + i, 99 + i, 100 + i, 1e6) for i, b in enumerate(win)]
+
+    def fake_fetch(tickers, period=None, **_):
+        d = {"WIN": win, "LOSE": lose, "SPY": spy}
+        return {t: d.get(t, []) for t in tickers}
+
+    res = run_backtest(["WIN", "LOSE"], fake_fetch, min_score=65, trend_filter=False)
+    all_dates = sorted(t.entry_date for t in res.trades)
+    assert all_dates, "fixture produced no trades -- test setup is broken"
+    mid = all_dates[len(all_dates) // 2]
+    train, test = res.split(mid)
+    assert len(train.trades) + len(test.trades) == len(res.trades)
+    assert all(t.entry_date < mid for t in train.trades)
+    assert all(t.entry_date >= mid for t in test.trades)

@@ -39,8 +39,24 @@ from stockscan.config import (
     SAR_COIL_MIN_PREP,
     SAR_COIL_MAX_GAP,
     SAR_MAX_RISK_ADR,
+    SAR_MIN_RISK_ADR,
     SAR_MAX_FROM_HIGH,
 )
+
+
+def effective_risk_per_share(entry: float, stop: float, adr_pct: float,
+                             min_risk_adr: float = SAR_MIN_RISK_ADR) -> float:
+    """Risk-per-share floored at a minimum fraction of a normal day's range.
+
+    A stop a few cents from entry gives a near-zero raw risk -- any
+    R-multiple or share count computed by dividing by it is an artifact of
+    that denominator, not a real, fillable result (see SAR_MIN_RISK_ADR's
+    comment in config.py). Position sizing uses this floored figure; the
+    actual stop price a trade exits at is unaffected.
+    """
+    raw = entry - stop
+    floor = min_risk_adr * adr_pct * entry if adr_pct else raw
+    return max(raw, floor)
 
 
 @dataclass(frozen=True)
@@ -120,6 +136,17 @@ class SetupScore:
     @property
     def wide_stop(self) -> bool:
         return self.risk_adr > SAR_MAX_RISK_ADR
+
+    @property
+    def tight_stop(self) -> bool:
+        """Stop is unrealistically close to entry (near-zero risk) -- see
+        SAR_MIN_RISK_ADR. Not a real signal to trade or count in stats."""
+        return 0 < self.risk_adr < SAR_MIN_RISK_ADR
+
+    @property
+    def sizing_risk(self) -> float:
+        """Floored risk-per-share for position sizing (see effective_risk_per_share)."""
+        return effective_risk_per_share(self.entry, self.stop, self.adr_pct)
 
     @property
     def is_breakout(self) -> bool:

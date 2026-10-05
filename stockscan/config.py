@@ -109,6 +109,18 @@ SAR_MAX_RISK_ADR: float = 1.0
 # watch list instead of BREAKOUTS (backtest: wide stops ~+0.02R vs +0.48R tight).
 SAR_REQUIRE_TIGHT_STOP: bool = True
 
+# Mirror rule at the OTHER end: skip/flag a setup whose stop sits closer than
+# this many average daily ranges from entry (risk / entry < SAR_MIN_RISK_ADR *
+# ADR%). A stop this close to the close is a real price, but it's not a
+# realistic fill (no one gets filled within a few cents of a move on a $100+
+# stock) and it makes the R-multiple denominator near zero -- a backtest run
+# on 2023-2026 found 5 of 530 "live rules" trades had risk_adr < 0.1, and
+# those 5 trades alone (2 freak winners) accounted for ~80% of the cohort's
+# entire reported profit, with the other 525 trades netting negative. Treat
+# any "edge" built on sub-SAR_MIN_RISK_ADR trades as a measurement artifact,
+# not a real result, until proven otherwise on a corrected backtest.
+SAR_MIN_RISK_ADR: float = 0.15
+
 # Relative strength: rank 1-99 vs every stock scanned (99 = strongest).
 # Lists are SORTED by RS (ranking only, nothing is filtered out).
 # RS >= SAR_RS_LEADER is tagged "RS leader" (80 = top 20%).
@@ -117,8 +129,27 @@ SAR_RS_LEADER: int = 80
 SAR_HOT_GROUP: int = 80
 # Points added to the score for a hot group. 0 until the backtest shows it helps.
 SAR_HOT_GROUP_BONUS: int = 0
+
+# Require RS rank / group rank / market regime to accept a NEW breakout, on
+# top of just sorting by them. All default OFF: these fields were only wired
+# up for display/ranking so far, never actually validated as entry filters --
+# turn one on, re-run sar-backtest, and compare before trusting it live.
+SAR_REQUIRE_RS_LEADER: bool = False     # only take RS rank >= SAR_RS_LEADER
+SAR_REQUIRE_HOT_GROUP: bool = False     # only take group rank >= SAR_HOT_GROUP
+SAR_REQUIRE_REGIME: bool = False        # only take setups when the market regime is favorable
+
 # Max open trades at once (dashboard warns when you're full).
 SAR_MAX_POSITIONS: int = 7
+
+# --- Position sizing (fixed-% risk per trade + sector/group concentration cap) ---
+# Suggestions only -- stockscan never places an order. Risk a fixed % of
+# account equity per trade, sized off the FLOORED risk-per-share (see
+# SAR_MIN_RISK_ADR) so a near-zero stop can't imply a wildly oversized
+# position. Separately cap how many open positions can share one
+# industry group/sector, so a single theme unwinding can't hit most of the
+# account at once.
+SAR_RISK_PCT_PER_TRADE: float = 1.0
+SAR_MAX_PER_SECTOR: int = 2
 
 # Flag names that report earnings within this many calendar days.
 SAR_EARNINGS_WARN_DAYS: int = 10
