@@ -1,0 +1,21 @@
+{
+ "format": "sar-intraday/1",
+ "generated": "2026-10-05T14:25:42+00:00",
+ "session": "2026-10-05",
+ "as_of_et": "10:25",
+ "scan_generated": "2026-10-05T14:08:59+00:00",
+ "rows": [
+  {
+   "ticker": "FTK",
+   "base_high": 31.889999389648438,
+   "status": "WAITING",
+   "price": 31.03,
+   "orh": 31.37,
+   "trigger": 31.89,
+   "low": 30.62,
+   "pace": 0.3,
+   "pct_to_trigger": 0.0277,
+   "first_triggered": null
+  }
+ ]
+}
