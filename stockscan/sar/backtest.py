@@ -41,6 +41,19 @@ from stockscan.sar.strength import rs_raw_series, rank_in, load_sectors, group_k
 
 MIN_VOLX = 1.3
 
+# Exit/entry variants tested side by side on the SAME live-rules setups (see run_backtest).
+# Each is judged on the first ~2/3 of history (TRAIN) and the last ~1/3 (TEST); only a
+# variant that beats the current rules in BOTH halves is worth adopting.
+VARIANTS: dict[str, dict] = {
+    "Current rules":              {},
+    "Partial at 3R (1/3 size)":   {"partial_r": 3.0, "partial": 1 / 3},
+    "Breakeven stop at +2R":      {"be_at_r": 2.0},
+    "Time stop: 10 days, <+1R":   {"time_bars": 10},
+    "Trail 20 SMA after partial": {"trail_after": 20},
+    "Trail 20 SMA from day 1":    {"trail": 20},
+    "Combo: 3R partial+20 SMA+time": {"partial_r": 3.0, "partial": 1 / 3, "trail_after": 20, "time_bars": 10},
+}
+
 
 @dataclass
 class Trade:
@@ -66,6 +79,7 @@ class Trade:
     hit_5r: bool = False
     bars_held: int = 0
     open: bool = False
+    variant: str = ""
 
 
 def _regime_by_date(index_bars: Sequence[Bar]) -> dict[str, bool]:
@@ -74,23 +88,44 @@ def _regime_by_date(index_bars: Sequence[Bar]) -> dict[str, bool]:
     return {b.date: (s10[i] > s20[i]) for i, b in enumerate(index_bars) if s20[i] is not None}
 
 
-def _manage(S: Series, t: Trade, i: int, partial: float) -> int:
-    """Run the exit rules from bar i+1; fills t's exit fields; returns the exit bar."""
+def _manage(S: Series, t: Trade, i: int, partial: float, exits: Optional[dict] = None) -> int:
+    """Run the exit rules from bar i+1; fills t's exit fields; returns the exit bar.
+
+    exits (all optional, default = the doc's rules):
+      partial_r    R multiple for the partial sale (5)    partial    fraction sold there
+      be_at_r      move the stop to breakeven once the high reaches this R
+      time_bars    exit at the close after this many bars if the high never reached +1R
+      trail        SMA (10/20) whose daily close below exits      trail_after  SMA used after the partial
+    """
+    x = exits or {}
+    pr, partial = x.get("partial_r", 5.0), x.get("partial", partial)
+    trail = S.s20 if x.get("trail") == 20 else S.s10
+    after = S.s20 if x.get("trail_after") == 20 else trail
     n = len(S)
-    R, stop, target, banked, left = t.entry - t.stop, t.stop, t.entry + 5 * (t.entry - t.stop), 0.0, 1.0
+    R, stop, banked, left = t.entry - t.stop, t.stop, 0.0, 1.0
+    target = t.entry + pr * R
     j = i + 1
     px = S.C[n - 1]
+    hit_1r = False
     while j < n:
         o, h, l, c = S.O[j], S.H[j], S.L[j], S.C[j]
         if l <= stop:
             px = min(stop, o)
-            t.exit_reason = "breakeven" if t.hit_5r else "stop"
+            t.exit_reason = "breakeven" if stop >= t.entry else "stop"
             break
+        hit_1r = hit_1r or h >= t.entry + R
+        if x.get("be_at_r") and h >= t.entry + x["be_at_r"] * R and stop < t.entry:
+            stop = t.entry
         if not t.hit_5r and h >= target:
-            t.hit_5r, banked, left, stop = True, partial * 5.0, 1 - partial, t.entry
-        if S.s10[j] is not None and c < S.s10[j]:
+            t.hit_5r, banked, left, stop = True, partial * pr, 1 - partial, max(stop, t.entry)
+        line = after if t.hit_5r else trail
+        if line[j] is not None and c < line[j]:
             px = c
-            t.exit_reason = "10sma"
+            t.exit_reason = "sma"
+            break
+        if x.get("time_bars") and not hit_1r and j - i >= x["time_bars"]:
+            px = c
+            t.exit_reason = "time"
             break
         j += 1
     else:
@@ -104,7 +139,8 @@ def backtest_ticker(ticker: str, bars: Sequence[Bar], min_score: int = SAR_TAKE_
                     partial: float = 0.20, max_risk_adr: Optional[float] = None,
                     regime: Optional[dict[str, bool]] = None, trend_filter: bool = True,
                     mode: str = "close", slippage: float = 0.002,
-                    rs: Optional[list[Optional[float]]] = None) -> list[Trade]:
+                    rs: Optional[list[Optional[float]]] = None, exits: Optional[dict] = None,
+                    confirm_cut: bool = False, variant: str = "") -> list[Trade]:
     S = Series(bars)
     n = len(S)
     PL = SAR_PULLBACK_LOOKBACK
@@ -145,13 +181,22 @@ def backtest_ticker(ticker: str, bars: Sequence[Bar], min_score: int = SAR_TAKE_
                       (regime or {}).get(S.bars[i].date), p.trend_ok, "intraday", round(S.volx(i), 2))
         if rs is not None:
             t.rs_raw = rs[i]
+        t.variant = variant
+        if t.mode == "intraday" and confirm_cut and (S.C[i] < max(S.H[i - PL: i]) or S.volx(i) < MIN_VOLX):
+            # confirm-or-cut: the break didn't confirm by the close -> sell at the close
+            t.false_break = True
+            t.exit_date, t.exit_price, t.exit_reason = t.entry_date, S.C[i], "cut at close"
+            t.r = (S.C[i] - t.entry) / (t.entry - t.stop)
+            trades.append(t)
+            i += 1
+            continue
         if t.mode == "intraday" and S.C[i] < max(S.H[i - PL: i]):
             t.false_break = True
             t.exit_date, t.exit_price, t.exit_reason, t.r = t.entry_date, t.stop, "false break", -1.0
             trades.append(t)
             i += 1
             continue
-        i = _manage(S, t, i, partial) + 1
+        i = _manage(S, t, i, partial, exits) + 1
         trades.append(t)
     return trades
 
@@ -225,6 +270,7 @@ class BacktestResult:
     period: str
     tickers: int
     trades: list[Trade] = field(default_factory=list)
+    experiments: dict[str, list[Trade]] = field(default_factory=dict)
 
     def mode(self, m: str) -> list[Trade]:
         return [t for t in self.trades if t.mode == m]
@@ -305,7 +351,8 @@ def _attach_ranks(trades: list[Trade], by_date: dict[str, array], g_by_date: dic
 def run_backtest(tickers: Sequence[str], fetch: Callable[..., dict], period: str = "3y",
                  chunk: int = 200, min_score: int = SAR_TAKE_AT, partial: float = 0.20,
                  max_risk_adr: Optional[float] = None, on_progress=None,
-                 trend_filter: bool = True, intraday: bool = True, slippage: float = 0.002) -> BacktestResult:
+                 trend_filter: bool = True, intraday: bool = True, slippage: float = 0.002,
+                 experiments: bool = True) -> BacktestResult:
     """Fetch history chunk-by-chunk and simulate every ticker, both entry styles."""
     tickers = list(dict.fromkeys(t.upper() for t in tickers))
     idx = fetch([SAR_REGIME_INDEXES[0]], period=period)
@@ -332,10 +379,63 @@ def run_backtest(tickers: Sequence[str], fetch: Callable[..., dict], period: str
                 if intraday:
                     res.trades.extend(backtest_ticker(tk, bars, min_score, partial, max_risk_adr, regime,
                                                       trend_filter, "intraday", slippage, rs))
+                if experiments:
+                    for name, ex in VARIANTS.items():
+                        if name == "Current rules":
+                            continue
+                        res.experiments.setdefault(name, []).extend(
+                            backtest_ticker(tk, bars, min_score, partial, max_risk_adr, regime,
+                                            trend_filter, "close", slippage, rs, exits=ex, variant=name))
+                    if intraday:
+                        res.experiments.setdefault("Intraday + cut at close if unconfirmed", []).extend(
+                            backtest_ticker(tk, bars, min_score, partial, max_risk_adr, regime, trend_filter,
+                                            "intraday", slippage, rs, confirm_cut=True,
+                                            variant="Intraday + cut at close if unconfirmed"))
         if on_progress:
             on_progress(min(start + chunk, len(tickers)), len(tickers), batch[-1])
     _attach_ranks(res.trades, by_date, g_by_date, groups)
+    for ts in res.experiments.values():
+        _attach_ranks(ts, by_date, g_by_date, groups)
     return res
+
+
+def _live_filter(ts: Sequence[Trade]) -> list[Trade]:
+    return [t for t in ts if t.risk_adr <= 1.0 and t.trend_ok is not False]
+
+
+def render_experiments(res: BacktestResult) -> str:
+    """Every variant on the live-rules setups, split into TRAIN (first 2/3) and TEST (last 1/3)."""
+    if not res.experiments:
+        return ""
+    base = res.live("close")
+    dates = sorted(t.entry_date for t in base)
+    if len(dates) < 30:
+        return ""
+    cut = dates[len(dates) * 2 // 3]
+    rows = [("Current rules", base)] + [(k, _live_filter(v)) for k, v in res.experiments.items()]
+    def half(ts, first):
+        return summarize([t for t in ts if (t.entry_date < cut) == first])
+    b_tr, b_te = half(base, True), half(base, False)
+    out = ["", "EXPERIMENTS — same live-rules setups, different exits/entries", "=" * 90,
+           f"  TRAIN = trades before {cut} · TEST = {cut} onward (judge by TEST)",
+           f"  {'':<38}{'TRADES':>7}{'WIN%':>6}{'AVG WIN':>8}{'EXP R':>7}{'PF':>6}{'TRAIN R':>9}{'TEST R':>8}  VERDICT"]
+    for name, ts in rows:
+        s, tr, te = summarize(ts), half(ts, True), half(ts, False)
+        if not s:
+            continue
+        pf = "inf" if s.profit_factor == float("inf") else f"{s.profit_factor:.2f}"
+        if name == "Current rules":
+            v = "baseline"
+        elif tr and te and b_tr and b_te and tr.expectancy_r > b_tr.expectancy_r and te.expectancy_r > b_te.expectancy_r:
+            v = "BETTER in both halves"
+        elif te and b_te and te.expectancy_r > b_te.expectancy_r:
+            v = "better in TEST only"
+        else:
+            v = "no improvement"
+        out.append(f"  {name:<38}{s.trades:>7}{s.win_rate:>6.0%}{s.avg_win_r:>+8.2f}{s.expectancy_r:>+7.2f}{pf:>6}"
+                   f"{(tr.expectancy_r if tr else 0):>+9.2f}{(te.expectancy_r if te else 0):>+8.2f}  {v}")
+    out += ["", "  Adopt a change only if it says BETTER in both halves AND the gain is more than ~0.03R.", ""]
+    return "\n".join(out)
 
 
 def write_trades_csv(res: BacktestResult, path: str) -> None:
@@ -347,6 +447,10 @@ def write_trades_csv(res: BacktestResult, path: str) -> None:
         w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
+
+
+def render_backtest_full(res: BacktestResult) -> str:
+    return render_backtest(res) + render_experiments(res)
 
 
 def render_backtest(res: BacktestResult) -> str:

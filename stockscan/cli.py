@@ -281,7 +281,7 @@ def cmd_sar(args) -> int:
 
 def cmd_sar_backtest(args) -> int:
     from stockscan.sar.scan import fetch_ohlcv
-    from stockscan.sar.backtest import run_backtest, render_backtest, write_trades_csv
+    from stockscan.sar.backtest import run_backtest, render_backtest_full as render_backtest, write_trades_csv
 
     if args.universe is None and not args.tickers:
         args.universe = "us_all" if "us_all" in list_builtin_universes() else DEFAULT_UNIVERSE
