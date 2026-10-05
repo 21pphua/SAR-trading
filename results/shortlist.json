@@ -1,7 +1,7 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-10-05T05:30:39+00:00",
- "scanned": 6245,
+ "generated": "2026-10-05T14:08:59+00:00",
+ "scanned": 6244,
  "passed_filters": 667,
  "regime": {
   "SPY": true,
@@ -217,14 +217,6 @@
    "wide_stop": false,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-10-03",
-     3.01,
-     3.29,
-     3.01,
-     3.12,
-     5745000
-    ],
     [
      "2025-10-06",
      3.25,
@@ -2377,14 +2369,6 @@
    "earnings_soon": false,
    "bars": [
     [
-     "2025-10-03",
-     15.36,
-     16.22,
-     15.02,
-     15.92,
-     402100
-    ],
-    [
      "2025-10-06",
      16.2,
      17.93,
@@ -4524,14 +4508,6 @@
    "earnings_soon": false,
    "bars": [
     [
-     "2025-10-03",
-     17.24,
-     17.48,
-     17.24,
-     17.42,
-     84400
-    ],
-    [
      "2025-10-06",
      17.46,
      18.85,
@@ -6664,20 +6640,12 @@
    "rs_rank": 99,
    "sector": "Industrials",
    "group": "Industrial Machinery/Components",
-   "group_rank": 48,
+   "group_rank": 49,
    "kind": "wide",
    "risk_adr": 2.57,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-10-03",
-     2.0,
-     2.02,
-     1.93,
-     1.95,
-     235400
-    ],
     [
      "2025-10-06",
      1.99,
