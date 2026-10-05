@@ -165,6 +165,19 @@ def evaluate_position(p: Position, bars: Sequence[Bar]) -> Position:
     return p
 
 
+def regime_size(breadth: Optional[float], spy_ok: Optional[bool]) -> tuple[float, str]:
+    """Backtest (update 11, better in both halves): full size when breadth 60%+ and SPY up,
+    half size when breadth 40-60% or SPY down, no new trades when breadth is under 40%."""
+    if breadth is None:
+        return 1.0, "Breadth unknown: normal size"
+    if breadth < 40:
+        return 0.0, f"Breadth {breadth:.0f}% (weak): no new trades"
+    if breadth < 60 or spy_ok is False:
+        why = f"breadth {breadth:.0f}%" + (" and SPY down" if spy_ok is False and breadth >= 40 else "")
+        return 0.5, f"Half size ({why})"
+    return 1.0, f"Full size (breadth {breadth:.0f}%, SPY up)"
+
+
 @dataclass
 class SarScanResult:
     generated: str
@@ -186,18 +199,6 @@ class SarScanResult:
     breadth: Optional[float] = None     # % of scanned stocks above their 50 SMA
     size_mult: float = 1.0              # regime sizing (backtest update 11): 1 / 0.5 / 0
 
-
-def regime_size(breadth: Optional[float], spy_ok: Optional[bool]) -> tuple[float, str]:
-    """Backtest (update 11, better in both halves): full size when breadth 60%+ and SPY up,
-    half size when breadth 40-60% or SPY down, no new trades when breadth is under 40%."""
-    if breadth is None:
-        return 1.0, "Breadth unknown: normal size"
-    if breadth < 40:
-        return 0.0, f"Breadth {breadth:.0f}% (weak): no new trades"
-    if breadth < 60 or spy_ok is False:
-        why = f"breadth {breadth:.0f}%" + (" and SPY down" if spy_ok is False and breadth >= 40 else "")
-        return 0.5, f"Half size ({why})"
-    return 1.0, f"Full size (breadth {breadth:.0f}%, SPY up)"
 
     @property
     def regime_ok(self) -> Optional[bool]:
