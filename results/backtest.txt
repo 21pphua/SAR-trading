@@ -1,69 +1,69 @@
 
 SAR BACKTEST
 ==========================================================================================
-6244 tickers · period 3y · generated 2026-10-05T18:05:29+00:00
+6244 tickers · period 3y · generated 2026-10-05T22:08:56+00:00
 
 PLAIN ENGLISH (entries at the close, all trades)
 ------------------------------------------------------------------------------------------
-  Out of 2557 trades, 31% made money.
+  Out of 2556 trades, 31% made money.
   Winners averaged +2.0R, losers -0.8R (R = what you risked; at 1% risk, 1R = 1% of the account).
   On average each trade made +0.04R. Positive = the rules made money over this period.
-  Worst losing streak: 19 in a row. Worst account drop at 1% risk: 77%.
+  Worst losing streak: 19 in a row. Worst account drop at 1% risk: 76%.
   8% of trades reached the 5R partial. Average hold: 7 trading days.
 
 THE QUESTIONS THAT DECIDE THE NEXT RULE CHANGES
 ------------------------------------------------------------------------------------------
                            TRADES    WIN%  AVG WIN AVG LOSS   EXP R     PF  STREAK  MAX DD
-  Live rules (close)          651     26%    +3.45    -1.07   +0.09   1.11      20     53%
-    + RS 80+                  560     26%    +3.54    -1.08   +0.11   1.14      19     51%
-    + hot group               179     25%    +3.32    -1.08   +0.03   1.04      23     27%
-    + RS leader & hot group    175     25%    +3.28    -1.08   -0.01   0.99      23     30%
-    + favorable regime only    466     23%    +3.52    -1.07   -0.02   0.98      23     50%
-  Live rules, intraday entry   1648     17%    +4.31    -1.06   -0.17   0.81      44     98%
-    + RS 80+                 1418     17%    +4.22    -1.06   -0.18   0.80      50     96%
-    + hot group               427     19%    +5.34    -1.09   +0.16   1.18      30     57%
-  Intraday false breaks (closed back inside the base, counted as -1R): 832 of 1651 (50%).
+  Live rules (close)          649     26%    +3.45    -1.07   +0.09   1.11      20     53%
+    + RS 80+                  559     26%    +3.55    -1.08   +0.11   1.13      19     51%
+    + hot group               178     25%    +3.38    -1.08   +0.02   1.03      23     27%
+    + RS leader & hot group    174     24%    +3.34    -1.08   -0.01   0.98      23     30%
+    + favorable regime only    464     23%    +3.52    -1.07   -0.01   0.99      23     50%
+  Live rules, intraday entry   1654     17%    +4.31    -1.06   -0.18   0.80      44     98%
+    + RS 80+                 1424     17%    +4.22    -1.06   -0.18   0.79      50     97%
+    + hot group               430     20%    +5.30    -1.11   +0.14   1.16      30     59%
+  Intraday false breaks (closed back inside the base, counted as -1R): 836 of 1657 (50%).
 
 DETAIL (close entries)
 ------------------------------------------------------------------------------------------
                            TRADES    WIN%  AVG WIN AVG LOSS   EXP R     PF  STREAK  MAX DD
-  All trades                 2557     31%    +2.01    -0.85   +0.04   1.07      19     77%
+  All trades                 2556     31%    +2.02    -0.85   +0.04   1.08      19     76%
 
   By score
   65-74                         —
-  75-84                      1914     31%    +2.10    -0.87   +0.04   1.06      15     68%
-  85+                         643     33%    +1.77    -0.78   +0.05   1.09      15     36%
+  75-84                      1913     31%    +2.10    -0.87   +0.04   1.07      15     68%
+  85+                         643     33%    +1.78    -0.78   +0.06   1.11      15     33%
 
   By relative strength at entry
-  RS 80+ (leaders)           2182     32%    +1.99    -0.85   +0.05   1.09      17     76%
+  RS 80+ (leaders)           2184     32%    +2.00    -0.85   +0.05   1.09      17     75%
   RS 50-79                     69     29%    +2.78    -0.71   +0.30   1.60      12     11%
   RS under 50                   2     50%    +2.49    -1.00   +0.75   2.49       1      1%
 
   By industry group strength at entry
-  Hot group (80+)             700     31%    +2.09    -0.86   +0.06   1.10      19     46%
-  Other groups               1535     32%    +1.99    -0.84   +0.06   1.11      21     63%
-  Group unknown               322     28%    +1.94    -0.87   -0.09   0.85      15     40%
+  Hot group (80+)             700     31%    +2.08    -0.86   +0.06   1.10      19     46%
+  Other groups               1537     32%    +2.00    -0.84   +0.06   1.11      21     61%
+  Group unknown               319     28%    +1.93    -0.87   -0.08   0.87      14     38%
 
   By long-term trend (50/200 SMA + near 52-week high)
-  uptrend                    2497     31%    +2.01    -0.85   +0.05   1.08      18     77%
+  uptrend                    2499     31%    +2.02    -0.85   +0.05   1.08      18     76%
   counter-trend                 —
 
   By market (SPY 10 vs 20 SMA at entry)
-  favorable                  1917     31%    +2.05    -0.85   +0.04   1.07      29     72%
-  unfavorable                 640     33%    +1.91    -0.85   +0.05   1.08      35     53%
+  favorable                  1915     31%    +2.05    -0.85   +0.04   1.07      29     71%
+  unfavorable                 641     33%    +1.91    -0.85   +0.05   1.08      35     53%
 
   By stop width
-  stop <= 1 ADR               651     26%    +3.45    -1.07   +0.09   1.11      20     53%
-  stop > 1 ADR               1906     33%    +1.63    -0.76   +0.03   1.05      19     60%
+  stop <= 1 ADR               649     26%    +3.45    -1.07   +0.09   1.11      20     53%
+  stop > 1 ADR               1907     33%    +1.64    -0.76   +0.03   1.06      17     58%
 
 DETAIL (intraday entries, live rules)
 ------------------------------------------------------------------------------------------
                            TRADES    WIN%  AVG WIN AVG LOSS   EXP R     PF  STREAK  MAX DD
-  RS 80+ (leaders)           1418     17%    +4.22    -1.06   -0.18   0.80      50     96%
+  RS 80+ (leaders)           1424     17%    +4.22    -1.06   -0.18   0.79      50     97%
   RS 50-79                     67     12%    +4.20    -1.22   -0.57   0.47      13     35%
   RS under 50                   1      0%    +0.00    -1.00   -1.00   0.00       1      1%
     closed on 1.3x+ volume    407     31%    +5.07    -1.09   +0.80   2.07      15     32%
-    closed on light volume   1241     12%    +3.68    -1.05   -0.49   0.47      44    100%
+    closed on light volume   1247     12%    +3.68    -1.06   -0.50   0.47      44    100%
 
 CAVEATS: today's ticker list only (survivorship bias); close fills exact, intraday fills
 approximated from daily bars with 0.2% slippage; no commissions; trades across tickers
@@ -76,13 +76,58 @@ EXPERIMENTS — same live-rules setups, different exits/entries
 ==========================================================================================
   TRAIN = trades before 2026-02-26 · TEST = 2026-02-26 onward (judge by TEST)
                                          TRADES  WIN% AVG WIN  EXP R    PF  TRAIN R  TEST R  VERDICT
-  Current rules                             651   26%   +3.45  +0.09  1.11    +0.01   +0.24  baseline
-  Partial at 3R (1/3 size)                  651   28%   +2.99  +0.06  1.07    -0.02   +0.21  no improvement
-  Breakeven stop at +2R                     654   22%   +3.79  +0.10  1.13    +0.01   +0.27  BETTER in both halves
-  Time stop: 10 days, <+1R                  656   26%   +3.41  +0.09  1.11    +0.00   +0.26  better in TEST only
-  Trail 20 SMA after partial                646   26%   +3.59  +0.13  1.17    +0.08   +0.25  BETTER in both halves
-  Trail 20 SMA from day 1                   626   23%   +4.58  +0.21  1.24    +0.20   +0.22  no improvement
-  Combo: 3R partial+20 SMA+time             648   28%   +3.15  +0.12  1.16    +0.07   +0.21  no improvement
-  Intraday + cut at close if unconfirmed   1797   36%   +1.66  +0.22  1.59    +0.20   +0.26  BETTER in both halves
+  Current rules                             649   26%   +3.45  +0.09  1.11    +0.01   +0.24  baseline
+  Partial at 3R (1/3 size)                  649   28%   +2.99  +0.06  1.08    -0.02   +0.21  no improvement
+  Breakeven stop at +2R                     652   23%   +3.79  +0.10  1.13    +0.02   +0.27  BETTER in both halves
+  Time stop: 10 days, <+1R                  654   26%   +3.41  +0.09  1.12    +0.01   +0.26  better in TEST only
+  Trail 20 SMA after partial                644   26%   +3.59  +0.14  1.17    +0.08   +0.25  BETTER in both halves
+  Trail 20 SMA from day 1                   624   23%   +4.58  +0.21  1.25    +0.21   +0.22  no improvement
+  Combo: 3R partial+20 SMA+time             646   28%   +3.15  +0.12  1.16    +0.08   +0.21  no improvement
+  Intraday + cut at close if unconfirmed   1804   36%   +1.66  +0.22  1.59    +0.21   +0.26  BETTER in both halves
+  Intraday+cut + 20 SMA after partial      1793   36%   +1.75  +0.25  1.65    +0.26   +0.21  no improvement
+  Intraday+cut + 20 SMA from day 1         1788   35%   +1.78  +0.24  1.61    +0.25   +0.20  no improvement
 
   Adopt a change only if it says BETTER in both halves AND the gain is more than ~0.03R.
+
+MARKET REGIME — does market health change results?  (Intraday + cut at close if unconfirmed)
+==========================================================================================
+  Breadth = % of all stocks above their 50-day average. VIX = market fear gauge.
+                                     TRADES   WIN%   EXP R   MAX DD
+  By fear level
+  VIX under 16 (calm)                   787    36%   +0.21      32%
+  VIX 16-22                             898    38%   +0.27      19%
+  VIX 22-30 (nervous)                   112    29%   -0.01      14%
+  VIX 30+ (fear)                          7    14%   -0.36       3%
+  By breadth
+  Breadth 60%+ (healthy)                660    40%   +0.55      19%
+  Breadth 40-60%                       1012    35%   +0.03      38%
+  Breadth under 40% (weak)              132    26%   +0.05      15%
+  By SPY trend (10 vs 20 SMA)
+  SPY 10 above 20                      1398    37%   +0.24      34%
+  SPY 10 below 20                       406    33%   +0.15      20%
+
+  SIZING RULE TESTED: full size if breadth 60%+ and SPY up; half size if breadth 40-60% or SPY down;
+  no new trades if breadth under 40%.
+                                     TRADES  R per 1R risked  TOTAL R  WORST DROP
+  Flat size (now)                      1804            +0.22     +402         41R
+  Regime-scaled size                   1672            +0.32     +365         24R
+  TRAIN (before 2026-02-13): flat +0.22 vs scaled +0.27   TEST: flat +0.23 vs scaled +0.41
+  VERDICT: BETTER in both halves — worth adopting
+
+MONTE CARLO — 5,000 reshuffles of 1,804 trades (Intraday + cut at close if unconfirmed)
+==========================================================================================
+  Over the next 200 trades:
+    Longest losing streak: typical 10, bad luck 12, worst 1-in-20 16
+    Biggest account drop at 0.5% risk: typical 7%, bad luck 9%, worst 1-in-20 13%
+    Biggest account drop at 1% risk:   typical 13%, bad luck 17%, worst 1-in-20 24%
+
+  AFTER N TRADES   CHANCE DOWN  WORST 5%  TYPICAL  BEST 5%   (avg R per trade)
+  10                       48%     -0.49    +0.03    +1.87
+  20                       40%     -0.37    +0.08    +1.32
+  30                       35%     -0.30    +0.11    +1.17
+  50                       28%     -0.20    +0.15    +0.96
+  100                      18%     -0.11    +0.18    +0.73
+  200                       8%     -0.03    +0.20    +0.57
+
+  EARLY WARNING: if your real avg R after 30+ trades is below the WORST 5% number for that
+  many trades, results are worse than bad luck explains. Pause and recheck the rules.
