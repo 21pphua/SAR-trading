@@ -27,6 +27,9 @@ fills at close/stop with no commissions; trades across tickers overlap.
 from __future__ import annotations
 
 import csv
+import json
+import math
+import random
 from array import array
 from collections import defaultdict
 from dataclasses import dataclass, asdict, field
@@ -80,6 +83,8 @@ class Trade:
     bars_held: int = 0
     open: bool = False
     variant: str = ""
+    breadth: Optional[float] = None   # % of stocks above their 50 SMA on entry day
+    vol: Optional[float] = None       # VIX close (or SPY 20-day volatility %) on entry day
 
 
 def _regime_by_date(index_bars: Sequence[Bar]) -> dict[str, bool]:
@@ -271,6 +276,7 @@ class BacktestResult:
     tickers: int
     trades: list[Trade] = field(default_factory=list)
     experiments: dict[str, list[Trade]] = field(default_factory=dict)
+    vol_name: str = "VIX"
 
     def mode(self, m: str) -> list[Trade]:
         return [t for t in self.trades if t.mode == m]
@@ -356,7 +362,22 @@ def run_backtest(tickers: Sequence[str], fetch: Callable[..., dict], period: str
     """Fetch history chunk-by-chunk and simulate every ticker, both entry styles."""
     tickers = list(dict.fromkeys(t.upper() for t in tickers))
     idx = fetch([SAR_REGIME_INDEXES[0]], period=period)
-    regime = _regime_by_date(idx.get(SAR_REGIME_INDEXES[0], []))
+    spy = idx.get(SAR_REGIME_INDEXES[0], [])
+    regime = _regime_by_date(spy)
+    vol_by_date, vol_name = {}, "VIX"
+    try:
+        vx = fetch(["^VIX"], period=period).get("^VIX", [])
+        vol_by_date = {x.date: x.close for x in vx if x.close > 0}
+    except Exception:
+        vol_by_date = {}
+    if len(vol_by_date) < 100:  # fall back to SPY's own 20-day volatility (annualized %)
+        vol_name, C = "SPY volatility", [x.close for x in spy]
+        for i in range(21, len(C)):
+            r = [math.log(C[k] / C[k - 1]) for k in range(i - 19, i + 1)]
+            m = sum(r) / 20
+            vol_by_date[spy[i].date] = math.sqrt(sum((v - m) ** 2 for v in r) / 19) * math.sqrt(252) * 100
+    above: dict[str, int] = defaultdict(int)
+    total: dict[str, int] = defaultdict(int)
     groups = group_keys(tickers, load_sectors())
     by_date: dict[str, array] = defaultdict(lambda: array("f"))
     g_by_date: dict[str, dict[str, array]] = defaultdict(lambda: defaultdict(lambda: array("f")))
@@ -367,6 +388,11 @@ def run_backtest(tickers: Sequence[str], fetch: Callable[..., dict], period: str
         for tk in batch:
             bars = data.get(tk) or []
             rs = rs_raw_series([b.close for b in bars])
+            s50 = sma([b.close for b in bars], 50)
+            for bar, m50 in zip(bars, s50):
+                if m50 is not None and bar.close >= 1:
+                    total[bar.date] += 1
+                    above[bar.date] += bar.close > m50
             g = groups.get(tk, "")
             for bar, v in zip(bars, rs):
                 if v is not None and bar.close >= 1:
@@ -398,6 +424,12 @@ def run_backtest(tickers: Sequence[str], fetch: Callable[..., dict], period: str
     _attach_ranks(res.trades, by_date, g_by_date, groups)
     for ts in res.experiments.values():
         _attach_ranks(ts, by_date, g_by_date, groups)
+    for ts in [res.trades, *res.experiments.values()]:
+        for t in ts:
+            n = total.get(t.entry_date, 0)
+            t.breadth = round(100 * above[t.entry_date] / n, 1) if n >= 200 else None
+            t.vol = round(vol_by_date[t.entry_date], 1) if t.entry_date in vol_by_date else None
+    res.vol_name = vol_name
     return res
 
 
@@ -451,8 +483,149 @@ def write_trades_csv(res: BacktestResult, path: str) -> None:
         w.writerows(rows)
 
 
+BEST_RULES = "Intraday + cut at close if unconfirmed"
+
+
+def best_trades(res: BacktestResult) -> tuple[str, list[Trade]]:
+    """The rules the live system now trades (intraday + cut), falling back to close entries."""
+    ts = _live_filter(res.experiments.get(BEST_RULES, []))
+    if len([t for t in ts if not t.open]) >= 100:
+        return BEST_RULES, ts
+    return "Live rules (close)", res.live("close")
+
+
+def _size(t: Trade) -> float:
+    """Regime sizing rule under test: full / half / none by market health."""
+    if t.breadth is None:
+        return 1.0
+    if t.breadth < 40:
+        return 0.0
+    if t.breadth < 60 or t.regime_ok is False:
+        return 0.5
+    return 1.0
+
+
+def _scaled(ts: Sequence[Trade]) -> dict:
+    closed = sorted((t for t in ts if not t.open), key=lambda t: t.exit_date)
+    eq = peak = dd = 0.0
+    tot = risk = 0.0
+    taken = 0
+    for t in closed:
+        w = _size(t)
+        if not w:
+            continue
+        taken += 1
+        tot += w * t.r
+        risk += w
+        eq += w * t.r
+        peak = max(peak, eq)
+        dd = max(dd, peak - eq)
+    return {"trades": taken, "total_r": tot, "per_risk": tot / risk if risk else 0.0, "dd_r": dd}
+
+
+def render_regime(res: BacktestResult) -> str:
+    name, ts = best_trades(res)
+    closed = [t for t in ts if not t.open]
+    if len(closed) < 50:
+        return ""
+    def row(label, s):
+        if not s:
+            return f"  {label:<34}{'—':>7}"
+        return f"  {label:<34}{s.trades:>7}{s.win_rate:>7.0%}{s.expectancy_r:>+8.2f}{s.max_drawdown_pct_1pct_risk:>9.0%}"
+    vb = [(f"{res.vol_name} under 16 (calm)", 0, 16), (f"{res.vol_name} 16-22", 16, 22),
+          (f"{res.vol_name} 22-30 (nervous)", 22, 30), (f"{res.vol_name} 30+ (fear)", 30, 999)]
+    bb = [("Breadth 60%+ (healthy)", 60, 101), ("Breadth 40-60%", 40, 60), ("Breadth under 40% (weak)", 0, 40)]
+    dates = sorted(t.entry_date for t in closed)
+    cut = dates[len(dates) * 2 // 3]
+    base_all, base_tr, base_te = (_scaled([dict_t for dict_t in closed if f(dict_t)]) for f in
+                                  (lambda t: True, lambda t: t.entry_date < cut, lambda t: t.entry_date >= cut))
+    flat = lambda xs: {"trades": len(xs), "total_r": sum(t.r for t in xs), "per_risk": (sum(t.r for t in xs) / len(xs)) if xs else 0.0}
+    f_all, f_tr, f_te = flat(closed), flat([t for t in closed if t.entry_date < cut]), flat([t for t in closed if t.entry_date >= cut])
+    eq = peak = ddf = 0.0
+    for t in sorted(closed, key=lambda t: t.exit_date):
+        eq += t.r; peak = max(peak, eq); ddf = max(ddf, peak - eq)
+    better = base_tr["per_risk"] > f_tr["per_risk"] and base_te["per_risk"] > f_te["per_risk"]
+    out = ["", "MARKET REGIME — does market health change results?  (" + name + ")", "=" * 90,
+           "  Breadth = % of all stocks above their 50-day average. " + res.vol_name + " = market fear gauge.",
+           f"  {'':<34}{'TRADES':>7}{'WIN%':>7}{'EXP R':>8}{'MAX DD':>9}",
+           "  By fear level", *[row(l, summarize([t for t in closed if t.vol is not None and lo <= t.vol < hi])) for l, lo, hi in vb],
+           "  By breadth", *[row(l, summarize([t for t in closed if t.breadth is not None and lo <= t.breadth < hi])) for l, lo, hi in bb],
+           "  By SPY trend (10 vs 20 SMA)",
+           row("SPY 10 above 20", summarize([t for t in closed if t.regime_ok is True])),
+           row("SPY 10 below 20", summarize([t for t in closed if t.regime_ok is False])),
+           "",
+           "  SIZING RULE TESTED: full size if breadth 60%+ and SPY up; half size if breadth 40-60% or SPY down;",
+           "  no new trades if breadth under 40%.",
+           f"  {'':<34}{'TRADES':>7}{'R per 1R risked':>17}{'TOTAL R':>9}{'WORST DROP':>12}",
+           f"  {'Flat size (now)':<34}{f_all['trades']:>7}{f_all['per_risk']:>+17.2f}{f_all['total_r']:>+9.0f}{ddf:>11.0f}R",
+           f"  {'Regime-scaled size':<34}{base_all['trades']:>7}{base_all['per_risk']:>+17.2f}{base_all['total_r']:>+9.0f}{base_all['dd_r']:>11.0f}R",
+           f"  TRAIN (before {cut}): flat {f_tr['per_risk']:+.2f} vs scaled {base_tr['per_risk']:+.2f}   "
+           f"TEST: flat {f_te['per_risk']:+.2f} vs scaled {base_te['per_risk']:+.2f}",
+           f"  VERDICT: {'BETTER in both halves — worth adopting' if better else 'not better in both halves — keep flat sizing'}", ""]
+    return "\n".join(out)
+
+
+def monte_carlo(res: BacktestResult, sims: int = 5000, seed: int = 7) -> dict:
+    """Resample the best-rules trades to show the range of outcomes you should expect."""
+    name, ts = best_trades(res)
+    R = [t.r for t in ts if not t.open]
+    if len(R) < 50:
+        return {}
+    rng = random.Random(seed)
+    pct = lambda xs, p: sorted(xs)[min(len(xs) - 1, int(p / 100 * len(xs)))]
+    horizons = [10, 20, 30, 50, 100, 200]
+    by_n = {}
+    for n in horizons:
+        avg, down = [], 0
+        for _ in range(sims):
+            s = sum(rng.choice(R) for _ in range(n))
+            avg.append(s / n)
+            down += s < 0
+        by_n[n] = {"p5": pct(avg, 5), "p25": pct(avg, 25), "p50": pct(avg, 50), "p75": pct(avg, 75),
+                   "p95": pct(avg, 95), "chance_down": down / sims}
+    streaks, dd_r, dd_05, dd_1 = [], [], [], []
+    N = 200
+    for _ in range(sims):
+        st = worst = 0
+        eq = pk = d = 0.0
+        a05 = p05 = a1 = p1 = 1.0
+        m05 = m1 = 0.0
+        for _ in range(N):
+            r = rng.choice(R)
+            st = st + 1 if r <= 0 else 0
+            worst = max(worst, st)
+            eq += r; pk = max(pk, eq); d = max(d, pk - eq)
+            a05 *= 1 + 0.005 * r; p05 = max(p05, a05); m05 = max(m05, 1 - a05 / p05)
+            a1 *= 1 + 0.01 * r; p1 = max(p1, a1); m1 = max(m1, 1 - a1 / p1)
+        streaks.append(worst); dd_r.append(d); dd_05.append(m05); dd_1.append(m1)
+    q = lambda xs: {"p50": pct(xs, 50), "p75": pct(xs, 75), "p95": pct(xs, 95)}
+    return {"format": "sar-montecarlo/1", "generated": res.generated, "rules": name, "trades_sampled": len(R),
+            "sims": sims, "avg_r": sum(R) / len(R), "win_rate": sum(r > 0 for r in R) / len(R),
+            "by_n": {str(k): v for k, v in by_n.items()}, "horizon": N,
+            "losing_streak": q(streaks), "drawdown_r": q(dd_r),
+            "drawdown_pct_05": q(dd_05), "drawdown_pct_1": q(dd_1)}
+
+
+def render_monte_carlo(mc: dict) -> str:
+    if not mc:
+        return ""
+    s, d05, d1 = mc["losing_streak"], mc["drawdown_pct_05"], mc["drawdown_pct_1"]
+    out = ["", f"MONTE CARLO — {mc['sims']:,} reshuffles of {mc['trades_sampled']:,} trades ({mc['rules']})", "=" * 90,
+           f"  Over the next {mc['horizon']} trades:",
+           f"    Longest losing streak: typical {s['p50']}, bad luck {s['p75']}, worst 1-in-20 {s['p95']}",
+           f"    Biggest account drop at 0.5% risk: typical {d05['p50']:.0%}, bad luck {d05['p75']:.0%}, worst 1-in-20 {d05['p95']:.0%}",
+           f"    Biggest account drop at 1% risk:   typical {d1['p50']:.0%}, bad luck {d1['p75']:.0%}, worst 1-in-20 {d1['p95']:.0%}",
+           "", f"  {'AFTER N TRADES':<16}{'CHANCE DOWN':>12}{'WORST 5%':>10}{'TYPICAL':>9}{'BEST 5%':>9}   (avg R per trade)"]
+    for n, v in mc["by_n"].items():
+        out.append(f"  {n:<16}{v['chance_down']:>12.0%}{v['p5']:>+10.2f}{v['p50']:>+9.2f}{v['p95']:>+9.2f}")
+    out += ["", "  EARLY WARNING: if your real avg R after 30+ trades is below the WORST 5% number for that",
+            "  many trades, results are worse than bad luck explains. Pause and recheck the rules.", ""]
+    return "\n".join(out)
+
+
 def render_backtest_full(res: BacktestResult) -> str:
-    return render_backtest(res) + render_experiments(res)
+    res.mc = monte_carlo(res)
+    return render_backtest(res) + render_experiments(res) + render_regime(res) + render_monte_carlo(res.mc)
 
 
 def render_backtest(res: BacktestResult) -> str:

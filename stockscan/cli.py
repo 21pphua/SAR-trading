@@ -298,6 +298,11 @@ def cmd_sar_backtest(args) -> int:
             fh.write(text)
     if args.trades:
         write_trades_csv(res, args.trades)
+    mc = getattr(res, "mc", None)
+    if mc and args.out:
+        import json, os
+        with open(os.path.join(os.path.dirname(args.out) or ".", "montecarlo.json"), "w", encoding="utf-8") as fh:
+            json.dump(mc, fh, indent=1)
     return 0
 
 
