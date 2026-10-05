@@ -1,20 +1,20 @@
 {
  "format": "sar-intraday/1",
- "generated": "2026-10-05T17:13:35+00:00",
+ "generated": "2026-10-05T18:03:24+00:00",
  "session": "2026-10-05",
- "as_of_et": "13:13",
+ "as_of_et": "14:03",
  "scan_generated": "2026-10-05T14:08:59+00:00",
  "rows": [
   {
    "ticker": "FTK",
    "base_high": 31.889999389648438,
    "status": "WAITING",
-   "price": 30.505,
+   "price": 30.48,
    "orh": 31.37,
    "trigger": 31.89,
-   "low": 30.505,
-   "pace": 0.38,
-   "pct_to_trigger": 0.0454,
+   "low": 30.415,
+   "pace": 0.39,
+   "pct_to_trigger": 0.0463,
    "first_triggered": null
   }
  ],
@@ -26,15 +26,15 @@
    "stop": 190.91,
    "date": "2026-10-05",
    "status": "HOLD",
-   "action": "On track. Stop 190.91. Sell on a daily close below the 10 SMA (182.72).",
-   "last": 201.52499389648438,
+   "action": "On track. Stop 190.91. Sell on a daily close below the 10 SMA (182.90).",
+   "last": 203.38999938964844,
    "last_date": "2026-10-05",
-   "sma10": 182.71750183105468,
+   "sma10": 182.90400238037108,
    "stop_now": 190.91,
    "target_5r": 250.67000000000004,
    "hit_5r_date": "",
-   "r_now": 0.06576243940606123,
-   "pnl": 7.204932861328075,
+   "r_now": 0.25301198691249305,
+   "pnl": 27.719993286132762,
    "bars": [
     [
      "2026-07-06",
@@ -553,8 +553,8 @@
      189.97,
      203.949,
      189.25,
-     201.525,
-     1505806
+     203.39,
+     1676845
     ]
    ],
    "live": true
@@ -566,15 +566,15 @@
    "stop": 12.8,
    "date": "2026-10-05",
    "status": "HOLD",
-   "action": "On track. Stop 12.80. Sell on a daily close below the 10 SMA (11.34).",
-   "last": 14.451600074768066,
+   "action": "On track. Stop 12.80. Sell on a daily close below the 10 SMA (11.35).",
+   "last": 14.539999961853027,
    "last_date": "2026-10-05",
-   "sma10": 11.341160011291503,
+   "sma10": 11.35,
    "stop_now": 12.8,
    "target_5r": 20.479999999999997,
    "hit_5r_date": "",
-   "r_now": 0.290312558412552,
-   "pnl": 37.16000747680663,
+   "r_now": 0.3593749701976777,
+   "pnl": 45.99999618530273,
    "bars": [
     [
      "2026-07-06",
@@ -1093,8 +1093,8 @@
      12.5,
      15.1199,
      12.48,
-     14.4516,
-     4548793
+     14.54,
+     4938462
     ]
    ],
    "live": true
