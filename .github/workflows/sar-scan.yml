@@ -9,7 +9,7 @@ on:
       task:
         description: "What to run"
         type: choice
-        options: [scan, backtest, intraday]
+        options: [scan, live, backtest, intraday]
         default: scan
 permissions:
   contents: write
@@ -46,7 +46,7 @@ jobs:
           fi
       - run: pip install -e '.[data]'
       - name: Build stock list + sectors
-        if: github.event.schedule != '*/30 13-20 * * 1-5' && !(github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
+        if: github.event.schedule != '*/30 13-20 * * 1-5' && !(github.event_name == 'workflow_dispatch' && (inputs.task == 'intraday' || inputs.task == 'live'))
         run: python scripts/build_us_universe.py
       - name: Intraday alert check
         if: github.event.schedule == '*/30 13-20 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
@@ -60,6 +60,11 @@ jobs:
           mkdir -p results
           stockscan sar --out results/shortlist.json > results/latest.txt
           cp results/latest.txt "results/scan-$(date -u +%Y-%m-%d).txt"
+      - name: Live scan (today's prices so far)
+        if: github.event_name == 'workflow_dispatch' && inputs.task == 'live'
+        run: |
+          mkdir -p results
+          stockscan sar --live --out results/live.json > results/live.txt
       - name: Send to phone / Discord
         if: github.event.schedule == '30 21 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.task == 'scan')
         env:
