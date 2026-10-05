@@ -1,38 +1,73 @@
 
 SAR BACKTEST
-==================================================================================
-6245 tickers · period 3y · generated 2026-10-02T20:39:14+00:00
+==========================================================================================
+6244 tickers · period 3y · generated 2026-10-05T17:44:02+00:00
 
-PLAIN ENGLISH
-----------------------------------------------------------------------------------
-  Out of 8257 trades, 29% made money.
-  Winners averaged +2.2R, losers -0.9R (R = what you risked; at 1% risk, 1R = 1% of the account).
-  On average each trade made -0.04R. Negative = the rules lost money over this period.
-  Worst losing streak: 33 in a row. Worst account drop at 1% risk: 100%.
+PLAIN ENGLISH (entries at the close, all trades)
+------------------------------------------------------------------------------------------
+  Out of 2559 trades, 31% made money.
+  Winners averaged +2.0R, losers -0.8R (R = what you risked; at 1% risk, 1R = 1% of the account).
+  On average each trade made +0.04R. Positive = the rules made money over this period.
+  Worst losing streak: 19 in a row. Worst account drop at 1% risk: 76%.
   8% of trades reached the 5R partial. Average hold: 7 trading days.
-  The doc claims ~30% wins, ~4:1 win/loss, up to 35 losses in a row, 20-35% drawdowns.
 
-DETAIL
-----------------------------------------------------------------------------------
-                   TRADES    WIN%  AVG WIN AVG LOSS   EXP R     PF  STREAK  MAX DD
-  All trades         8257     29%    +2.19    -0.95   -0.04   0.95      33    100%
+THE QUESTIONS THAT DECIDE THE NEXT RULE CHANGES
+------------------------------------------------------------------------------------------
+                           TRADES    WIN%  AVG WIN AVG LOSS   EXP R     PF  STREAK  MAX DD
+  Live rules (close)          651     26%    +3.45    -1.07   +0.09   1.11      20     53%
+    + RS 80+                  560     26%    +3.54    -1.08   +0.11   1.14      19     51%
+    + hot group               179     25%    +3.32    -1.08   +0.03   1.04      23     27%
+    + RS leader & hot group    175     25%    +3.28    -1.08   -0.01   0.99      23     30%
+    + favorable regime only    466     23%    +3.52    -1.07   -0.02   0.98      23     50%
+  Live rules, intraday entry   1653     17%    +4.31    -1.06   -0.18   0.80      44     98%
+    + RS 80+                 1423     17%    +4.22    -1.06   -0.18   0.79      50     97%
+    + hot group               430     20%    +5.30    -1.11   +0.14   1.16      30     59%
+  Intraday false breaks (closed back inside the base, counted as -1R): 833 of 1656 (50%).
+
+DETAIL (close entries)
+------------------------------------------------------------------------------------------
+                           TRADES    WIN%  AVG WIN AVG LOSS   EXP R     PF  STREAK  MAX DD
+  All trades                 2559     31%    +2.02    -0.85   +0.04   1.07      19     76%
 
   By score
-  65-74              3483     28%    +2.12    -1.00   -0.14   0.81      26    100%
-  75-84              3498     29%    +2.40    -0.93   +0.04   1.06      21     96%
-  85+                1276     33%    +1.85    -0.84   +0.04   1.06      21     68%
+  65-74                         —
+  75-84                      1915     31%    +2.10    -0.87   +0.04   1.06      15     68%
+  85+                         644     33%    +1.78    -0.78   +0.06   1.11      15     33%
 
-  By long-term trend (the new filter: 50/200 SMA + near 52-week high)
-  uptrend            3436     31%    +2.19    -0.87   +0.06   1.11      21     87%
-  counter-trend      4717     28%    +2.21    -1.00   -0.10   0.86      36    100%
+  By relative strength at entry
+  RS 80+ (leaders)           2184     32%    +2.00    -0.85   +0.05   1.09      17     75%
+  RS 50-79                     69     29%    +2.78    -0.71   +0.30   1.60      12     11%
+  RS under 50                   2     50%    +2.49    -1.00   +0.75   2.49       1      1%
+
+  By industry group strength at entry
+  Hot group (80+)             700     31%    +2.09    -0.86   +0.06   1.10      19     46%
+  Other groups               1537     32%    +2.00    -0.84   +0.06   1.11      21     61%
+  Group unknown               322     28%    +1.94    -0.87   -0.09   0.85      15     40%
+
+  By long-term trend (50/200 SMA + near 52-week high)
+  uptrend                    2499     31%    +2.02    -0.85   +0.05   1.08      18     76%
+  counter-trend                 —
 
   By market (SPY 10 vs 20 SMA at entry)
-  favorable          6126     29%    +2.24    -0.95   -0.04   0.95      77    100%
-  unfavorable        2131     30%    +2.05    -0.92   -0.04   0.95      59     97%
+  favorable                  1919     31%    +2.05    -0.85   +0.04   1.07      29     71%
+  unfavorable                 640     33%    +1.91    -0.85   +0.05   1.08      35     53%
 
   By stop width
-  stop <= 1 ADR      2651     24%    +3.80    -1.24   -0.02   0.98      63     99%
-  stop > 1 ADR       5606     31%    +1.60    -0.79   -0.04   0.92      25     96%
+  stop <= 1 ADR               651     26%    +3.45    -1.07   +0.09   1.11      20     53%
+  stop > 1 ADR               1908     33%    +1.64    -0.76   +0.03   1.06      19     58%
 
-CAVEATS: today's ticker list only (survivorship bias); fills at close/stop, no slippage
-or commissions; trades across tickers can overlap. Treat as a rough guide, not proof.
+DETAIL (intraday entries, live rules)
+------------------------------------------------------------------------------------------
+                           TRADES    WIN%  AVG WIN AVG LOSS   EXP R     PF  STREAK  MAX DD
+  RS 80+ (leaders)           1423     17%    +4.22    -1.06   -0.18   0.79      50     97%
+  RS 50-79                     67     12%    +4.20    -1.22   -0.57   0.47      13     35%
+  RS under 50                   1      0%    +0.00    -1.00   -1.00   0.00       1      1%
+    closed on 1.3x+ volume    407     31%    +5.07    -1.09   +0.80   2.07      15     32%
+    closed on light volume   1246     12%    +3.68    -1.06   -0.50   0.47      44    100%
+
+CAVEATS: today's ticker list only (survivorship bias); close fills exact, intraday fills
+approximated from daily bars with 0.2% slippage; no commissions; trades across tickers
+overlap; trades with a stop under 0.15 ADR are excluded (see SAR_MIN_RISK_ADR --
+those produced unrealistic, unfillable R-multiples on a prior run). Treat as a rough guide,
+not proof -- especially the RS/group/regime-stacked rows above, which have NOT been
+walk-forward tested (run with --split-date to check a filter out-of-sample before trusting it).
