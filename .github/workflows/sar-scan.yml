@@ -3,15 +3,19 @@ on:
   schedule:
     - cron: "30 21 * * 1-5"   # weekdays after the US close -> scan
     - cron: "0 14 1 * *"      # 1st of each month -> backtest
+    - cron: "*/30 13-20 * * 1-5"  # every 30 min in market hours -> intraday alert check
   workflow_dispatch:
     inputs:
       task:
         description: "What to run"
         type: choice
-        options: [scan, backtest]
+        options: [scan, backtest, intraday]
         default: scan
 permissions:
   contents: write
+concurrency:
+  group: sar
+  cancel-in-progress: false
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -29,11 +33,11 @@ jobs:
         run: |
           mkdir -p stockscan/sar scripts tests
           mv_if () { if [ -f "$1" ]; then git mv -f "$1" "$2"; fi; }
-          for f in engine scan render backtest; do mv_if "$f.py" "stockscan/sar/$f.py"; done
+          for f in engine scan render backtest strength; do mv_if "$f.py" "stockscan/sar/$f.py"; done
           mv_if __init__.py stockscan/sar/__init__.py
           mv_if cli.py stockscan/cli.py
           mv_if config.py stockscan/config.py
-          for f in build_us_universe notify; do mv_if "$f.py" "scripts/$f.py"; done
+          for f in build_us_universe notify intraday; do mv_if "$f.py" "scripts/$f.py"; done
           mv_if test_sar.py tests/test_sar.py
           if [ -f sar-scan.yml ]; then git rm -q sar-scan.yml; fi
           if ! git diff --cached --quiet; then
@@ -41,7 +45,15 @@ jobs:
             git push
           fi
       - run: pip install -e '.[data]'
-      - run: python scripts/build_us_universe.py
+      - name: Build stock list + sectors
+        if: github.event.schedule != '*/30 13-20 * * 1-5' && !(github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
+        run: python scripts/build_us_universe.py
+      - name: Intraday alert check
+        if: github.event.schedule == '*/30 13-20 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python scripts/intraday.py
       - name: Run the SAR scan
         if: github.event.schedule == '30 21 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.task == 'scan')
         run: |
@@ -62,6 +74,6 @@ jobs:
       - name: Save results
         run: |
           git add results
-          git commit -m "SAR results $(date -u +%Y-%m-%d)" || echo "nothing new"
+          git commit -q -m "SAR results $(date -u +%Y-%m-%d %H:%M)" || echo "nothing new"
           git pull --rebase
           git push
