@@ -86,6 +86,8 @@ class Position:
     last: float = 0.0
     last_date: str = ""
     sma10: Optional[float] = None
+    sma20: Optional[float] = None
+    exit_line: str = "10 SMA"   # switches to the 20 SMA once 5R is hit (backtest update 9)
     stop_now: float = 0.0
     target_5r: Optional[float] = None
     hit_5r_date: str = ""
@@ -133,26 +135,31 @@ def evaluate_position(p: Position, bars: Sequence[Bar]) -> Position:
         if p.target_5r and not p.hit_5r_date and b.high >= p.target_5r:
             p.hit_5r_date, stop = b.date, p.entry
     last = bars[-1]
-    p.last, p.last_date, p.sma10, p.stop_now = last.close, last.date, S.s10[-1], stop
+    p.last, p.last_date, p.sma10, p.sma20, p.stop_now = last.close, last.date, S.s10[-1], S.s20[-1], stop
     p.r_now = (p.last - p.entry) / R if R > 0 else 0.0
     p.pnl = (p.last - p.entry) * p.shares
+    # After the 5R partial, trail the 20 SMA instead of the 10 (better in both backtest halves).
+    trail = p.sma20 if p.hit_5r_date else p.sma10
+    p.exit_line = "20 SMA" if p.hit_5r_date else "10 SMA"
     if stopped:
         p.status = "STOPPED"
         p.action = (f"{'Breakeven stop' if p.hit_5r_date else 'Stop'} {stop:.2f} was hit on {stopped}. "
                     "Close the position if your broker hasn't already.")
-    elif p.sma10 and start < n and p.last < p.sma10:
+    elif trail and start < n and p.last < trail:
         p.status = "EXIT"
-        p.action = f"Closed {p.last:.2f}, below the 10 SMA ({p.sma10:.2f}). Sell the rest at the next open."
-    elif p.hit_5r_date:
+        p.action = f"Closed {p.last:.2f}, below the {p.exit_line} ({trail:.2f}). Sell the rest at the next open."
+    elif p.hit_5r_date and p.target_5r and (n - 1 - next((k for k, b in enumerate(bars) if b.date == p.hit_5r_date), n - 1)) <= 2:
         p.status = "5R HIT"
         p.action = (f"Reached 5R ({p.target_5r:.2f}) on {p.hit_5r_date}. Sell 10-30% if you haven't, "
-                    f"and raise your stop to {p.entry:.2f}. Then hold until a close below the 10 SMA.")
-    elif p.sma10 and p.last < p.sma10 * 1.02:
+                    f"and raise your stop to {p.entry:.2f}. From now on, exit on a close below the 20 SMA "
+                    f"({(p.sma20 or 0):.2f}), not the 10.")
+    elif trail and p.last < trail * 1.02:
         p.status = "NEAR EXIT"
-        p.action = f"Within 2% of the 10 SMA ({p.sma10:.2f}). A daily close below it means sell."
+        p.action = f"Within 2% of the {p.exit_line} ({trail:.2f}). A daily close below it means sell."
     else:
         p.status = "HOLD"
-        p.action = f"On track. Stop {stop:.2f}. Sell on a daily close below the 10 SMA ({(p.sma10 or 0):.2f})."
+        p.action = (f"On track. Stop {stop:.2f}. Sell on a daily close below the {p.exit_line} ({(trail or 0):.2f})."
+                    + (" (5R partial taken: trailing the 20 SMA.)" if p.hit_5r_date else ""))
     p.bars = [[b.date, round(b.open, 4), round(b.high, 4), round(b.low, 4), round(b.close, 4), int(b.volume)]
               for b in bars[-260:]]
     return p

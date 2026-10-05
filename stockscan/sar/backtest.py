@@ -387,10 +387,12 @@ def run_backtest(tickers: Sequence[str], fetch: Callable[..., dict], period: str
                             backtest_ticker(tk, bars, min_score, partial, max_risk_adr, regime,
                                             trend_filter, "close", slippage, rs, exits=ex, variant=name))
                     if intraday:
-                        res.experiments.setdefault("Intraday + cut at close if unconfirmed", []).extend(
-                            backtest_ticker(tk, bars, min_score, partial, max_risk_adr, regime, trend_filter,
-                                            "intraday", slippage, rs, confirm_cut=True,
-                                            variant="Intraday + cut at close if unconfirmed"))
+                        for nm, ex in (("Intraday + cut at close if unconfirmed", None),
+                                       ("Intraday+cut + 20 SMA after partial", {"trail_after": 20}),
+                                       ("Intraday+cut + 20 SMA from day 1", {"trail": 20})):
+                            res.experiments.setdefault(nm, []).extend(
+                                backtest_ticker(tk, bars, min_score, partial, max_risk_adr, regime, trend_filter,
+                                                "intraday", slippage, rs, exits=ex, confirm_cut=True, variant=nm))
         if on_progress:
             on_progress(min(start + chunk, len(tickers)), len(tickers), batch[-1])
     _attach_ranks(res.trades, by_date, g_by_date, groups)

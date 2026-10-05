@@ -9,6 +9,12 @@ For each stock on the alert list:
 Volume pace = volume so far vs a normal full day, scaled by time elapsed.
 Volume is heavier near the open, so early pace readings run high.
 
+CONFIRM-OR-CUT (update 10, best result in the backtest): from 3:20 PM ET
+(12:20 PM PT) every stock that triggered today is checked again:
+  HOLD = still above the trigger AND projected volume >= 1.3x normal
+  CUT  = back below the trigger, or volume too light -> sell before the close
+One ping per stock. All times in messages are Pacific (PT).
+
 Writes results/intraday.json for the dashboard and pings phone/Discord once
 per ticker per day when one triggers (same secrets as notify.py).
 """
@@ -25,6 +31,27 @@ sys.path.insert(0, os.path.dirname(__file__))
 from notify import post  # noqa: E402
 
 ET = ZoneInfo("America/New_York")
+PT = ZoneInfo("America/Los_Angeles")
+CONFIRM_FROM = time(15, 20)   # ET -> 12:20 PM PT; the 3:30 ET run lands in this window
+MIN_PACE = 1.3
+
+
+def pt(dt: datetime) -> str:
+    """'12:35 PM' Pacific."""
+    return dt.astimezone(PT).strftime("%-I:%M %p")
+
+
+def _ping(title: str, body: str, high: bool = False) -> None:
+    topic = os.environ.get("NTFY_TOPIC", "").strip()
+    if topic:
+        h = {"Title": title}
+        if high:
+            h["Priority"] = "high"
+        post(f"https://ntfy.sh/{topic}", body.encode("utf-8"), h)
+    hook = os.environ.get("DISCORD_WEBHOOK", "").strip()
+    if hook:
+        post(hook, json.dumps({"content": f"**{title}**\n```\n{body[:1800]}\n```"}).encode("utf-8"),
+             {"Content-Type": "application/json", "User-Agent": "sar-scan"})
 SHORTLIST = os.environ.get("SHORTLIST", "results/shortlist.json")
 OUT = os.environ.get("INTRADAY_OUT", "results/intraday.json")
 OR_MINUTES = 30
@@ -69,8 +96,9 @@ def track_positions(now, prev_pos: dict) -> tuple[list[dict], list[str]]:
         d = asdict(p)
         d["live"] = True
         if p.status == "EXIT":
-            d["action"] = (f"Trading at {p.last:.2f}, below the 10 SMA ({(p.sma10 or 0):.2f}). The rule is a daily "
-                           "CLOSE below it: if it's still below near 4 PM, sell the rest.")
+            line = p.sma20 if p.exit_line == "20 SMA" else p.sma10
+            d["action"] = (f"Trading at {p.last:.2f}, below the {p.exit_line} ({(line or 0):.2f}). The rule is a daily "
+                           "CLOSE below it: if it's still below near 12:45 PM PT, sell the rest.")
         out.append(d)
         before = prev_pos.get(p.ticker, {}).get("status")
         if p.status in ("STOPPED", "5R HIT", "EXIT") and before != p.status:
@@ -81,7 +109,7 @@ def track_positions(now, prev_pos: dict) -> tuple[list[dict], list[str]]:
 def main() -> int:
     now = datetime.now(ET)
     if now.weekday() >= 5 or not (OPEN <= now.time() <= time(16, 15)):
-        print(f"market closed ({now:%a %H:%M} ET); nothing to do")
+        print(f"market closed ({pt(now)} PT); nothing to do")
         return 0
     doc = {}
     if os.path.exists(SHORTLIST):
@@ -103,7 +131,7 @@ def main() -> int:
     except Exception as e:  # never let position tracking break the alert check
         print(f"position tracking failed: {e}")
         positions, pos_alerts = [], []
-    rows, fresh = [], []
+    rows, fresh, confirms = [], [], []
     if alerts:
         import yfinance as yf
         tks = [r["ticker"] for r in alerts]
@@ -137,43 +165,46 @@ def main() -> int:
                     status = "ABOVE BASE"
                 else:
                     status = "WAITING"
-                first_t = prev.get(tk, {}).get("first_triggered")
+                pv = prev.get(tk, {})
+                first_t = pv.get("first_triggered")
                 if status == "TRIGGERED" and not first_t:
-                    first_t = now.strftime("%H:%M")
+                    first_t = pt(now)
                     fresh.append((tk, price, trig, low, pace))
+                # confirm-or-cut, late in the session, for anything that triggered today
+                confirm = pv.get("confirm")
+                if first_t and not confirm and now.time() >= CONFIRM_FROM:
+                    ok = price > trig and (pace or 0) >= MIN_PACE
+                    confirm = "HOLD" if ok else "CUT"
+                    why = ("held above the trigger on heavy volume" if ok else
+                           "closed back below the trigger" if price <= trig else
+                           f"volume too light ({(pace or 0):.1f}x, needs {MIN_PACE}x)")
+                    confirms.append((tk, confirm, price, trig, why))
                 row.update(status=status, price=round(price, 4), orh=round(orh, 4), trigger=round(trig, 4),
                            low=round(low, 4), pace=round(pace, 2) if pace else None,
-                           pct_to_trigger=round(trig / price - 1, 4), first_triggered=first_t)
+                           pct_to_trigger=round(trig / price - 1, 4), first_triggered=first_t,
+                           confirm=confirm, confirm_at=pv.get("confirm_at") or (pt(now) if confirm else None))
             rows.append(row)
     os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as fh:
         json.dump({"format": "sar-intraday/1", "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                   "session": now.date().isoformat(), "as_of_et": now.strftime("%H:%M"),
+                   "session": now.date().isoformat(), "as_of_et": now.strftime("%H:%M"), "as_of_pt": pt(now),
                    "scan_generated": doc.get("generated"), "rows": rows, "positions": positions}, fh, indent=1)
     print(f"{len(positions)} positions tracked; {len(pos_alerts)} need action")
     if pos_alerts:
-        body = "\n".join(pos_alerts)
-        title = "SAR positions: " + ", ".join(a.split(" ")[0] for a in pos_alerts)
-        topic = os.environ.get("NTFY_TOPIC", "").strip()
-        if topic:
-            post(f"https://ntfy.sh/{topic}", body.encode("utf-8"), {"Title": title, "Priority": "high"})
-        hook = os.environ.get("DISCORD_WEBHOOK", "").strip()
-        if hook:
-            post(hook, json.dumps({"content": f"**{title}**\n```\n{body[:1800]}\n```"}).encode("utf-8"),
-                 {"Content-Type": "application/json", "User-Agent": "sar-scan"})
+        _ping("SAR positions: " + ", ".join(a.split(" ")[0] for a in pos_alerts), "\n".join(pos_alerts), high=True)
     print(f"{len(rows)} alerts checked; {sum(r['status'] == 'TRIGGERED' for r in rows)} triggered; {len(fresh)} new")
     if fresh:
-        body = "\n".join(f"{tk} above {trig:.2f} (now {p:.2f}) · stop = day low {lo:.2f}"
+        body = "\n".join(f"{tk}: BUY above {trig:.2f} (now {p:.2f}) · stop = day low {lo:.2f}"
                          + (f" · volume pace {pc:.1f}x" if pc else "") for tk, p, trig, lo, pc in fresh)
-        body += "\nCheck the chart before buying. Pace under ~1.3x = weaker break."
-        title = f"SAR intraday: {', '.join(t[0] for t in fresh)} triggered"
-        topic = os.environ.get("NTFY_TOPIC", "").strip()
-        if topic:
-            post(f"https://ntfy.sh/{topic}", body.encode("utf-8"), {"Title": title})
-        hook = os.environ.get("DISCORD_WEBHOOK", "").strip()
-        if hook:
-            post(hook, json.dumps({"content": f"**{title}**\n```\n{body[:1800]}\n```"}).encode("utf-8"),
-                 {"Content-Type": "application/json", "User-Agent": "sar-scan"})
+        body += ("\nCheck the chart, buy, add the line to positions.txt."
+                 "\nAround 12:30 PM PT you'll get HOLD or CUT for each one.")
+        _ping(f"SAR BUY signal ({pt(now)} PT): {', '.join(t[0] for t in fresh)}", body, high=True)
+    if confirms:
+        body = "\n".join((f"{tk}: HOLD. Now {p:.2f}, {why}. Keep it; normal exit rules from here."
+                          if c == "HOLD" else
+                          f"{tk}: CUT. Now {p:.2f} vs trigger {trig:.2f}: {why}. Sell before 1:00 PM PT.")
+                         for tk, c, p, trig, why in confirms)
+        _ping(f"SAR close check ({pt(now)} PT): " + ", ".join(f"{t[0]} {t[1]}" for t in confirms), body, high=True)
     return 0
 
 
