@@ -1,36 +1,46 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6244 · with data 6242 · passed filters 661  (2026-10-05T14:43:48+00:00)
+Scanned 6244 · with data 6240 · passed filters 662  (2026-10-05T15:11:26+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
 
-BREAKOUTS (1)
+YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
-  TWST       75  Take     202.04   189.25  6.3%   265.96   272.95  1.66  99
+  TWST   HOLD          11 sh  last   200.52   -0.0R  -$4
+           On track. Stop 190.91. Sell on a daily close below the 10 SMA (182.62).
+  DNA    HOLD         100 sh  last    14.23   +0.1R  +$15
+           On track. Stop 12.80. Sell on a daily close below the 10 SMA (11.32).
 
-COILING — setup formed, not yet broken out (4)
+BREAKOUTS (0)
+------------------------------------------------------------------------------
+  none today
+
+COILING — setup formed, not yet broken out (5)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  FTK      36/50      31.89  -2.4%     78%  5.9%    29.79
-  NET      37/50     367.43  -1.6%     26%  5.2%   352.82
-  SG       36/50       9.19  -0.9%     30%  5.9%     8.46
-  SEI      35/50      75.46  -1.5%     52%  5.5%    70.35
+  FTK      36/50      31.89  -2.3%     78%  5.9%    29.79
+  NET      37/50     367.43  -1.1%     26%  5.2%   353.01
+  FROG     40/50     100.00  -2.8%     42%  5.6%    93.22
+  SG       36/50       9.19  -1.0%     30%  6.0%     8.46
+  SEI      35/50      75.46  -0.6%     52%  5.5%    70.42
 
 WIDE STOP — watch only (1): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  DNA        75  entry 13.90  stop 12.48  (1.0x ADR)
+  DNA        79  entry 14.23  stop 12.48  (1.2x ADR)
 
-SKIPPED — COUNTER-TREND (8): scored well, but not in a long-term uptrend
+SKIPPED — COUNTER-TREND (11): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  TTMI       83  50 SMA falling; -39% from 52-week high
-  OPTX       77  50 SMA falling; -38% from 52-week high
-  OUST       69  50 SMA falling; -31% from 52-week high
-  ODD        54  -67% from 52-week high
-  SMCI       51  -26% from 52-week high
-  TENB       50  50 SMA falling
-  LPTH       45  below the 50 SMA; 50 SMA falling; below the 200 SMA; -42% from 52-week high
-  CIEN       43  50 SMA falling; below the 200 SMA; -39% from 52-week high
+  RXRX       78  -37% from 52-week high
+  TTMI       77  50 SMA falling; -39% from 52-week high
+  OUST       65  50 SMA falling; -32% from 52-week high
+  SIMO       65  50 SMA falling
+  AAOI       60  50 SMA falling; -51% from 52-week high
+  ODD        56  -67% from 52-week high
+  TENB       53  50 SMA falling
+  CIEN       49  50 SMA falling; -38% from 52-week high
+  SMCI       47  -26% from 52-week high
+  LPTH       44  below the 50 SMA; 50 SMA falling; below the 200 SMA; -42% from 52-week high
+  AXTI       39  -41% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
