@@ -31,9 +31,23 @@ OR_MINUTES = 30
 OPEN, CLOSE = time(9, 30), time(16, 0)
 
 
-def _frame(df, tk, many):
+def _frame(df, tk, many=None):
+    """One ticker's OHLCV frame out of a yf.download() result.
+
+    Newer yfinance returns MultiIndex columns even for a single ticker, and the
+    level order varies (ticker first with group_by="ticker", field first
+    otherwise), so don't assume -- look for the ticker in either level.
+    """
     try:
-        f = df[tk] if many else df
+        f = df
+        cols = f.columns
+        if getattr(cols, "nlevels", 1) > 1:
+            if tk in cols.get_level_values(0):
+                f = f[tk]
+            elif tk in cols.get_level_values(1):
+                f = f.xs(tk, axis=1, level=1)
+            else:
+                f = f.droplevel(list(range(1, cols.nlevels)), axis=1)  # single ticker, ticker level missing
         return f.dropna(how="all")
     except Exception:
         return None
