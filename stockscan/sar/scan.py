@@ -24,7 +24,8 @@ from datetime import datetime, timezone
 from typing import Callable, Optional, Sequence
 
 from stockscan.config import (SAR_TAKE_AT, SAR_REGIME_INDEXES, SAR_EARNINGS_WARN_DAYS, SAR_TREND_FILTER,
-                              SAR_REQUIRE_TIGHT_STOP)
+                              SAR_REQUIRE_TIGHT_STOP, SAR_HOT_GROUP, SAR_HOT_GROUP_BONUS)
+from stockscan.sar.strength import rs_raw, percentile_ranks, load_sectors, group_keys, group_ranks
 from stockscan.sar.engine import (
     Bar, SetupScore, Series, passes_filters, score_setup, market_regime,
 )
@@ -298,10 +299,12 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
         elif s.is_coiling or (s.is_breakout and s.score >= min_score):  # low-volume break = unconfirmed
             coiling.append(s)
 
-    breakouts.sort(key=lambda s: s.score, reverse=True)
-    coiling.sort(key=lambda s: (s.prep_points, s.gap_to_base), reverse=True)
+    attach_strength(scored, data)
+    by_rs = lambda s: (s.rs_rank or 0, s.score)
+    breakouts.sort(key=by_rs, reverse=True)
+    coiling.sort(key=by_rs, reverse=True)
     counter.sort(key=lambda s: s.score, reverse=True)
-    wide.sort(key=lambda s: s.score, reverse=True)
+    wide.sort(key=by_rs, reverse=True)
     breakouts, coiling, counter, wide = breakouts[:top], coiling[:top], counter[:top], wide[:top]
     keep = {s.ticker for s in breakouts + coiling + wide}
     if earnings and keep:
@@ -313,6 +316,28 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
         bars={t: data[t] for t in keep},
         all_scored=scored, all_bars={x.ticker: data[x.ticker] for x in scored}, filtered_out=filtered_out,
     )
+
+
+def attach_strength(scored: list[SetupScore], data: dict[str, list[Bar]]) -> None:
+    """RS rank vs every stock with data, and industry-group rank, onto each setup."""
+    rs = {}
+    for tk, bars in data.items():
+        if tk in SAR_REGIME_INDEXES or not bars or bars[-1].close < 1:
+            continue
+        v = rs_raw([b.close for b in bars])
+        if v is not None:
+            rs[tk] = v
+    ranks = percentile_ranks(rs)
+    sectors = load_sectors()
+    groups = group_keys(list(data), sectors)
+    granks = group_ranks(rs, groups)
+    for s in scored:
+        s.rs_rank = ranks.get(s.ticker)
+        s.sector = sectors.get(s.ticker, ("", ""))[0]
+        s.group = groups.get(s.ticker, "")
+        s.group_rank = granks.get(s.group)
+        if SAR_HOT_GROUP_BONUS and (s.group_rank or 0) >= SAR_HOT_GROUP:
+            s.score = min(100, s.score + SAR_HOT_GROUP_BONUS)
 
 
 def _setup_json(s: SetupScore, kind: str, bars: list[Bar], keep_bars: int = 260) -> dict:

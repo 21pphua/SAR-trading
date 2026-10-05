@@ -101,6 +101,10 @@ class SetupScore:
     sma50: Optional[float] = None
     sma200: Optional[float] = None
     pct_from_high: Optional[float] = None
+    rs_rank: Optional[int] = None       # 1-99 vs every stock scanned
+    sector: str = ""
+    group: str = ""                     # industry (or sector if the industry is small)
+    group_rank: Optional[int] = None    # 1-99 vs all groups
 
     @property
     def risk(self) -> float:

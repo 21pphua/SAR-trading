@@ -12,6 +12,8 @@ scan's own liquidity filters (price, ADR%, $ volume) trim the rest.
 
 from __future__ import annotations
 
+import csv
+import json
 import os
 import re
 import urllib.request
@@ -21,6 +23,31 @@ URLS = {
     "other": "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt",
 }
 OUT = os.path.join(os.path.dirname(__file__), "..", "stockscan", "universes", "us_all.txt")
+SECTORS_OUT = os.path.join(os.path.dirname(OUT), "sectors.csv")
+SCREENER = "https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=25&offset=0&download=true"
+
+
+def write_sectors() -> None:
+    """Sector + industry per ticker from NASDAQ's public screener (best effort)."""
+    try:
+        req = urllib.request.Request(SCREENER, headers={
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36",
+            "Accept": "application/json, text/plain, */*"})
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            rows = json.load(resp)["data"]["rows"]
+    except Exception as e:  # keep going without sectors; group strength just shows "unknown"
+        print(f"sector download failed ({e}); group strength will be blank")
+        return
+    n = 0
+    with open(SECTORS_OUT, "w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["symbol", "sector", "industry"])
+        for r in rows:
+            s = (r.get("symbol") or "").strip().upper()
+            if re.fullmatch(r"[A-Z]{1,5}", s) and r.get("sector"):
+                w.writerow([s, r.get("sector", "").strip(), r.get("industry", "").strip()])
+                n += 1
+    print(f"wrote {n} sector rows -> {os.path.normpath(SECTORS_OUT)}")
 
 
 def _rows(url: str) -> list[dict]:
@@ -51,6 +78,7 @@ def main() -> None:
         fh.write("# All US-listed common stocks (NASDAQ Trader symbol directory)\n")
         fh.write("\n".join(sorted(syms)) + "\n")
     print(f"wrote {len(syms)} tickers -> {os.path.normpath(OUT)}")
+    write_sectors()
 
 
 if __name__ == "__main__":

@@ -282,7 +282,8 @@ def cmd_sar_backtest(args) -> int:
     print(f"SAR backtest: {len(tickers)} names over {args.period} ...", file=sys.stderr)
     res = run_backtest(tickers, fetch_ohlcv, period=args.period, min_score=args.min_score,
                        partial=args.partial, max_risk_adr=args.max_risk_adr, on_progress=_progress,
-                       trend_filter=not args.all_trends)
+                       trend_filter=not args.all_trends, intraday=not args.no_intraday,
+                       slippage=args.slippage)
     text = render_backtest(res)
     print(text)
     if args.out:
@@ -368,6 +369,9 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--trades", help="Write every simulated trade to this CSV.")
     sp.add_argument("--all-trends", action="store_true",
                     help="Also take counter-trend trades (default: uptrend only, like the live scan).")
+    sp.add_argument("--no-intraday", action="store_true", help="Skip the intraday-entry simulation.")
+    sp.add_argument("--slippage", type=float, default=0.002,
+                    help="Slippage on intraday buy-stop entries (default 0.002 = 0.2%%).")
     sp.set_defaults(func=cmd_sar_backtest)
 
     return p

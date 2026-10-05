@@ -309,3 +309,36 @@ def test_wide_stop_goes_to_watch_list():
         assert [x.ticker for x in res.wide_stop] == ["BRK"] and not res.breakouts
     else:
         assert [x.ticker for x in res.breakouts] == ["BRK"] and not res.wide_stop
+
+
+# --- strength + intraday backtest ------------------------------------------
+
+from stockscan.sar.strength import rs_raw, percentile_ranks, group_keys, group_ranks
+
+
+def test_rs_rank_orders_by_performance():
+    up = [100 * (1.01 ** i) for i in range(200)]
+    flat = [100.0] * 200
+    down = [100 * (0.99 ** i) for i in range(200)]
+    ranks = percentile_ranks({"UP": rs_raw(up), "FLAT": rs_raw(flat), "DOWN": rs_raw(down)})
+    assert ranks["UP"] > ranks["FLAT"] > ranks["DOWN"]
+    assert rs_raw([100.0] * 100) is None  # under 6 months
+
+
+def test_group_ranks_use_industry_then_sector():
+    sectors = {f"A{i}": ("Tech", "Chips") for i in range(4)} | {f"B{i}": ("Health", "Biotech") for i in range(4)} \
+        | {"C0": ("Tech", "Tiny")}
+    g = group_keys(list(sectors), sectors)
+    assert g["A0"] == "Chips" and g["C0"] == "Tech"
+    rs = {f"A{i}": 0.5 for i in range(4)} | {f"B{i}": -0.2 for i in range(4)}
+    gr = group_ranks(rs, g)
+    assert gr["Chips"] > gr["Biotech"]
+
+
+def test_intraday_mode_runs(monkeypatch):
+    _loosen(monkeypatch)
+    bars = _bars(_phases_textbook() + [(0.03, 1.4, 0.04)] * 15 + [(-0.04, 1.0, 0.04)] * 10)
+    trades = backtest_ticker("T", bars, min_score=65, trend_filter=False, mode="intraday")
+    for t in trades:
+        assert t.mode == "intraday" and t.entry > t.stop
+        assert t.false_break == (t.exit_reason == "false break")

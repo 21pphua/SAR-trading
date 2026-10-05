@@ -58,13 +58,13 @@ def render_sar_scan(r: SarScanResult) -> str:
         f"BREAKOUTS ({len(r.breakouts)})",
         "-" * 78,
     ]
-    hdr = f"  {'TICKER':<7}{'SCORE':>6}  {'VERDICT':<6}{'ENTRY':>9}{'STOP':>9}{'R%':>6}{'5R':>9}{'MM':>9}{'VOLx':>6}  FLAGS"
+    hdr = f"  {'TICKER':<7}{'SCORE':>6}  {'VERDICT':<6}{'ENTRY':>9}{'STOP':>9}{'R%':>6}{'5R':>9}{'MM':>9}{'VOLx':>6}{'RS':>4}  FLAGS"
     if r.breakouts:
         lines.append(hdr)
         for s in r.breakouts:
             lines.append(
                 f"  {s.ticker:<7}{s.score:>6}  {s.verdict:<6}{s.entry:>9.2f}{s.stop:>9.2f}"
-                f"{s.risk / s.entry:>6.1%}{_target(s, '5R partial'):>9}{_target(s, 'Measured move'):>9}{s.volx:>6.2f}{_flags(s)}"
+                f"{s.risk / s.entry:>6.1%}{_target(s, '5R partial'):>9}{_target(s, 'Measured move'):>9}{s.volx:>6.2f}{(s.rs_rank or 0):>4}{_flags(s)}"
             )
     else:
         lines.append("  none today")

@@ -109,6 +109,17 @@ SAR_MAX_RISK_ADR: float = 1.0
 # watch list instead of BREAKOUTS (backtest: wide stops ~+0.02R vs +0.48R tight).
 SAR_REQUIRE_TIGHT_STOP: bool = True
 
+# Relative strength: rank 1-99 vs every stock scanned (99 = strongest).
+# Lists are SORTED by RS (ranking only, nothing is filtered out).
+# RS >= SAR_RS_LEADER is tagged "RS leader" (80 = top 20%).
+SAR_RS_LEADER: int = 80
+# Industry group rank 1-99; >= SAR_HOT_GROUP is tagged "Hot group".
+SAR_HOT_GROUP: int = 80
+# Points added to the score for a hot group. 0 until the backtest shows it helps.
+SAR_HOT_GROUP_BONUS: int = 0
+# Max open trades at once (dashboard warns when you're full).
+SAR_MAX_POSITIONS: int = 7
+
 # Flag names that report earnings within this many calendar days.
 SAR_EARNINGS_WARN_DAYS: int = 10
 
