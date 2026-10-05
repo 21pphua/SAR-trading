@@ -4,6 +4,8 @@ on:
     - cron: "30 21 * * 1-5"   # weekdays after the US close -> scan
     - cron: "0 14 1 * *"      # 1st of each month -> backtest
     - cron: "*/30 13-20 * * 1-5"  # every 30 min in market hours -> intraday alert check
+  push:
+    paths: ["positions.txt"]   # you added/removed a trade -> check positions right away
   workflow_dispatch:
     inputs:
       task:
@@ -46,10 +48,10 @@ jobs:
           fi
       - run: pip install -e '.[data]'
       - name: Build stock list + sectors
-        if: github.event.schedule != '*/30 13-20 * * 1-5' && !(github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
+        if: github.event.schedule != '*/30 13-20 * * 1-5' && github.event_name != 'push' && !(github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
         run: python scripts/build_us_universe.py
       - name: Intraday alert check
-        if: github.event.schedule == '*/30 13-20 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
+        if: github.event.schedule == '*/30 13-20 * * 1-5' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
