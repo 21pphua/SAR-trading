@@ -1,6 +1,6 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-10-04T23:20:49+00:00",
+ "generated": "2026-10-05T00:27:52+00:00",
  "scanned": 6245,
  "passed_filters": 667,
  "regime": {
@@ -201,13 +201,17 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-03",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 3.3330000114440916,
    "sma200": 2.6839999985694885,
    "pct_from_high": -0.08252425330423852,
+   "rs_rank": 96,
+   "sector": "Technology",
+   "group": "Computer Software: Prepackaged Software",
+   "group_rank": 72,
    "kind": "breakout",
    "risk_adr": 1.0,
    "wide_stop": false,
@@ -2222,7 +2226,7 @@
      3224800
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -2356,13 +2360,17 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-03",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 28.09580001831055,
    "sma200": 21.195900011062623,
    "pct_from_high": -0.2200654912487937,
+   "rs_rank": 95,
+   "sector": "Industrials",
+   "group": "Major Chemicals",
+   "group_rank": 35,
    "kind": "coiling",
    "risk_adr": 0.44,
    "wide_stop": false,
@@ -4377,7 +4385,7 @@
      406200
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -4499,13 +4507,17 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-10-29",
-   "days_to_earnings": 25,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 44.54940002441406,
    "sma200": 32.77899994373322,
    "pct_from_high": -0.011526441103504648,
+   "rs_rank": 99,
+   "sector": "Telecommunications",
+   "group": "Computer Communications Equipment",
+   "group_rank": 83,
    "kind": "wide",
    "risk_adr": 1.4,
    "wide_stop": true,
@@ -6521,7 +6533,7 @@
     ]
    ],
    "new": false,
-   "fired": true
+   "fired": false
   },
   {
    "ticker": "NNBR",
@@ -6642,13 +6654,17 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-10-28",
-   "days_to_earnings": 24,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 3.607400002479553,
    "sma200": 2.4748500031232834,
    "pct_from_high": -0.05845505954093422,
+   "rs_rank": 99,
+   "sector": "Industrials",
+   "group": "Industrial Machinery/Components",
+   "group_rank": 48,
    "kind": "wide",
    "risk_adr": 2.57,
    "wide_stop": true,
@@ -8663,19 +8679,20 @@
      14659200
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   }
  ],
  "positions": [],
  "previous": {
-  "generated": "2026-10-03T00:47:26+00:00",
+  "generated": "2026-10-04T23:20:49+00:00",
   "breakouts": [
-   "FOSL",
-   "PAYS"
+   "DDD",
+   "SILC",
+   "NNBR"
   ],
   "coiling": [
-   "SILC"
+   "FTK"
   ]
  }
 }
