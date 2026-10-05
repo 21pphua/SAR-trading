@@ -183,6 +183,21 @@ class SarScanResult:
     all_bars: dict[str, list[Bar]] = field(default_factory=dict)
     filtered_out: dict[str, str] = field(default_factory=dict)
     live_as_of: Optional[str] = None    # "HH:MM" ET when scored on today's unfinished bar
+    breadth: Optional[float] = None     # % of scanned stocks above their 50 SMA
+    size_mult: float = 1.0              # regime sizing (backtest update 11): 1 / 0.5 / 0
+
+
+def regime_size(breadth: Optional[float], spy_ok: Optional[bool]) -> tuple[float, str]:
+    """Backtest (update 11, better in both halves): full size when breadth 60%+ and SPY up,
+    half size when breadth 40-60% or SPY down, no new trades when breadth is under 40%."""
+    if breadth is None:
+        return 1.0, "Breadth unknown: normal size"
+    if breadth < 40:
+        return 0.0, f"Breadth {breadth:.0f}% (weak): no new trades"
+    if breadth < 60 or spy_ok is False:
+        why = f"breadth {breadth:.0f}%" + (" and SPY down" if spy_ok is False and breadth >= 40 else "")
+        return 0.5, f"Half size ({why})"
+    return 1.0, f"Full size (breadth {breadth:.0f}%, SPY up)"
 
     @property
     def regime_ok(self) -> Optional[bool]:
@@ -294,6 +309,12 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
     data = {k: prep(v) for k, v in fetch(tickers, on_progress=on_progress).items()}
     idx = {k: prep(v) for k, v in fetch(list(SAR_REGIME_INDEXES)).items()}
     regime = {k: market_regime(idx.get(k, [])) for k in SAR_REGIME_INDEXES}
+    up = tot = 0
+    for tk, bars in data.items():
+        if len(bars) >= 50 and bars[-1].close >= 1:
+            tot += 1
+            up += bars[-1].close > sum(b.close for b in bars[-50:]) / 50
+    breadth = round(100 * up / tot, 1) if tot >= 200 else None
     positions = list(positions or [])
     missing = sorted({p.ticker for p in positions} - set(data))
     if missing:
@@ -354,7 +375,8 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
         generated=datetime.now(timezone.utc).isoformat(timespec="seconds"),
         scanned=len(tickers), with_data=with_data, passed_filters=passed, regime=regime,
         breakouts=breakouts, coiling=coiling, counter_trend=counter, wide_stop=wide, too_tight=tight,
-        positions=positions,
+        positions=positions, breadth=breadth,
+        size_mult=regime_size(breadth, regime.get(SAR_REGIME_INDEXES[0]))[0],
         bars={t: data[t] for t in keep},
         all_scored=scored, all_bars={x.ticker: data[x.ticker] for x in scored}, filtered_out=filtered_out,
     )
@@ -424,6 +446,9 @@ def write_shortlist(result: SarScanResult, path: str, prev_path: Optional[str] =
         "scanned": result.scanned,
         "passed_filters": result.passed_filters,
         "regime": result.regime,
+        "breadth": result.breadth,
+        "size_mult": result.size_mult,
+        "size_note": regime_size(result.breadth, result.regime.get(SAR_REGIME_INDEXES[0]))[1],
         "counter_trend": [{"ticker": s.ticker, "score": s.score, "why": s.trend_note} for s in result.counter_trend],
         "too_tight": [{"ticker": s.ticker, "score": s.score, "entry": s.entry, "stop": s.stop,
                        "risk_adr": round(s.risk_adr, 2)} for s in result.too_tight],

@@ -196,6 +196,9 @@ def main() -> int:
     if fresh:
         body = "\n".join(f"{tk}: BUY above {trig:.2f} (now {p:.2f}) · stop = day low {lo:.2f}"
                          + (f" · volume pace {pc:.1f}x" if pc else "") for tk, p, trig, lo, pc in fresh)
+        sm = doc.get("size_mult", 1.0)
+        if sm < 1:
+            body += f"\nMARKET: {doc.get('size_note', '')}. " + ("Skip new buys today." if sm == 0 else "Use HALF your normal risk.")
         body += ("\nCheck the chart, buy, add the line to positions.txt."
                  "\nAround 12:30 PM PT you'll get HOLD or CUT for each one.")
         _ping(f"SAR BUY signal ({pt(now)} PT): {', '.join(t[0] for t in fresh)}", body, high=True)

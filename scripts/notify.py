@@ -28,6 +28,8 @@ def summary(doc: dict) -> tuple[str, str]:
     res = doc.get("results", [])
     bo = [r for r in res if r.get("kind") == "breakout"]
     co = [r for r in res if r.get("kind") == "coiling"]
+    if doc.get("size_note"):
+        market += " · " + doc["size_note"]
     lines = [market, ""]
     pos = [p for p in doc.get("positions", []) if p.get("status") not in ("HOLD", None)]
     if pos:
