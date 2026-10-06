@@ -1,43 +1,38 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6241 · with data 6229 · passed filters 688  (2026-10-06T17:49:57+00:00)
+Scanned 6241 · with data 6238 · passed filters 684  (2026-10-06T21:48:49+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NBIS   NEAR EXIT      7 sh  last   232.57   -1.3R  -$146
-           Within 2% of the 10 SMA (235.63). A daily close below it means sell.
-  NTSK   HOLD         121 sh  last    18.42   -1.3R  -$168
-           On track. Stop 18.78. Sell on a daily close below the 10 SMA (17.99).
+  NTSK   HOLD         121 sh  last    19.64   -0.2R  -$21
+           On track. Stop 18.78. Sell on a daily close below the 10 SMA (18.10).
+  NBIS   HOLD           7 sh  last   249.87   -0.2R  -$25
+           On track. Stop 237.00. Sell on a daily close below the 10 SMA (237.01).
 
-BREAKOUTS (2)
+BREAKOUTS (0)
 ------------------------------------------------------------------------------
-  TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
-  RCEL       76  Take      13.25    12.53  5.4%    16.85    20.32  1.34  99
-  FOSL       79  Take       7.22     6.85  5.1%     9.07     9.36  1.81  96
+  none today
 
-COILING — setup formed, not yet broken out (4)
+COILING — setup formed, not yet broken out (3)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  MRNA     39/50     208.90  -2.7%    224%  7.4%   193.38  WIDE STOP 1.2xADR
-  NET      35/50     367.43  -2.2%     26%  5.2%   352.63
-  FROG     41/50     100.00  -2.1%     42%  5.6%    93.28
-  SG       35/50       9.19  -1.1%     30%  6.0%     8.46
+  SILC     38/50      62.76  -1.8%     42%  6.6%    54.42
+  NBIS     44/50     254.74  -1.9%     87%  6.3%   237.01
+  FROG     41/50     100.00  -1.5%     42%  5.3%    94.14
 
-WIDE STOP — watch only (1): broke out, but the stop is farther than a normal day
+SKIPPED — COUNTER-TREND (9): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  PACB       76  entry 2.87  stop 2.51  (1.4x ADR)
-
-SKIPPED — COUNTER-TREND (7): scored well, but not in a long-term uptrend
-------------------------------------------------------------------------------
-  BOT        81  50 SMA falling; -46% from 52-week high
-  AAOI       76  50 SMA falling; -48% from 52-week high
-  OUST       59  50 SMA falling; -31% from 52-week high
-  TTMI       54  50 SMA falling; -41% from 52-week high
-  SERV       53  50 SMA falling; below the 200 SMA; -74% from 52-week high
-  SIMO       53  50 SMA falling
-  AXTI       48  -39% from 52-week high
+  FCEL       95  50 SMA falling; -45% from 52-week high
+  PENG       92  50 SMA falling; -29% from 52-week high
+  AAOI       83  50 SMA falling; -44% from 52-week high
+  CIEN       83  50 SMA falling; -30% from 52-week high
+  SIMO       65  50 SMA falling
+  SHLS       57  50 SMA falling; below the 200 SMA; -36% from 52-week high
+  OUST       53  50 SMA falling; -30% from 52-week high
+  SMCI       48  -26% from 52-week high
+  LPTH       39  below the 50 SMA; 50 SMA falling; below the 200 SMA; -43% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
