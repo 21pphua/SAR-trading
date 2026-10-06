@@ -11,7 +11,7 @@ on:
       task:
         description: "What to run"
         type: choice
-        options: [scan, live, backtest, intraday]
+        options: [scan, live, backtest, intraday, lab]
         default: scan
 permissions:
   contents: write
@@ -78,6 +78,11 @@ jobs:
         run: |
           mkdir -p results
           stockscan sar-backtest --period 3y --out results/backtest.txt --trades results/backtest_trades.csv
+      - name: Run the model lab (honest account-level backtest + walk-forward)
+        if: github.event_name == 'workflow_dispatch' && inputs.task == 'lab'
+        run: |
+          mkdir -p results
+          stockscan lab --period 10y --out results/lab.txt --trades results/lab_trades.csv --json results/lab.json
       - name: Save results
         run: |
           git add results
