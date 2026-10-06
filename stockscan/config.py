@@ -85,7 +85,9 @@ SAR_PULLBACK_LOOKBACK: int = 20
 # Checklist weights (sum to 100): run-up, SMA incline, tightening, volume
 # dry-up, range break, breakout volume, close near high. Breakout volume +
 # range break weighted heaviest. This weighting is ours, not the source doc's.
-SAR_WEIGHTS: tuple[int, ...] = (15, 15, 10, 10, 20, 20, 10)
+# Re-weighted by the backtest (update 15): fitted on the first 2 years, better in BOTH halves
+# (+0.22R vs +0.11R per trade). Was (15, 15, 10, 10, 20, 20, 10).
+SAR_WEIGHTS: tuple[int, ...] = (14, 14, 8, 14, 19, 20, 11)
 
 # Verdict cutoffs on the 0-100 score.
 SAR_TAKE_AT: int = 75   # backtest: 65-74 lost money, 75+ made money

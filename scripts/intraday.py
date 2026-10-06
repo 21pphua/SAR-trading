@@ -37,7 +37,7 @@ MIN_PACE = 1.3
 # Gap rule (update 14): a stock that OPENS >5% above its alert price is flagged GAPPED.
 # GAP_WAIT = True -> it only triggers after pulling back to within 1% of the alert price
 # and climbing back above it. False -> normal trigger, but pings + dashboard warn you.
-# The monthly backtest ("gap>5%: wait for pullback" row) decides which is better.
+# Backtest (update 14): waiting did NOT help; gapped trades did +1.23R each (small sample). Keep False.
 GAP_WAIT = False
 GAP_PCT = 0.05
 
@@ -211,7 +211,7 @@ def main() -> int:
     if fresh:
         body = "\n".join(f"{tk}: BUY above {trig:.2f} (now {p:.2f}) · stop = day low {lo:.2f}"
                          + (f" · volume pace {pc:.1f}x" if pc else "")
-                         + (f"\n  ⚠ Gapped {g:+.0%} at the open: better to wait for a pullback toward the alert price." if g else "")
+                         + (f" · gapped {g:+.0%} at the open" if g else "")
                          for tk, p, trig, lo, pc, g in fresh)
         sm = doc.get("size_mult", 1.0)
         if sm < 1:
