@@ -369,8 +369,10 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
     wide.sort(key=by_rs, reverse=True)
     tight.sort(key=lambda s: s.score, reverse=True)
     breakouts, coiling, counter, wide, tight = breakouts[:top], coiling[:top], counter[:top], wide[:top], tight[:top]
-    keep = {s.ticker for s in breakouts + coiling + wide}
-    attach_history(breakouts + coiling + wide, data, fetch)
+    # counter-trend breakouts scoring 80+ keep their chart so you can assess them yourself
+    ct_view = [s for s in counter if s.is_breakout and s.score >= 80]
+    keep = {s.ticker for s in breakouts + coiling + wide + ct_view}
+    attach_history(breakouts + coiling + wide + ct_view, data, fetch)
     if earnings and keep:
         _attach_earnings(breakouts + coiling + wide, earnings(sorted(keep)))
     res_ = SarScanResult(
@@ -491,7 +493,9 @@ def write_shortlist(result: SarScanResult, path: str, prev_path: Optional[str] =
                        "risk_adr": round(s.risk_adr, 2)} for s in result.too_tight],
         "results": [_setup_json(s, "breakout", result.bars[s.ticker]) for s in result.breakouts]
                    + [_setup_json(s, "coiling", result.bars[s.ticker]) for s in result.coiling]
-                   + [_setup_json(s, "wide", result.bars[s.ticker]) for s in result.wide_stop],
+                   + [_setup_json(s, "wide", result.bars[s.ticker]) for s in result.wide_stop]
+                   + [_setup_json(s, "counter", result.bars[s.ticker]) for s in result.counter_trend
+                      if s.is_breakout and s.score >= 80 and s.ticker in result.bars],
         "positions": [asdict(p) for p in result.positions],
         "previous": prev,
     }
