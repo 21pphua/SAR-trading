@@ -161,7 +161,11 @@ def write_snapshot() -> None:
             rtxt = "—" if rnow is None else f"{rnow:+.2f}R"
             line = sp.get("exit_line") or "10 SMA"
             lv = sp.get("sma20") if line == "20 SMA" else sp.get("sma10")
-            if last and qq.get("low") is not None and qq["low"] <= stop:
+            # On the entry day the stop IS the day's low, so only a lower low is a hit.
+            entered_today = p.get("date") == datetime.now(ET).strftime("%Y-%m-%d")
+            low = qq.get("low")
+            hit = low is not None and (low < stop if entered_today else low <= stop)
+            if last and hit:
                 st = f"STOP HIT today (low {_f(qq['low'])} ≤ {_f(stop)})"
             elif last and lv and last < lv:
                 st = f"BELOW {line} — sell if it closes here"

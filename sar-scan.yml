@@ -1,0 +1,96 @@
+name: SAR nightly scan
+on:
+  schedule:
+    - cron: "30 21 * * 1-5"   # weekdays after the US close -> scan
+    - cron: "0 14 1 * *"      # 1st of each month -> backtest
+    - cron: "*/30 13-20 * * 1-5"  # every 30 min in market hours -> intraday alert check
+  push:
+    paths: ["positions.txt"]   # you added/removed a trade -> check positions right away
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "What to run"
+        type: choice
+        options: [scan, live, backtest, intraday, lab]
+        default: scan
+permissions:
+  contents: write
+concurrency:
+  group: sar
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Set up git
+        run: |
+          git config user.name "sar-bot"
+          git config user.email "sar-bot@users.noreply.github.com"
+      - name: Put uploaded files in the right folders
+        run: |
+          mkdir -p stockscan/sar scripts tests
+          mv_if () { if [ -f "$1" ]; then git mv -f "$1" "$2"; fi; }
+          for f in engine scan render backtest strength; do mv_if "$f.py" "stockscan/sar/$f.py"; done
+          mv_if __init__.py stockscan/sar/__init__.py
+          mv_if cli.py stockscan/cli.py
+          mv_if config.py stockscan/config.py
+          for f in build_us_universe notify intraday; do mv_if "$f.py" "scripts/$f.py"; done
+          mv_if test_sar.py tests/test_sar.py
+          if [ -f sar-scan.yml ]; then git rm -q sar-scan.yml; fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Move uploaded SAR files into place"
+            git push
+          fi
+      - run: pip install -e '.[data]'
+      - name: Build stock list + sectors
+        if: github.event.schedule != '*/30 13-20 * * 1-5' && github.event_name != 'push' && !(github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
+        run: python scripts/build_us_universe.py
+      - name: Intraday alert check
+        if: github.event.schedule == '*/30 13-20 * * 1-5' || github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.task == 'intraday')
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python scripts/intraday.py
+      - name: Run the SAR scan
+        if: github.event.schedule == '30 21 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.task == 'scan')
+        run: |
+          mkdir -p results
+          stockscan sar --out results/shortlist.json > results/latest.txt
+          cp results/latest.txt "results/scan-$(date -u +%Y-%m-%d).txt"
+      - name: Live scan (today's prices so far)
+        if: github.event_name == 'workflow_dispatch' && inputs.task == 'live'
+        run: |
+          mkdir -p results
+          stockscan sar --live --out results/live.json > results/live.txt
+      - name: Send to phone / Discord
+        if: github.event.schedule == '30 21 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.task == 'scan')
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python scripts/notify.py
+      - name: Run the monthly backtest
+        if: github.event.schedule == '0 14 1 * *' || (github.event_name == 'workflow_dispatch' && inputs.task == 'backtest')
+        run: |
+          mkdir -p results
+          stockscan sar-backtest --period 3y --out results/backtest.txt --trades results/backtest_trades.csv
+      - name: Run the model lab (honest account-level backtest + walk-forward)
+        if: github.event_name == 'workflow_dispatch' && inputs.task == 'lab'
+        run: |
+          mkdir -p results
+          stockscan lab --period 10y --out results/lab.txt --trades results/lab_trades.csv --json results/lab.json
+      - name: Save results
+        run: |
+          git add results
+          git commit -q -m "SAR results $(date -u '+%Y-%m-%d %H:%M')" || { echo "nothing new"; exit 0; }
+          # Another run may have saved results meanwhile. This run's files are newer, so keep them.
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 5))
+          done
+          echo "Could not save results after 5 tries"; exit 1
