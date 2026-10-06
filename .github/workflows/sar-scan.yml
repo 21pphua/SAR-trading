@@ -33,17 +33,29 @@ jobs:
           git config user.email "sar-bot@users.noreply.github.com"
       - name: Put uploaded files in the right folders
         run: |
-          mkdir -p stockscan/sar scripts tests
+          mkdir -p stockscan/sar stockscan/lab/setups scripts tests
           mv_if () { if [ -f "$1" ]; then git mv -f "$1" "$2"; fi; }
+          # __init__ files all share one name, so sort them by what's inside
+          for f in __init__*.py; do
+            [ -f "$f" ] || continue
+            if grep -q "SETUPS" "$f"; then dest=stockscan/lab/setups/__init__.py
+            elif grep -q "The model lab" "$f"; then dest=stockscan/lab/__init__.py
+            elif grep -q "SAR Trading breakout-setup scanner" "$f"; then dest=stockscan/sar/__init__.py
+            elif [ ! -s "$f" ]; then dest=tests/__init__.py
+            else echo "Unknown init file: $f"; continue; fi
+            git mv -f "$f" "$dest"
+          done
           for f in engine scan render backtest strength; do mv_if "$f.py" "stockscan/sar/$f.py"; done
-          mv_if __init__.py stockscan/sar/__init__.py
+          for f in core metrics portfolio report run walkforward; do mv_if "$f.py" "stockscan/lab/$f.py"; done
+          mv_if sar_breakout.py stockscan/lab/setups/sar_breakout.py
           mv_if cli.py stockscan/cli.py
           mv_if config.py stockscan/config.py
           for f in build_us_universe notify intraday; do mv_if "$f.py" "scripts/$f.py"; done
           mv_if test_sar.py tests/test_sar.py
+          mv_if test_lab.py tests/test_lab.py
           if [ -f sar-scan.yml ]; then git rm -q sar-scan.yml; fi
           if ! git diff --cached --quiet; then
-            git commit -m "Move uploaded SAR files into place"
+            git commit -m "Move uploaded files into place"
             git push
           fi
       - run: pip install -e '.[data]'
