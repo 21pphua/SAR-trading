@@ -1,15 +1,15 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6241 · with data 6239 · passed filters 670  (2026-10-06T17:16:16+00:00)
+Scanned 6241 · with data 6239 · passed filters 681  (2026-10-06T19:56:26+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   HOLD         121 sh  last    19.55   -0.3R  -$31
-           On track. Stop 18.78. Sell on a daily close below the 10 SMA (18.09).
-  NBIS   HOLD           7 sh  last   251.97   -0.1R  -$10
-           On track. Stop 237.00. Sell on a daily close below the 10 SMA (237.22).
+  NTSK   HOLD         121 sh  last    19.59   -0.2R  -$26
+           On track. Stop 18.78. Sell on a daily close below the 10 SMA (18.10).
+  NBIS   HOLD           7 sh  last   249.74   -0.2R  -$25
+           On track. Stop 237.00. Sell on a daily close below the 10 SMA (236.99).
 
 BREAKOUTS (0)
 ------------------------------------------------------------------------------
@@ -18,22 +18,21 @@ BREAKOUTS (0)
 COILING — setup formed, not yet broken out (4)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  SILC     38/50      62.76  -1.6%     42%  6.6%    54.43
-  NBIS     44/50     254.74  -1.1%     87%  6.3%   237.22
-  KOPN     37/50       5.10  -2.6%     74%  5.3%     4.82  LOW-PRICED
-  FROG     41/50     100.00  -2.3%     42%  5.3%    94.05
+  SILC     38/50      62.76  -2.6%     42%  6.6%    54.37
+  NBIS     44/50     254.74  -2.0%     87%  6.3%   236.99
+  NET      37/50     367.43  -3.0%     26%  5.1%   352.97
+  FROG     41/50     100.00  -1.5%     42%  5.3%    94.13
 
-SKIPPED — COUNTER-TREND (9): scored well, but not in a long-term uptrend
+SKIPPED — COUNTER-TREND (8): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  FCEL       97  50 SMA falling; -46% from 52-week high
-  AAOI       90  50 SMA falling; -44% from 52-week high
-  CIEN       83  50 SMA falling; -32% from 52-week high
-  OUST       77  50 SMA falling; -28% from 52-week high
-  SIMO       65  50 SMA falling
-  SMCI       49  -26% from 52-week high
-  TTMI       47  50 SMA falling; -40% from 52-week high
-  AXTI       43  -40% from 52-week high
-  LPTH       41  below the 50 SMA; 50 SMA falling; below the 200 SMA; -42% from 52-week high
+  FCEL       95  50 SMA falling; -45% from 52-week high
+  PENG       92  50 SMA falling; -29% from 52-week high
+  CIEN       83  50 SMA falling; -30% from 52-week high
+  AAOI       76  50 SMA falling; -45% from 52-week high
+  SIMO       60  50 SMA falling
+  SHLS       54  50 SMA falling; below the 200 SMA; -36% from 52-week high
+  OUST       50  50 SMA falling; -30% from 52-week high
+  SMCI       47  -26% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
