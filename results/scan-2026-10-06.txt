@@ -1,15 +1,8 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6241 · with data 6239 · passed filters 688  (2026-10-06T13:17:00+00:00)
+Scanned 6241 · with data 6232 · passed filters 688  (2026-10-06T15:05:52+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
-
-YOUR POSITIONS (2)
-------------------------------------------------------------------------------
-  TWST   HOLD          11 sh  last   205.00   +0.4R  +$45
-           On track. Stop 190.91. Sell on a daily close below the 10 SMA (183.07).
-  DNA    HOLD         100 sh  last    14.98   +0.7R  +$90
-           On track. Stop 12.80. Sell on a daily close below the 10 SMA (11.39).
 
 BREAKOUTS (2)
 ------------------------------------------------------------------------------
