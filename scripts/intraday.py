@@ -34,6 +34,12 @@ ET = ZoneInfo("America/New_York")
 PT = ZoneInfo("America/Los_Angeles")
 CONFIRM_FROM = time(15, 20)   # ET -> 12:20 PM PT; the 3:30 ET run lands in this window
 MIN_PACE = 1.3
+# Gap rule (update 14): a stock that OPENS >5% above its alert price is flagged GAPPED.
+# GAP_WAIT = True -> it only triggers after pulling back to within 1% of the alert price
+# and climbing back above it. False -> normal trigger, but pings + dashboard warn you.
+# The monthly backtest ("gap>5%: wait for pullback" row) decides which is better.
+GAP_WAIT = False
+GAP_PCT = 0.05
 
 
 def pt(dt: datetime) -> str:
@@ -157,8 +163,16 @@ def main() -> int:
                 avg = sum(vols) / len(vols) if vols else 0
                 pace = vol / (avg * min(1.0, mins / 390)) if avg else None
                 trig = max(r["base_high"], orh)
+                opn = float(f["Open"].iloc[0])
+                gap = opn / r["base_high"] - 1 if r["base_high"] else 0.0
+                gapped = gap > GAP_PCT
+                pulled_back = low <= r["base_high"] * 1.01
+                if gapped and GAP_WAIT:
+                    trig = r["base_high"]
                 if mins < OR_MINUTES:
                     status = "OPENING RANGE"
+                elif gapped and GAP_WAIT and not pulled_back:
+                    status = "GAPPED"
                 elif price > trig:
                     status = "TRIGGERED"
                 elif price > r["base_high"]:
@@ -169,7 +183,7 @@ def main() -> int:
                 first_t = pv.get("first_triggered")
                 if status == "TRIGGERED" and not first_t:
                     first_t = pt(now)
-                    fresh.append((tk, price, trig, low, pace))
+                    fresh.append((tk, price, trig, low, pace, gap if gapped else None))
                 # confirm-or-cut, late in the session, for anything that triggered today
                 confirm = pv.get("confirm")
                 if first_t and not confirm and now.time() >= CONFIRM_FROM:
@@ -182,6 +196,7 @@ def main() -> int:
                 row.update(status=status, price=round(price, 4), orh=round(orh, 4), trigger=round(trig, 4),
                            low=round(low, 4), pace=round(pace, 2) if pace else None,
                            pct_to_trigger=round(trig / price - 1, 4), first_triggered=first_t,
+                           gap=round(gap, 4), gapped=gapped, pulled_back=pulled_back,
                            confirm=confirm, confirm_at=pv.get("confirm_at") or (pt(now) if confirm else None))
             rows.append(row)
     os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
@@ -195,7 +210,9 @@ def main() -> int:
     print(f"{len(rows)} alerts checked; {sum(r['status'] == 'TRIGGERED' for r in rows)} triggered; {len(fresh)} new")
     if fresh:
         body = "\n".join(f"{tk}: BUY above {trig:.2f} (now {p:.2f}) · stop = day low {lo:.2f}"
-                         + (f" · volume pace {pc:.1f}x" if pc else "") for tk, p, trig, lo, pc in fresh)
+                         + (f" · volume pace {pc:.1f}x" if pc else "")
+                         + (f"\n  ⚠ Gapped {g:+.0%} at the open: better to wait for a pullback toward the alert price." if g else "")
+                         for tk, p, trig, lo, pc, g in fresh)
         sm = doc.get("size_mult", 1.0)
         if sm < 1:
             body += f"\nMARKET: {doc.get('size_note', '')}. " + ("Skip new buys today." if sm == 0 else "Use HALF your normal risk.")

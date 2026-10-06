@@ -83,6 +83,11 @@ class Trade:
     bars_held: int = 0
     open: bool = False
     variant: str = ""
+    fracs: tuple = ()                 # the 7 step fractions on the signal bar
+    close_pos: float = 0.0
+    base_days: int = 0
+    spike_share: float = 0.0
+    gapped: bool = False              # opened >5% above the trigger (intraday)
     breadth: Optional[float] = None   # % of stocks above their 50 SMA on entry day
     vol: Optional[float] = None       # VIX close (or SPY 20-day volatility %) on entry day
 
@@ -145,7 +150,7 @@ def backtest_ticker(ticker: str, bars: Sequence[Bar], min_score: int = SAR_TAKE_
                     regime: Optional[dict[str, bool]] = None, trend_filter: bool = True,
                     mode: str = "close", slippage: float = 0.002,
                     rs: Optional[list[Optional[float]]] = None, exits: Optional[dict] = None,
-                    confirm_cut: bool = False, variant: str = "") -> list[Trade]:
+                    confirm_cut: bool = False, variant: str = "", gap_wait: bool = False) -> list[Trade]:
     S = Series(bars)
     n = len(S)
     PL = SAR_PULLBACK_LOOKBACK
@@ -164,6 +169,7 @@ def backtest_ticker(ticker: str, bars: Sequence[Bar], min_score: int = SAR_TAKE_
                 continue
             t = Trade(ticker, s.date, s.entry, s.stop, s.score, round(s.risk_adr, 2),
                       (regime or {}).get(s.date), s.trend_ok, "close", round(S.volx(i), 2))
+            t.fracs, t.close_pos, t.base_days, t.spike_share = tuple(x.frac for x in s.steps), s.close_pos, s.base_days, s.spike_share
         else:
             trig = max(S.H[i - PL: i])
             if not (S.H[i] > trig and S.passes_filters(i - 1)[0]):
@@ -174,6 +180,13 @@ def backtest_ticker(ticker: str, bars: Sequence[Bar], min_score: int = SAR_TAKE_
                 i += 1
                 continue
             entry = max(S.O[i], trig) * (1 + slippage)
+            gapped = S.O[i] > trig * 1.05
+            if gap_wait and gapped:
+                # opened >5% above the trigger: wait for a pullback to within 1% of it
+                if S.L[i] > trig * 1.01 or S.C[i] <= trig:
+                    i += 1
+                    continue
+                entry = trig * 1.01 * (1 + slippage)
             stop = S.L[i]
             adr_d = p.adr_pct * p.entry if p.adr_pct else 0.0
             risk_adr = (entry - stop) / adr_d if adr_d else 0.0
@@ -184,6 +197,7 @@ def backtest_ticker(ticker: str, bars: Sequence[Bar], min_score: int = SAR_TAKE_
                 continue
             t = Trade(ticker, S.bars[i].date, entry, stop, p.score, round(risk_adr, 2),
                       (regime or {}).get(S.bars[i].date), p.trend_ok, "intraday", round(S.volx(i), 2))
+            t.gapped = gapped
         if rs is not None:
             t.rs_raw = rs[i]
         t.variant = variant
@@ -276,6 +290,8 @@ class BacktestResult:
     tickers: int
     trades: list[Trade] = field(default_factory=list)
     experiments: dict[str, list[Trade]] = field(default_factory=dict)
+    pool: list[Trade] = field(default_factory=list)
+    refine: dict = field(default_factory=dict)
     vol_name: str = "VIX"
 
     def mode(self, m: str) -> list[Trade]:
@@ -419,6 +435,13 @@ def run_backtest(tickers: Sequence[str], fetch: Callable[..., dict], period: str
                             res.experiments.setdefault(nm, []).extend(
                                 backtest_ticker(tk, bars, min_score, partial, max_risk_adr, regime, trend_filter,
                                                 "intraday", slippage, rs, exits=ex, confirm_cut=True, variant=nm))
+                        nm = "Intraday+cut + gap>5%: wait for pullback"
+                        res.experiments.setdefault(nm, []).extend(
+                            backtest_ticker(tk, bars, min_score, partial, max_risk_adr, regime, trend_filter,
+                                            "intraday", slippage, rs, confirm_cut=True, variant=nm, gap_wait=True))
+                    # candidate pool for checklist refinements (scored 55+, filtered later)
+                    res.pool.extend(backtest_ticker(tk, bars, 55, partial, max_risk_adr, regime,
+                                                    trend_filter, "close", slippage, rs, variant="pool"))
         if on_progress:
             on_progress(min(start + chunk, len(tickers)), len(tickers), batch[-1])
     _attach_ranks(res.trades, by_date, g_by_date, groups)
@@ -623,9 +646,100 @@ def render_monte_carlo(mc: dict) -> str:
     return "\n".join(out)
 
 
+REFINES = {
+    "Closing range (top 25%)": lambda t, p: p if t.close_pos >= 0.75 else -p if t.close_pos < 0.5 else 0,
+    "Base length 2-8 weeks":   lambda t, p: p if 10 <= t.base_days <= 40 else -p,
+    "Steady run-up (no spike)": lambda t, p: p if t.spike_share < 0.35 else -p if t.spike_share >= 0.6 else 0,
+}
+REFINE_KEYS = {"Closing range (top 25%)": "close_range", "Base length 2-8 weeks": "base_len",
+               "Steady run-up (no spike)": "steady_runup"}
+
+
+def _fit_weights(ts: Sequence[Trade], guard: int = 5) -> list[int]:
+    """Data-driven step weights, fitted on TRAIN only. Each step moves at most +/-guard points
+    from SAR_WEIGHTS, by how much better trades did when that step was strong (>=0.8) vs weak (<0.4).
+    Re-normalized to sum to 100."""
+    from stockscan.config import SAR_WEIGHTS
+    base = list(SAR_WEIGHTS)
+    edges = []
+    for j in range(7):
+        hi = [t.r for t in ts if len(t.fracs) == 7 and t.fracs[j] >= 0.8]
+        lo = [t.r for t in ts if len(t.fracs) == 7 and t.fracs[j] < 0.4]
+        edges.append((sum(hi) / len(hi) - sum(lo) / len(lo)) if len(hi) >= 30 and len(lo) >= 30 else 0.0)
+    m = max((abs(x) for x in edges), default=0) or 1
+    w = [max(1, base[j] + round(guard * edges[j] / m)) for j in range(7)]
+    k = 100 / sum(w)
+    w = [round(x * k) for x in w]
+    w[w.index(max(w))] += 100 - sum(w)
+    return w
+
+
+def render_refinements(res: BacktestResult, min_score: int = None) -> str:
+    from stockscan.config import SAR_TAKE_AT, SAR_WEIGHTS
+    ms = min_score or SAR_TAKE_AT
+    pool = _live_filter(res.pool)
+    if len(pool) < 60:
+        return ""
+    dates = sorted(t.entry_date for t in pool)
+    cut = dates[len(dates) * 2 // 3]
+    tr = [t for t in pool if t.entry_date < cut]
+
+    def score_with(t, bonus=0, w=None):
+        if w and len(t.fracs) == 7:
+            return sum(int(f * x + 0.5) for f, x in zip(t.fracs, w)) + bonus
+        return t.score + bonus
+
+    def stats(sel):
+        a = summarize([t for t in sel if t.entry_date < cut])
+        z = summarize([t for t in sel if t.entry_date >= cut])
+        s = summarize(sel)
+        return s, a, z
+    base = [t for t in pool if t.score >= ms]
+    _, b_tr, b_te = stats(base)
+    out = ["", "CHECKLIST REFINEMENTS — points in the score, same live rules (close entries)", "=" * 90,
+           f"  TRAIN = before {cut} · TEST = {cut} onward. Each refinement adds/subtracts 5 points; a trade",
+           f"  is taken if the new score >= {ms}. Re-weighted steps are fitted on TRAIN only, judged on TEST.",
+           f"  {'':<36}{'TRADES':>7}{'WIN%':>6}{'EXP R':>7}{'TRAIN R':>9}{'TEST R':>8}  VERDICT"]
+    rows = [("Current checklist", base)]
+    for nm, fn in REFINES.items():
+        rows.append((nm + " ±5", [t for t in pool if score_with(t, fn(t, 5)) >= ms]))
+    allb = lambda t: sum(fn(t, 5) for fn in REFINES.values())
+    rows.append(("All three refinements ±5", [t for t in pool if score_with(t, allb(t)) >= ms]))
+    w = _fit_weights(tr)
+    rows.append((f"Re-weighted steps {tuple(w)}", [t for t in pool if score_with(t, 0, w) >= ms]))
+    res.refine = {"cut": cut, "weights_now": list(SAR_WEIGHTS), "weights_fit": w, "rows": []}
+    for nm, sel in rows:
+        s, a, z = stats(sel)
+        if not s:
+            continue
+        if nm == "Current checklist":
+            v = "baseline"
+        elif a and z and b_tr and b_te and a.expectancy_r > b_tr.expectancy_r + 0.03 and z.expectancy_r > b_te.expectancy_r + 0.03:
+            v = "BETTER in both halves"
+        elif z and b_te and z.expectancy_r > b_te.expectancy_r:
+            v = "better in TEST only"
+        else:
+            v = "no improvement"
+        res.refine["rows"].append({"name": nm, "trades": s.trades, "win": s.win_rate, "exp": s.expectancy_r,
+                                   "train": a.expectancy_r if a else None, "test": z.expectancy_r if z else None, "verdict": v,
+                                   "key": REFINE_KEYS.get(nm.replace(" ±5", ""))})
+        out.append(f"  {nm:<36}{s.trades:>7}{s.win_rate:>6.0%}{s.expectancy_r:>+7.2f}"
+                   f"{(a.expectancy_r if a else 0):>+9.2f}{(z.expectancy_r if z else 0):>+8.2f}  {v}")
+    gaps = [t for t in _live_filter(res.experiments.get("Intraday + cut at close if unconfirmed", [])) if t.gapped]
+    if gaps:
+        g = summarize(gaps)
+        if g:
+            out.append(f"  (Intraday trades that opened >5% above the trigger: {g.trades}, {g.expectancy_r:+.2f}R each."
+                       " The 'gap>5%: wait for pullback' rule is in the EXPERIMENTS table above.)")
+    out += ["", "  To switch on a refinement that says BETTER in both halves: set its number to 5 in",
+            "  SAR_REFINE_POINTS (config.py). Re-weighted steps: copy the tuple into SAR_WEIGHTS.", ""]
+    return "\n".join(out)
+
+
 def render_backtest_full(res: BacktestResult) -> str:
     res.mc = monte_carlo(res)
-    return render_backtest(res) + render_experiments(res) + render_regime(res) + render_monte_carlo(res.mc)
+    return (render_backtest(res) + render_experiments(res) + render_refinements(res)
+            + render_regime(res) + render_monte_carlo(res.mc))
 
 
 def render_backtest(res: BacktestResult) -> str:

@@ -370,6 +370,7 @@ def run_sar_scan(tickers: Sequence[str], fetch: Fetcher = fetch_ohlcv, min_score
     tight.sort(key=lambda s: s.score, reverse=True)
     breakouts, coiling, counter, wide, tight = breakouts[:top], coiling[:top], counter[:top], wide[:top], tight[:top]
     keep = {s.ticker for s in breakouts + coiling + wide}
+    attach_history(breakouts + coiling + wide, data, fetch)
     if earnings and keep:
         _attach_earnings(breakouts + coiling + wide, earnings(sorted(keep)))
     res_ = SarScanResult(
@@ -395,6 +396,13 @@ def attach_strength(scored: list[SetupScore], data: dict[str, list[Bar]]) -> Non
         if v is not None:
             rs[tk] = v
     ranks = percentile_ranks(rs)
+    _sec = load_sectors()
+    _by: dict[str, list[float]] = {}
+    for tk, bars in data.items():
+        sec = _sec.get(tk, ("", ""))[0]
+        if sec and len(bars) > 22 and bars[-22].close > 0 and bars[-1].close >= 1:
+            _by.setdefault(sec, []).append(bars[-1].close / bars[-22].close - 1)
+    sec1m = {k: round(sorted(v)[len(v) // 2], 4) for k, v in _by.items() if len(v) >= 5}
     sectors = load_sectors()
     groups = group_keys(list(data), sectors)
     granks = group_ranks(rs, groups)
@@ -403,8 +411,36 @@ def attach_strength(scored: list[SetupScore], data: dict[str, list[Bar]]) -> Non
         s.sector = sectors.get(s.ticker, ("", ""))[0]
         s.group = groups.get(s.ticker, "")
         s.group_rank = granks.get(s.group)
+        s.sector_1m = sec1m.get(s.sector)
         if SAR_HOT_GROUP_BONUS and (s.group_rank or 0) >= SAR_HOT_GROUP:
             s.score = min(100, s.score + SAR_HOT_GROUP_BONUS)
+
+
+def attach_history(setups: list[SetupScore], data: dict[str, list[Bar]], fetch=None) -> None:
+    """How past SAR breakouts on the same stock played out, over ALL available history."""
+    from stockscan.sar.backtest import backtest_ticker
+    full: dict[str, list[Bar]] = {}
+    if fetch and setups:
+        try:
+            full = fetch(sorted({s.ticker for s in setups}), period="max")
+        except Exception:
+            full = {}
+    for s in setups:
+        bars = full.get(s.ticker) or data.get(s.ticker) or []
+        if bars and bars[-1].date > s.date:
+            bars = [b for b in bars if b.date <= s.date]
+        try:
+            past = [t for t in backtest_ticker(s.ticker, bars[:-1], trend_filter=True, mode="close") if not t.open]
+        except Exception:
+            continue
+        if not past:
+            s.history = {"n": 0, "years": round(len(bars) / 252, 1)}
+            continue
+        wins = [t for t in past if t.r > 0]
+        last = past[-1]
+        s.history = {"n": len(past), "wins": len(wins), "avg_r": round(sum(t.r for t in past) / len(past), 2),
+                     "best_r": round(max(t.r for t in past), 2), "years": round(len(bars) / 252, 1),
+                     "last": {"date": last.entry_date, "r": round(last.r, 2), "exit": last.exit_reason}}
 
 
 def _setup_json(s: SetupScore, kind: str, bars: list[Bar], keep_bars: int = 260) -> dict:

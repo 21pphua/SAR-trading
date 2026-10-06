@@ -141,6 +141,16 @@ SAR_REQUIRE_REGIME: bool = False        # only take setups when the market regim
 # Max open trades at once (dashboard warns when you're full).
 SAR_MAX_POSITIONS: int = 7
 
+# --- Checklist refinements (update 14) -------------------------------------
+# Extra points added to the 0-100 score. All 0 until the monthly backtest's
+# "CHECKLIST REFINEMENTS" section says BETTER in both halves; then set the
+# number it suggests (e.g. 5) to switch one on.
+SAR_REFINE_POINTS: dict[str, int] = {
+    "close_range": 0,    # +pts if the close is in the top 25% of the day's range, -pts if bottom half
+    "base_len": 0,       # +pts if the base is 2-8 weeks old (10-40 bars), -pts otherwise
+    "steady_runup": 0,   # +pts if no single day made over 35% of the run-up, -pts if one day made 60%+
+}
+
 # --- Position sizing (fixed-% risk per trade + sector/group concentration cap) ---
 # Suggestions only -- stockscan never places an order. Risk a fixed % of
 # account equity per trade, sized off the FLOORED risk-per-share (see

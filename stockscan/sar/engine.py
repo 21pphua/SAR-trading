@@ -121,6 +121,16 @@ class SetupScore:
     sector: str = ""
     group: str = ""                     # industry (or sector if the industry is small)
     group_rank: Optional[int] = None    # 1-99 vs all groups
+    # --- detail (update 14) ---
+    base_days: int = 0                  # bars since the run-up peak
+    contractions: list = field(default_factory=list)   # pullback depths inside the base, oldest first
+    spike_share: float = 0.0            # biggest single-day gain / whole run-up (1.0 = all in one day)
+    close_pos: float = 0.0              # close position in the day's range, 0 = low, 1 = high
+    gap_open: float = 0.0               # open vs prior close
+    why: list = field(default_factory=list)            # plain-English reason per step
+    refine_pts: int = 0                 # points added by SAR_REFINE_POINTS
+    history: dict = field(default_factory=dict)        # past breakouts on this stock (scan only)
+    sector_1m: Optional[float] = None   # median 1-month return of the stock's sector (scan only)
 
     @property
     def risk(self) -> float:
@@ -326,6 +336,42 @@ def _swing_highs(H: Sequence[float], focus: int, above: float, k: int = 3) -> li
     return sorted(out)
 
 
+def _contractions(H: Sequence[float], L: Sequence[float], a: int, b: int, thr: float = 0.03) -> list[float]:
+    """Pullback depths (high -> low) inside bars a..b, each needing a 3% swing to count."""
+    out: list[float] = []
+    if b < a:
+        return out
+    hi, lo = H[a], None
+    for k in range(a, b + 1):
+        if lo is None:
+            if H[k] > hi:
+                hi = H[k]
+            elif L[k] <= hi * (1 - thr):
+                lo = L[k]
+        else:
+            if L[k] < lo:
+                lo = L[k]
+            elif H[k] >= lo * (1 + thr):
+                out.append(1 - lo / hi)
+                hi, lo = H[k], None
+    if lo is not None:
+        out.append(1 - lo / hi)
+    return [round(x, 4) for x in out[-4:]]
+
+
+def refine_points(base_days: int, spike_share: float, close_pos: float, pts: Optional[dict] = None) -> int:
+    from stockscan.config import SAR_REFINE_POINTS
+    p = SAR_REFINE_POINTS if pts is None else pts
+    t = 0
+    if p.get("close_range"):
+        t += p["close_range"] if close_pos >= 0.75 else -p["close_range"] if close_pos < 0.5 else 0
+    if p.get("base_len"):
+        t += p["base_len"] if 10 <= base_days <= 40 else -p["base_len"]
+    if p.get("steady_runup"):
+        t += p["steady_runup"] if spike_share < 0.35 else -p["steady_runup"] if spike_share >= 0.6 else 0
+    return t
+
+
 def score_setup(bars: Sequence[Bar], i: Optional[int] = None, ticker: str = "",
                 take_at: int = SAR_TAKE_AT, watch_at: int = SAR_WATCH_AT,
                 series: Optional[Series] = None, with_targets: bool = True) -> SetupScore:
@@ -396,7 +442,36 @@ def score_setup(bars: Sequence[Bar], i: Optional[int] = None, ticker: str = "",
         StepScore(key, title, fr, _round_half_up(fr * w), w, m)
         for (key, title), fr, w, m in zip(STEP_TITLES, fracs, SAR_WEIGHTS, metrics)
     ]
-    score = sum(s.points for s in steps)
+    # --- detail + optional refinement points (update 14)
+    base_days = i - high_i
+    cons = _contractions(H, L, high_i, i - 1)
+    day_gains = [C[k] / C[k - 1] - 1 for k in range(max(low_i + 1, 1), high_i + 1) if C[k - 1] > 0]
+    spike = (max(day_gains) / best) if day_gains and best > 0 else 0.0
+    gap_open = S.O[i] / C[i - 1] - 1 if C[i - 1] else 0.0
+    rpts = refine_points(base_days, spike, pos)
+    con_txt = (" Pullbacks: " + " → ".join(f"{x:.0%}" for x in cons)
+               + (" (each smaller: textbook)" if len(cons) >= 2 and all(cons[k] > cons[k + 1] for k in range(len(cons) - 1)) else "")
+               + ".") if cons else ""
+    why = [
+        f"Rose {best:.0%} from {dates[low_i].date} to {dates[high_i].date}"
+        + (" (meets the 30% bar)" if best >= 0.30 else " (short of the 30% bar)")
+        + (f"; {spike:.0%} of it came in a single day, so it's spiky, not a steady climb." if spike >= 0.6 else
+           "; a steady climb, not one spike." if spike < 0.35 else "."),
+        f"10 SMA {'rising' if sl10 > 0 else 'falling'}, {'above' if s10[i] > s20[i] else 'below'} the 20 SMA; "
+        f"20 SMA {'rising' if sl20 > 0 else 'falling'}.",
+        f"Daily range went from {r1:.1%} to {r2:.1%} ({'tightening' if r2 < r1 else 'widening'}). "
+        f"Base is {base_days} trading days old"
+        + (" (2–8 weeks: ideal)." if 10 <= base_days <= 40 else " (short)." if base_days < 10 else " (long, can be sloppy).")
+        + con_txt,
+        f"Volume in the base was {dry:.0%} of the run-up's"
+        + (" (dried up: sellers gone)." if dry < 0.7 else " (only partly dried up)." if dry < 1 else " (no dry-up)."),
+        f"Closed {gap:+.1%} vs the base high {base_high:.2f}"
+        + (" (broke out)." if gap > 0 else " (not broken out yet)."),
+        f"Volume {volx:.1f}× normal" + (" (strong; 1.3× needed)." if volx >= 1.3 else " (below the 1.3× needed)."),
+        f"Closed at {pos:.0%} of the day's range"
+        + (" (top quarter: buyers held it)." if pos >= 0.75 else " (middle)." if pos >= 0.5 else " (bottom half: sellers won the day)."),
+    ]
+    score = max(0, min(100, sum(s.points for s in steps) + rpts))
     verdict = "Take" if score >= take_at else "Watch" if score >= watch_at else "Skip"
 
     entry, stop = C[i], L[i]
@@ -429,6 +504,8 @@ def score_setup(bars: Sequence[Bar], i: Optional[int] = None, ticker: str = "",
         entry=entry, stop=stop, base_high=base_high, base_low=base_low,
         run_low=run_low, run_high=run_high, runup_pct=best, adr_pct=adr,
         dollar_vol=S.dollar_vol(i), sma10=sma10_last, volx=volx, targets=targets,
+        base_days=base_days, contractions=cons, spike_share=round(spike, 3), close_pos=round(pos, 3),
+        gap_open=round(gap_open, 4), why=why, refine_pts=rpts,
     )
 
 
