@@ -81,6 +81,11 @@ jobs:
       - name: Save results
         run: |
           git add results
-          git commit -q -m "SAR results $(date -u +%Y-%m-%d %H:%M)" || echo "nothing new"
-          git pull --rebase
-          git push
+          git commit -q -m "SAR results $(date -u '+%Y-%m-%d %H:%M')" || { echo "nothing new"; exit 0; }
+          # Another run may have saved results meanwhile. This run's files are newer, so keep them.
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs && git push && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 5))
+          done
+          echo "Could not save results after 5 tries"; exit 1
