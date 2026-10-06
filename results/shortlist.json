@@ -1,9 +1,9 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-10-06T01:56:19+00:00",
+ "generated": "2026-10-06T13:17:00+00:00",
  "live": null,
- "scanned": 6244,
- "passed_filters": 689,
+ "scanned": 6241,
+ "passed_filters": 688,
  "regime": {
   "SPY": true,
   "QQQ": true
@@ -194,8 +194,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-05",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 9.302600002288818,
@@ -2341,8 +2341,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-12",
-   "days_to_earnings": 37,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 5.502600002288818,
@@ -4494,8 +4494,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-05",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 126.61660118103028,
@@ -6641,8 +6641,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-11",
-   "days_to_earnings": 36,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 12.43519998550415,
@@ -8794,8 +8794,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-10-29",
-   "days_to_earnings": 23,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 309.6735998535156,
@@ -10953,8 +10953,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-05",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 90.09310012817383,
@@ -13112,8 +13112,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-05",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 6.883000001907349,
@@ -13122,7 +13122,7 @@
    "rs_rank": 88,
    "sector": "Consumer Discretionary",
    "group": "Restaurants",
-   "group_rank": 18,
+   "group_rank": 19,
    "kind": "coiling",
    "risk_adr": 0.23,
    "wide_stop": false,
@@ -15217,7 +15217,7 @@
    "run_low": 42.59119986625302,
    "run_high": 65.96021358101383,
    "runup_pct": 0.5193459191381364,
-   "adr_pct": 0.055210213621891616,
+   "adr_pct": 0.05521021362189157,
    "dollar_vol": 194189914.74962234,
    "sma10": 70.38999938964844,
    "volx": 0.632778762789903,
@@ -15236,8 +15236,8 @@
     },
     {
      "label": "+1 ADR",
-     "price": 78.87696346823641,
-     "r_multiple": 3.652188937409665,
+     "price": 78.87696346823638,
+     "r_multiple": 3.65218893740964,
      "note": ""
     },
     {
@@ -15248,8 +15248,8 @@
     },
     {
      "label": "+3 ADR",
-     "price": 87.1308904047092,
-     "r_multiple": 10.95656681222897,
+     "price": 87.13089040470918,
+     "r_multiple": 10.956566812228946,
      "note": ""
     },
     {
@@ -15271,8 +15271,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-02",
-   "days_to_earnings": 27,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 60.14910339355469,
@@ -15372,7 +15372,7 @@
      51.8174,
      53.4835,
      50.2406,
-     50.7364,
+     50.7365,
      2807900
     ],
     [
@@ -17418,8 +17418,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-04",
-   "days_to_earnings": 29,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 21.662199878692626,
@@ -17428,7 +17428,7 @@
    "rs_rank": 98,
    "sector": "Health Care",
    "group": "Biotechnology: Pharmaceutical Preparations",
-   "group_rank": 15,
+   "group_rank": 16,
    "kind": "wide",
    "risk_adr": 1.14,
    "wide_stop": true,
@@ -19565,8 +19565,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-05",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 1.4519999933242798,
@@ -21718,8 +21718,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-05",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 8.228399991989136,
@@ -23865,8 +23865,8 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-05",
-   "days_to_earnings": 30,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 9.197199993133545,

@@ -1,7 +1,7 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6244 · with data 6242 · passed filters 689  (2026-10-06T01:56:19+00:00)
+Scanned 6241 · with data 6239 · passed filters 688  (2026-10-06T13:17:00+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
 
 YOUR POSITIONS (2)
