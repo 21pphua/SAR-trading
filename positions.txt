@@ -2,3 +2,4 @@
 # Example: ARHS,97,10.24,9.86,2026-10-02
 ticker,shares,entry,stop,date
 NTSK,121,19.81,18.78,2026-10-06
+NBIS,7,253.38,237.00,2026-10-06
