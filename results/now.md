@@ -1,8 +1,8 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Tue Oct 6, 10:51 AM PT (MARKET OPEN, prices are live)
+- **Snapshot taken:** Tue Oct 6, 11:46 AM PT (MARKET OPEN, prices are live)
 - **Nightly scan used for levels:** Tue Oct 6, 10:49 AM PT
-- **Last intraday check:** 10:51 AM PT
+- **Last intraday check:** 11:46 AM PT
 
 ## Market
 
@@ -14,8 +14,8 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **19.49** | 18.78 | -0.32R | -39 | 18.78 | 10 SMA 17.99 | HOLD |
-| NBIS | 7 | 253.38 | **253.88** | 237.00 | +0.03R | +4 | 237.00 | 10 SMA 235.63 | STOP HIT today (low 237.00 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **19.52** | 18.78 | -0.28R | -34 | 18.78 | 10 SMA 17.99 | HOLD |
+| NBIS | 7 | 253.38 | **252.39** | 237.00 | -0.06R | -7 | 237.00 | 10 SMA 235.63 | STOP HIT today (low 237.00 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
@@ -28,10 +28,10 @@
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| SG | **9.11** | 9.24 | 1.4% | 9.34 | 0.56x | TRIGGERED at 9:13 AM |
-| FROG | **97.59** | 100.38 | 2.9% | 100.38 | 0.49x | WAITING |
-| NET | **357.54** | 370.35 | 3.6% | 370.35 | 0.72x | WAITING |
-| MRNA | **190.11** | 212.19 | 11.6% | 212.19 | 1.48x | WAITING |
+| SG | **9.10** | 9.24 | 1.5% | 9.34 | 0.56x | TRIGGERED at 9:13 AM |
+| FROG | **97.56** | 100.38 | 2.9% | 100.38 | 0.44x | WAITING |
+| NET | **356.56** | 370.35 | 3.9% | 370.35 | 0.68x | WAITING |
+| MRNA | **189.34** | 212.19 | 12.1% | 212.19 | 1.29x | WAITING |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
