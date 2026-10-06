@@ -88,4 +88,11 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    rc = main()
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from snapshot import safe_snapshot  # scripts/ or repo root
+        safe_snapshot()
+    except Exception as e:
+        print(f"snapshot skipped: {e}")
+    sys.exit(rc)
