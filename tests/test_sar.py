@@ -161,7 +161,7 @@ def test_backtest_winner_exits_on_10sma(monkeypatch):
     bo = [t for t in trades if t.entry_date == bo_date]
     assert bo, [t.entry_date for t in trades]
     tr = bo[0]
-    assert not tr.open and tr.exit_reason in ("10sma", "breakeven")
+    assert not tr.open and tr.exit_reason in ("sma", "breakeven")
     assert tr.r > 0
 
 
@@ -258,7 +258,7 @@ def test_position_5r_then_breakeven_hold():
     bars = _line(rise)
     p = evaluate_position(Position("X", 100, 10.0, 9.5, bars[0].date), bars)
     assert p.hit_5r_date and p.stop_now == 10.0
-    assert p.status in ("5R HIT", "NEAR EXIT")
+    assert p.status in ("5R HIT", "NEAR EXIT", "HOLD")   # 5R badge shows 2 bars; exit line is now the 20 SMA
     assert p.r_now > 5
 
 

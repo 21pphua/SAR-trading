@@ -8,6 +8,7 @@ Commands
   scan     Full funnel: screen -> draft survivors -> confirm -> ranked report.
   sar      SAR Trading breakout scan: filters -> checklist score -> targets.
   sar-backtest  Replay the SAR rules over history; win rate, R stats, drawdown.
+  lab      Model lab: honest account-level backtest + walk-forward (Step 1).
 """
 
 from __future__ import annotations
@@ -306,6 +307,35 @@ def cmd_sar_backtest(args) -> int:
     return 0
 
 
+def cmd_lab(args) -> int:
+    from stockscan.sar.scan import fetch_ohlcv
+    from stockscan.lab.core import CostModel
+    from stockscan.lab.portfolio import AccountRules
+    from stockscan.lab.run import run_lab, write_trades_csv, write_summary_json
+    from stockscan.lab.report import render
+
+    if args.universe is None and not args.tickers:
+        args.universe = "us_all" if "us_all" in list_builtin_universes() else DEFAULT_UNIVERSE
+    tickers = _load_universe(args)
+    print(f"Model lab: {len(tickers)} names over {args.period} ...", file=sys.stderr)
+    rules = AccountRules(start_equity=args.equity, risk_pct=args.risk, max_positions=args.max_positions,
+                         max_heat_pct=args.max_heat, max_per_group=args.max_per_group,
+                         max_position_pct=args.max_position_pct, use_regime=not args.no_regime)
+    costs = CostModel(slippage_bps=args.slippage_bps, commission_per_share=args.commission)
+    res = run_lab(tickers, fetch_ohlcv, period=args.period, rules=rules, costs=costs,
+                  on_progress=_progress, wf_criterion=args.wf_criterion)
+    text = render(res)
+    print(text)
+    if args.out:
+        with open(args.out, "w", encoding="utf-8") as fh:
+            fh.write(text)
+    if args.trades:
+        write_trades_csv(res, args.trades)
+    if args.json:
+        write_summary_json(res, args.json)
+    return 0
+
+
 # ---------------------------------------------------------------------------
 # parser
 # ---------------------------------------------------------------------------
@@ -387,6 +417,24 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--slippage", type=float, default=0.002,
                     help="Slippage on intraday buy-stop entries (default 0.002 = 0.2%%).")
     sp.set_defaults(func=cmd_sar_backtest)
+
+    sp = sub.add_parser("lab", help="Model lab: honest account-level backtest + walk-forward.")
+    add_universe_args(sp)
+    sp.add_argument("--period", default="10y", help="History length for yfinance (default 10y).")
+    sp.add_argument("--equity", type=float, default=25_000, help="Starting account size (default 25000).")
+    sp.add_argument("--risk", type=float, default=0.5, help="%% of equity risked per trade (default 0.5).")
+    sp.add_argument("--max-positions", type=int, default=8)
+    sp.add_argument("--max-heat", type=float, default=6.0, help="Max total open risk, %% of equity (default 6).")
+    sp.add_argument("--max-per-group", type=int, default=2)
+    sp.add_argument("--max-position-pct", type=float, default=25.0, help="Largest position, %% of equity.")
+    sp.add_argument("--slippage-bps", type=float, default=10.0, help="Slippage per side in bps (default 10).")
+    sp.add_argument("--commission", type=float, default=0.0, help="Commission per share (default 0).")
+    sp.add_argument("--no-regime", action="store_true", help="Ignore the market-regime switch.")
+    sp.add_argument("--wf-criterion", default="sharpe", choices=["sharpe", "mar", "cagr"])
+    sp.add_argument("--out", help="Write the text report here.")
+    sp.add_argument("--trades", help="Write every account trade to this CSV.")
+    sp.add_argument("--json", help="Write a JSON summary (equity curves, yearly, walk-forward).")
+    sp.set_defaults(func=cmd_lab)
 
     return p
 
