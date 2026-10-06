@@ -1,50 +1,52 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6244 · with data 6242 · passed filters 684  (2026-10-05T19:55:38+00:00)
+Scanned 6241 · with data 6240 · passed filters 634  (2026-10-06T13:47:47+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  TWST   HOLD          11 sh  last   206.86   +0.6R  +$66
-           On track. Stop 190.91. Sell on a daily close below the 10 SMA (183.25).
-  DNA    HOLD         100 sh  last    15.03   +0.7R  +$95
-           On track. Stop 12.80. Sell on a daily close below the 10 SMA (11.40).
+  TWST   HOLD          11 sh  last   217.40   +1.7R  +$182
+           On track. Stop 190.91. Sell on a daily close below the 10 SMA (188.35).
+  DNA    HOLD         100 sh  last    17.68   +2.8R  +$360
+           On track. Stop 12.80. Sell on a daily close below the 10 SMA (12.23).
 
-BREAKOUTS (0)
+BREAKOUTS (2)
 ------------------------------------------------------------------------------
-  none today
+  TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
+  MRNA       88  Take     211.66   201.30  4.9%   263.46   331.85  2.21  99
+  TWST       77  Take     217.40   208.00  4.3%   264.40   280.54  3.11  99
 
-COILING — setup formed, not yet broken out (8)
+COILING — setup formed, not yet broken out (7)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  SILC     38/50      60.73  -0.0%     42%  7.0%    53.17
-  PAYS     35/50      14.93  -1.8%     69%  5.3%    13.35
-  AGPU     44/50      13.49  -2.9%     61%  9.8%    12.01  WIDE STOP 1.2xADR
-  SENS     35/50      10.64  -2.8%    105%  5.2%    10.06  WIDE STOP 1.4xADR
-  NET      37/50     367.43  -1.7%     26%  5.2%   352.80
-  FROG     40/50     100.00  -2.8%     42%  5.6%    93.22
-  SG       36/50       9.19  -1.4%     30%  6.0%     8.46
-  SEI      35/50      75.46  -0.6%     52%  5.5%    70.41
+  RCEL     40/50      13.48  -0.6%    184%  5.5%    12.11
+  SILC     39/50      62.76  -1.7%     42%  6.5%    54.43
+  OABI     36/50       5.09  -2.6%    158%  5.9%     4.84  LOW-PRICED
+  SMTC     35/50     201.99  -2.9%     57%  5.7%   182.98
+  FROG     40/50     100.00  -0.8%     42%  5.3%    94.21
+  SG       36/50       9.40  -2.7%     30%  5.6%     8.61
+  KMTS     35/50      29.66  -2.7%     36%  6.0%    27.50
 
-WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
+WIDE STOP — watch only (2): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  DNA        77  entry 15.03  stop 12.48  (1.6x ADR)
-  PACB       76  entry 2.91  stop 2.51  (1.5x ADR)
-  NVAX       78  entry 12.90  stop 10.27  (3.0x ADR)
+  PACB       80  entry 3.41  stop 2.93  (1.4x ADR)
+  DNA        76  entry 17.68  stop 15.31  (1.2x ADR)
 
-SKIPPED — COUNTER-TREND (10): scored well, but not in a long-term uptrend
+SKIPPED — COUNTER-TREND (16): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  BOT        82  50 SMA falling; -45% from 52-week high
-  QTEX       77  50 SMA falling; -60% from 52-week high
-  RXRX       77  -33% from 52-week high
-  TENB       52  50 SMA falling
-  OUST       51  50 SMA falling; -31% from 52-week high
-  EFOR       50  -33% from 52-week high
-  SERV       50  50 SMA falling; below the 200 SMA; -74% from 52-week high
-  TTMI       49  50 SMA falling; -40% from 52-week high
-  AXTI       45  -40% from 52-week high
-  CIEN       44  50 SMA falling; below the 200 SMA; -39% from 52-week high
+  OUST       84  50 SMA falling; -29% from 52-week high
+  AAOI       83  50 SMA falling; -45% from 52-week high
+  OLOX       80  below the 50 SMA; 50 SMA falling; below the 200 SMA; -98% from 52-week high
+  ALAB       78  50 SMA falling
+  NTLA       75  50 SMA falling; -53% from 52-week high
+  BOT        73  50 SMA falling; -43% from 52-week high
+  SIMO       65  50 SMA falling
+  FCEL       64  50 SMA falling; -51% from 52-week high
+  LPTH       53  below the 50 SMA; 50 SMA falling; below the 200 SMA; -41% from 52-week high
+  HQ         52  50 SMA falling; -63% from 52-week high
+  ARQQ       50  -60% from 52-week high
+  BLZE       49  below the 50 SMA; 50 SMA falling; -41% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
