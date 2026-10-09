@@ -1,14 +1,14 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-10-09T01:29:22+00:00",
+ "generated": "2026-10-09T14:10:31+00:00",
  "live": null,
- "scanned": 6238,
- "passed_filters": 668,
+ "scanned": 6239,
+ "passed_filters": 664,
  "regime": {
   "SPY": true,
   "QQQ": true
  },
- "breadth": 28.3,
+ "breadth": 28.4,
  "size_mult": 0.0,
  "size_note": "Breadth 28% (weak): no new trades",
  "counter_trend": [
@@ -159,7 +159,7 @@
    "rs_rank": 99,
    "sector": "Health Care",
    "group": "Medical/Dental Instruments",
-   "group_rank": 52,
+   "group_rank": 46,
    "base_days": 23,
    "contractions": [
     0.0569,
@@ -2351,7 +2351,7 @@
    "rs_rank": 90,
    "sector": "Consumer Discretionary",
    "group": "Apparel",
-   "group_rank": 11,
+   "group_rank": 8,
    "base_days": 28,
    "contractions": [
     0.0987,
@@ -2384,7 +2384,7 @@
      "exit": "sma"
     }
    },
-   "sector_1m": -0.0303,
+   "sector_1m": -0.0219,
    "kind": "wide",
    "risk_adr": 1.29,
    "wide_stop": true,
@@ -4543,7 +4543,7 @@
    "rs_rank": 32,
    "sector": "Industrials",
    "group": "Aerospace",
-   "group_rank": 7,
+   "group_rank": 8,
    "base_days": 25,
    "contractions": [
     0.3005,
@@ -4576,7 +4576,7 @@
      "exit": "stop"
     }
    },
-   "sector_1m": -0.0493,
+   "sector_1m": -0.044,
    "kind": "counter",
    "risk_adr": 1.03,
    "wide_stop": true,
