@@ -1,21 +1,21 @@
 {
  "format": "sar-intraday/1",
- "generated": "2026-10-09T14:11:37+00:00",
+ "generated": "2026-10-09T18:39:14+00:00",
  "session": "2026-10-09",
- "as_of_et": "10:11",
- "as_of_pt": "7:11 AM",
+ "as_of_et": "14:39",
+ "as_of_pt": "11:39 AM",
  "scan_generated": "2026-10-09T14:10:31+00:00",
  "rows": [
   {
    "ticker": "RCEL",
    "base_high": 13.5,
-   "status": "TRIGGERED",
-   "price": 13.58,
+   "status": "WAITING",
+   "price": 13.175,
    "orh": 13.55,
    "trigger": 13.55,
-   "low": 13.35,
-   "pace": 2.16,
-   "pct_to_trigger": -0.0022,
+   "low": 13.0,
+   "pace": 0.69,
+   "pct_to_trigger": 0.0285,
    "first_triggered": "7:11 AM",
    "gap": -0.0007,
    "gapped": false,
@@ -32,17 +32,17 @@
    "stop": 18.78,
    "date": "2026-10-06",
    "status": "HOLD",
-   "action": "On track. Stop 18.78. Sell on a daily close below the 10 SMA (18.49).",
-   "last": 19.864999771118164,
+   "action": "On track. Stop 18.78. Sell on a daily close below the 10 SMA (18.57).",
+   "last": 20.674999237060547,
    "last_date": "2026-10-09",
-   "sma10": 18.4935001373291,
-   "sma20": 18.157749938964844,
+   "sma10": 18.57450008392334,
+   "sma20": 18.198249912261964,
    "exit_line": "10 SMA",
    "stop_now": 18.78,
    "target_5r": 24.959999999999987,
    "hit_5r_date": "",
-   "r_now": 0.05339783603705386,
-   "pnl": 6.654972305298006,
+   "r_now": 0.839805084524806,
+   "pnl": 104.66490768432632,
    "bars": [
     [
      "2026-07-09",
@@ -567,10 +567,10 @@
     [
      "2026-10-09",
      19.84,
-     19.98,
+     20.71,
      19.49,
-     19.865,
-     677140
+     20.675,
+     4172904
     ]
    ],
    "live": true
@@ -583,16 +583,16 @@
    "date": "2026-10-06",
    "status": "STOPPED",
    "action": "Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.",
-   "last": 219.1699981689453,
+   "last": 220.5749969482422,
    "last_date": "2026-10-09",
-   "sma10": 233.86750030517578,
-   "sma20": 229.27374954223632,
+   "sma10": 234.00800018310548,
+   "sma20": 229.34399948120117,
    "exit_line": "10 SMA",
    "stop_now": 237.0,
    "target_5r": 335.28,
    "hit_5r_date": "",
-   "r_now": -2.088522700308589,
-   "pnl": -239.47001281738278,
+   "r_now": -2.002747439057254,
+   "pnl": -229.63502136230466,
    "bars": [
     [
      "2026-07-09",
@@ -1119,8 +1119,8 @@
      222.495,
      225.11,
      218.5,
-     219.17,
-     2980629
+     220.575,
+     6703249
     ]
    ],
    "live": true
