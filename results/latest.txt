@@ -1,34 +1,39 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6239 · with data 6224 · passed filters 664  (2026-10-09T14:10:31+00:00)
+Scanned 6239 · with data 6238 · passed filters 671  (2026-10-09T20:40:38+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NBIS   STOPPED        7 sh  last   219.71   -2.1R  -$236
+  NBIS   STOPPED        7 sh  last   221.07   -2.0R  -$226
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
-  NTSK   HOLD         121 sh  last    19.61   -0.2R  -$24
-           On track. Stop 18.78. Sell on a daily close below the 10 SMA (18.27).
+  NTSK   HOLD         121 sh  last    20.75   +0.9R  +$114
+           On track. Stop 18.78. Sell on a daily close below the 10 SMA (18.58).
 
 BREAKOUTS (0)
 ------------------------------------------------------------------------------
   none today
 
-COILING — setup formed, not yet broken out (1)
+COILING — setup formed, not yet broken out (4)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  RCEL     42/50      13.50  -1.3%    155%  6.1%    12.46
+  RCEL     43/50      13.50  -2.1%    155%  6.1%    12.59
+  FROG     45/50     100.38   1.8%     42%  5.1%    96.33  BROKE ON LOW VOLUME ·
+  SG       35/50       9.65  -0.2%     32%  5.4%     9.02
+  BRZE     37/50      29.18  -0.4%     63%  5.2%    26.14
 
-WIDE STOP — watch only (1): broke out, but the stop is farther than a normal day
+WIDE STOP — watch only (2): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  FIGS       79  entry 14.98  stop 13.98  (1.3x ADR)
+  MRNA       80  entry 225.00  stop 197.17  (1.6x ADR)
+  SMWB       90  entry 9.05  stop 8.55  (1.0x ADR)
 
-SKIPPED — COUNTER-TREND (3): scored well, but not in a long-term uptrend
+SKIPPED — COUNTER-TREND (4): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  FLYE       81  50 SMA falling; below the 200 SMA; -89% from 52-week high
-  SHLS       55  50 SMA falling; below the 200 SMA; -36% from 52-week high
-  PSIG       53  below the 200 SMA; -60% from 52-week high
+  WFF        83  -37% from 52-week high
+  PSIG       81  -58% from 52-week high
+  HIMS       69  50 SMA falling; -53% from 52-week high
+  REPL       55  below the 50 SMA
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
