@@ -1,6 +1,6 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Wed Oct 14, 10:46 AM PT (MARKET OPEN, prices are live)
+- **Snapshot taken:** Wed Oct 14, 2:16 PM PT (market closed, prices are the latest close)
 - **Nightly scan used for levels:** Tue Oct 13, 5:39 PM PT
 - **Last intraday check:** 10:46 AM PT
 
@@ -14,8 +14,8 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **19.82** | 19.82 | +0.01R | +1 | 18.78 | 10 SMA 18.86 | HOLD |
-| NBIS | 7 | 253.38 | **185.11** | 185.00 | -4.17R | -478 | 237.00 | 10 SMA 231.88 | STOP HIT today (low 185.00 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **20.04** | 19.62 | +0.22R | +28 | 18.78 | 10 SMA 18.86 | HOLD |
+| NBIS | 7 | 253.38 | **186.01** | 183.13 | -4.11R | -472 | 237.00 | 10 SMA 231.88 | STOP HIT today (low 183.13 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
@@ -25,9 +25,9 @@ None.
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| RCEL | **13.15** | 13.71 | 4.2% | 13.22 | 1.57x | WAITING |
-| BRZE | **28.03** | 29.38 | 4.8% | 28.87 | 0.29x | WAITING |
-| SEI | **69.08** | 80.28 | 16.2% | 76.94 | 1.42x | WAITING |
+| BRZE | **28.25** | 29.38 | 4.0% | 28.87 | 0.56x | WAITING |
+| RCEL | **13.10** | 13.71 | 4.7% | 13.28 | 1.60x | WAITING |
+| SEI | **69.37** | 80.28 | 15.7% | 76.94 | 2.10x | WAITING |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
