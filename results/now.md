@@ -1,8 +1,8 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Tue Oct 13, 5:39 PM PT (market closed, prices are the latest close)
+- **Snapshot taken:** Wed Oct 14, 10:46 AM PT (MARKET OPEN, prices are live)
 - **Nightly scan used for levels:** Tue Oct 13, 5:39 PM PT
-- **Last intraday check:** 12:44 PM PT
+- **Last intraday check:** 10:46 AM PT
 
 ## Market
 
@@ -14,8 +14,8 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **nan** | 20.48 | +nanR | +nan | 18.78 | 10 SMA 18.86 | HOLD |
-| NBIS | 7 | 253.38 | **nan** | 197.60 | +nanR | +nan | 237.00 | 10 SMA 231.88 | STOP HIT today (low 197.60 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **19.82** | 19.82 | +0.01R | +1 | 18.78 | 10 SMA 18.86 | HOLD |
+| NBIS | 7 | 253.38 | **185.11** | 185.00 | -4.17R | -478 | 237.00 | 10 SMA 231.88 | STOP HIT today (low 185.00 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
@@ -25,9 +25,9 @@ None.
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| RCEL | **nan** | 13.71 | nan% | 13.70 | 0.90x | WAITING |
-| SEI | **nan** | 80.28 | nan% | 78.98 | 1.01x | WAITING |
-| BRZE | **nan** | 29.66 | nan% | 29.75 | 0.66x | CUT (close check 12:44 PM) |
+| RCEL | **13.15** | 13.71 | 4.2% | 13.22 | 1.57x | WAITING |
+| BRZE | **28.03** | 29.38 | 4.8% | 28.87 | 0.29x | WAITING |
+| SEI | **69.08** | 80.28 | 16.2% | 76.94 | 1.42x | WAITING |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
