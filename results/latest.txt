@@ -1,15 +1,15 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6239 · with data 6239 · passed filters 694  (2026-10-15T23:53:32+00:00)
+Scanned 6241 · with data 6241 · passed filters 721  (2026-10-16T23:53:07+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NBIS   STOPPED        7 sh  last   188.41   -4.0R  -$455
+  NTSK   STOPPED      121 sh  last    19.00   -0.8R  -$98
+           Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
+  NBIS   STOPPED        7 sh  last   165.47   -5.4R  -$615
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
-  NTSK   HOLD         121 sh  last    20.45   +0.6R  +$77
-           On track. Stop 18.78. Sell on a daily close below the 10 SMA (19.77).
 
 BREAKOUTS (0)
 ------------------------------------------------------------------------------
@@ -18,17 +18,12 @@ BREAKOUTS (0)
 COILING — setup formed, not yet broken out (1)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  RCEL     42/50      13.73  -2.3%    155%  5.9%    13.18
+  SPT      46/50      11.61  -2.9%     59%  5.3%    10.91
 
-WIDE STOP — watch only (1): broke out, but the stop is farther than a normal day
+SKIPPED — COUNTER-TREND (2): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  APPN       80  entry 43.82  stop 38.32  (2.3x ADR)
-
-SKIPPED — COUNTER-TREND (3): scored well, but not in a long-term uptrend
-------------------------------------------------------------------------------
-  MNDY       81  -55% from 52-week high
-  EVH        80  50 SMA falling; -41% from 52-week high
-  DAVE       57  50 SMA falling
+  DAVE       46  50 SMA falling
+  TTAN       40  below the 50 SMA; 50 SMA falling; -33% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
