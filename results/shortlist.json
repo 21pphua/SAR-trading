@@ -1,16 +1,16 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-10-16T23:53:07+00:00",
+ "generated": "2026-10-20T00:41:37+00:00",
  "live": null,
- "scanned": 6241,
+ "scanned": 6239,
  "passed_filters": 721,
  "regime": {
   "SPY": true,
   "QQQ": true
  },
- "breadth": 27.5,
+ "breadth": 27.4,
  "size_mult": 0.0,
- "size_note": "Breadth 28% (weak): no new trades",
+ "size_note": "Breadth 27% (weak): no new trades",
  "counter_trend": [
   {
    "ticker": "DAVE",
@@ -96,68 +96,68 @@
     }
    ],
    "entry": 11.279999732971191,
-   "stop": 10.973299980163574,
+   "stop": 10.970000267028809,
    "base_high": 11.614999771118164,
    "base_low": 8.949999809265137,
    "run_low": 7.290999889373779,
    "run_high": 11.859999656677246,
    "runup_pct": 0.5887977925827461,
-   "adr_pct": 0.05272913574250375,
-   "dollar_vol": 8391091.762600947,
+   "adr_pct": 0.052745751073113724,
+   "dollar_vol": 8391073.150601387,
    "sma10": 10.90949993133545,
-   "volx": 0.9758913925912467,
+   "volx": 0.9758527794521054,
    "targets": [
     {
      "label": "Resistance 1",
      "price": 11.34000015258789,
-     "r_multiple": 0.19563243552509654,
+     "r_multiple": 0.1935500741406149,
      "note": "prior swing high"
     },
     {
      "label": "Resistance 2",
      "price": 11.489999771118164,
-     "r_multiple": 0.6847088601297272,
+     "r_multiple": 0.6774206449310585,
      "note": "prior swing high"
     },
     {
      "label": "+1 ADR",
-     "price": 11.874784370066434,
-     "r_multiple": 1.9393058900452786,
+     "price": 11.87497179099128,
+     "r_multiple": 1.9192680097412536,
      "note": ""
     },
     {
      "label": "5R partial",
-     "price": 12.813498497009277,
+     "price": 12.829997062683105,
      "r_multiple": 5.0,
      "note": "sell 10-30%, stop to breakeven"
     },
     {
      "label": "+3 ADR",
-     "price": 13.064353644256922,
-     "r_multiple": 5.8179176701358415,
+     "price": 13.064915907031455,
+     "r_multiple": 5.757804029223755,
      "note": ""
     },
     {
      "label": "Measured move",
      "price": 16.18399953842163,
-     "r_multiple": 15.989578604344555,
+     "r_multiple": 15.819381464230998,
      "note": "run-up height added to base high"
     },
     {
      "label": "Trailing exit",
      "price": 10.90949993133545,
-     "r_multiple": -1.208021194161653,
+     "r_multiple": -1.195162709424162,
      "note": "exit on daily close below 10 SMA"
     },
     {
      "label": "Stop",
-     "price": 10.973299980163574,
+     "price": 10.970000267028809,
      "r_multiple": -1.0,
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-03",
-   "days_to_earnings": 18,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 10.502100028991698,
@@ -175,7 +175,7 @@
     0.041
    ],
    "spike_share": 0.446,
-   "close_pos": 0.376,
+   "close_pos": 0.378,
    "gap_open": 0.0086,
    "why": [
     "Rose 59% from 2026-07-23 to 2026-09-14 (meets the 30% bar).",
@@ -199,20 +199,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": -0.0533,
+   "sector_1m": -0.0538,
    "kind": "coiling",
    "risk_adr": 0.52,
    "wide_stop": false,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-10-17",
-     10.74,
-     10.83,
-     10.33,
-     10.51,
-     1287300
-    ],
     [
      "2025-10-20",
      10.71,
@@ -2208,13 +2200,13 @@
     [
      "2026-10-16",
      11.67,
-     11.7899,
-     10.9733,
+     11.79,
+     10.97,
      11.28,
-     793333
+     793300
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   }
  ],
@@ -2238,14 +2230,6 @@
    "r_now": -0.7864077669902919,
    "pnl": -98.00999999999985,
    "bars": [
-    [
-     "2025-10-17",
-     22.5,
-     22.75,
-     21.55,
-     22.24,
-     1201700
-    ],
     [
      "2025-10-20",
      22.25,
@@ -4242,9 +4226,9 @@
      "2026-10-16",
      20.47,
      20.779,
-     18.43,
+     18.41,
      19.0,
-     20963400
+     21360300
     ]
    ]
   },
@@ -4267,14 +4251,6 @@
    "r_now": -5.366910792386868,
    "pnl": -615.3699914550781,
    "bars": [
-    [
-     "2025-10-17",
-     118.06,
-     120.573,
-     110.88,
-     113.44,
-     21366500
-    ],
     [
      "2025-10-20",
      116.79,
@@ -6273,18 +6249,16 @@
      182.7,
      163.27,
      165.47,
-     34790499
+     34962100
     ]
    ]
   }
  ],
  "previous": {
-  "generated": "2026-10-15T23:53:32+00:00",
-  "breakouts": [
-   "APPN"
-  ],
+  "generated": "2026-10-16T23:53:07+00:00",
+  "breakouts": [],
   "coiling": [
-   "RCEL"
+   "SPT"
   ]
  }
 }

@@ -1,0 +1,31 @@
+
+SAR BREAKOUT SCAN
+==============================================================================
+Scanned 6239 · with data 6239 · passed filters 721  (2026-10-20T00:41:37+00:00)
+MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
+
+YOUR POSITIONS (2)
+------------------------------------------------------------------------------
+  NTSK   STOPPED      121 sh  last    19.00   -0.8R  -$98
+           Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
+  NBIS   STOPPED        7 sh  last   165.47   -5.4R  -$615
+           Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
+
+BREAKOUTS (0)
+------------------------------------------------------------------------------
+  none today
+
+COILING — setup formed, not yet broken out (1)
+------------------------------------------------------------------------------
+  TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
+  SPT      46/50      11.61  -2.9%     59%  5.3%    10.91
+
+SKIPPED — COUNTER-TREND (2): scored well, but not in a long-term uptrend
+------------------------------------------------------------------------------
+  DAVE       46  50 SMA falling
+  TTAN       40  below the 50 SMA; 50 SMA falling; -33% from 52-week high
+
+FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
+one normal day's range (size down or skip) · LOW-PRICED = under $5.
+Rules-based rating only — not a trade signal. Verify each chart before acting.
+
