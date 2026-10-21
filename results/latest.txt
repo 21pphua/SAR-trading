@@ -1,14 +1,14 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6239 · with data 6239 · passed filters 721  (2026-10-20T00:41:37+00:00)
-MARKET:  SPY 10>20 ✓ · QQQ 10>20 ✓  ->  FAVORABLE
+Scanned 6239 · with data 6239 · passed filters 711  (2026-10-21T00:13:50+00:00)
+MARKET:  SPY 10>20 ✓ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   STOPPED      121 sh  last    19.00   -0.8R  -$98
+  NTSK   STOPPED      121 sh  last    19.42   -0.4R  -$47
            Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
-  NBIS   STOPPED        7 sh  last   165.47   -5.4R  -$615
+  NBIS   STOPPED        7 sh  last   170.24   -5.1R  -$582
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
 
 BREAKOUTS (0)
@@ -18,12 +18,17 @@ BREAKOUTS (0)
 COILING — setup formed, not yet broken out (1)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  SPT      46/50      11.61  -2.9%     59%  5.3%    10.91
+  SPT      45/50      11.79  -1.1%     54%  5.3%    11.06
 
-SKIPPED — COUNTER-TREND (2): scored well, but not in a long-term uptrend
+WIDE STOP — watch only (1): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  DAVE       46  50 SMA falling
-  TTAN       40  below the 50 SMA; 50 SMA falling; -33% from 52-week high
+  HPK        76  entry 11.39  stop 10.42  (1.4x ADR)
+
+SKIPPED — COUNTER-TREND (3): scored well, but not in a long-term uptrend
+------------------------------------------------------------------------------
+  ODD        58  -56% from 52-week high
+  MNDY       51  -56% from 52-week high
+  AGL        49  50 SMA falling; -33% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
