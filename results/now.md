@@ -1,6 +1,6 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Fri Oct 23, 10:41 AM PT (MARKET OPEN, prices are live)
+- **Snapshot taken:** Fri Oct 23, 1:58 PM PT (market closed, prices are the latest close)
 - **Nightly scan used for levels:** Thu Oct 22, 5:14 PM PT
 - **Last intraday check:** 10:41 AM PT
 
@@ -14,8 +14,8 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **23.84** | 21.83 | +3.91R | +488 | 18.78 | 10 SMA 20.27 | STOPPED |
-| NBIS | 7 | 253.38 | **160.31** | 155.86 | -5.68R | -651 | 237.00 | 10 SMA 191.09 | STOP HIT today (low 155.86 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **24.28** | 21.83 | +4.34R | +541 | 18.78 | 10 SMA 20.27 | STOPPED |
+| NBIS | 7 | 253.38 | **171.57** | — | -4.99R | -573 | 237.00 | 10 SMA 191.09 | BELOW 10 SMA — sell if it closes here |
 
 ## Breakouts (from last night's scan, priced now)
 
@@ -25,10 +25,10 @@ None.
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| HTFL | **57.29** | 56.43 | -1.5% | 57.74 | 0.70x | TRIGGERED at 10:41 AM |
-| CAI | **32.02** | 32.89 | 2.7% | 32.16 | 0.50x | WAITING |
-| STLN | **6.77** | 7.00 | 3.4% | 6.95 | 0.57x | WAITING |
-| SPT | **12.83** | 13.35 | 4.0% | 13.35 | 0.66x | ABOVE BASE |
+| HTFL | **56.71** | 56.43 | -0.5% | 57.74 | 0.93x | TRIGGERED at 10:41 AM |
+| CAI | **32.00** | 32.89 | 2.8% | 32.16 | 0.60x | WAITING |
+| SPT | **12.86** | 13.35 | 3.8% | 13.35 | 1.17x | ABOVE BASE |
+| STLN | **6.71** | 7.00 | 4.3% | 6.95 | 0.88x | WAITING |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
