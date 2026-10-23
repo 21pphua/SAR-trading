@@ -1,14 +1,14 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6239 · with data 6239 · passed filters 716  (2026-10-22T00:17:34+00:00)
+Scanned 6240 · with data 6240 · passed filters 704  (2026-10-23T00:14:12+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   STOPPED      121 sh  last    19.82   +0.0R  +$1
+  NTSK   STOPPED      121 sh  last    21.81   +1.9R  +$242
            Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
-  NBIS   STOPPED        7 sh  last   171.45   -5.0R  -$574
+  NBIS   STOPPED        7 sh  last   171.57   -5.0R  -$573
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
 
 BREAKOUTS (0)
@@ -18,29 +18,25 @@ BREAKOUTS (0)
 COILING — setup formed, not yet broken out (4)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  MRNA     35/50     242.29  -0.1%    239%  8.8%   219.82  WIDE STOP 1.2xADR
-  CVI      40/50      63.51  -2.6%     74%  5.2%    60.38
-  SG       38/50      10.77  -0.9%     42%  5.0%     9.99  WIDE STOP 1.1xADR
-  FNKO     40/50       6.91  -0.6%     34%  5.1%     6.55
+  HTFL     36/50      56.29  -0.8%    103%  5.7%    50.93
+  SPT      42/50      12.73  -0.2%     42%  5.1%    11.51
+  CAI      42/50      32.89  -1.6%    103%  6.7%    30.32
+  STLN     35/50       7.00  -2.4%     48%  5.8%     6.62
 
-WIDE STOP — watch only (2): broke out, but the stop is farther than a normal day
+WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  HTFL       86  entry 55.59  stop 51.00  (1.4x ADR)
-  SPT        79  entry 12.54  stop 11.85  (1.1x ADR)
-
-TOO TIGHT — watch only (1): broke out, but the stop is unrealistically close to entry
-(not a real edge -- see SAR_MIN_RISK_ADR; verify the chart before treating this as a signal)
-------------------------------------------------------------------------------
-  BRZE       89  entry 45.57  stop 45.26  (0.13x ADR)
+  RCEL       91  entry 15.29  stop 13.95  (1.5x ADR)
+  LIFE       82  entry 44.22  stop 41.00  (1.0x ADR)
+  APPN       79  entry 48.73  stop 44.31  (1.5x ADR)
 
 SKIPPED — COUNTER-TREND (6): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  MNDY       81  -52% from 52-week high
-  MYGN       81  50 SMA falling; -35% from 52-week high
-  MAZE       80  50 SMA falling; -40% from 52-week high
-  KVYO       78  50 SMA falling; -41% from 52-week high
-  ODD        58  -54% from 52-week high
-  GTM        57  below the 200 SMA; -67% from 52-week high
+  POM        83  below the 200 SMA; -97% from 52-week high
+  DAVE       53  50 SMA falling
+  HUBS       51  50 SMA falling; -50% from 52-week high
+  RPD        50  -30% from 52-week high
+  PSIX       46  below the 200 SMA; -51% from 52-week high
+  FIG        44  below the 50 SMA; 50 SMA falling; below the 200 SMA; -59% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
