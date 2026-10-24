@@ -1,42 +1,46 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6240 · with data 6240 · passed filters 704  (2026-10-23T00:14:12+00:00)
+Scanned 6241 · with data 6241 · passed filters 713  (2026-10-24T00:03:01+00:00)
 MARKET:  SPY 10>20 ✓ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   STOPPED      121 sh  last    21.81   +1.9R  +$242
+  NTSK   STOPPED      121 sh  last    22.20   +2.3R  +$289
            Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
-  NBIS   STOPPED        7 sh  last   171.57   -5.0R  -$573
+  NBIS   STOPPED        7 sh  last   159.17   -5.8R  -$659
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
 
-BREAKOUTS (0)
+BREAKOUTS (2)
 ------------------------------------------------------------------------------
-  none today
+  TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
+  SPT        78  Take      13.11    12.73  2.9%    15.01    16.65  1.44  98
+  BOLT       80  Take       6.27     5.99  4.5%     7.67     5.88 19.34  92
 
-COILING — setup formed, not yet broken out (4)
+COILING — setup formed, not yet broken out (6)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  HTFL     36/50      56.29  -0.8%    103%  5.7%    50.93
-  SPT      42/50      12.73  -0.2%     42%  5.1%    11.51
-  CAI      42/50      32.89  -1.6%    103%  6.7%    30.32
-  STLN     35/50       7.00  -2.4%     48%  5.8%     6.62
+  RCEL     41/50      15.64  -1.4%    163%  5.8%    13.71
+  LIFE     36/50      44.83  -2.9%    112%  6.7%    39.69
+  FIVN     39/50      37.79  -0.5%     40%  6.0%    34.71
+  CAI      40/50      32.77  -2.3%    106%  6.9%    30.97
+  GTLB     37/50      57.89  -2.8%     49%  5.1%    54.44
+  TENB     38/50      42.69  -1.6%     27%  5.7%    39.89
 
-WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
+WIDE STOP — watch only (2): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  RCEL       91  entry 15.29  stop 13.95  (1.5x ADR)
-  LIFE       82  entry 44.22  stop 41.00  (1.0x ADR)
-  APPN       79  entry 48.73  stop 44.31  (1.5x ADR)
+  QLYS       76  entry 208.20  stop 197.06  (1.0x ADR)
+  RPD        83  entry 14.73  stop 13.62  (1.1x ADR)
 
-SKIPPED — COUNTER-TREND (6): scored well, but not in a long-term uptrend
+SKIPPED — COUNTER-TREND (7): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  POM        83  below the 200 SMA; -97% from 52-week high
-  DAVE       53  50 SMA falling
-  HUBS       51  50 SMA falling; -50% from 52-week high
-  RPD        50  -30% from 52-week high
-  PSIX       46  below the 200 SMA; -51% from 52-week high
-  FIG        44  below the 50 SMA; 50 SMA falling; below the 200 SMA; -59% from 52-week high
+  XLAB       77  50 SMA falling; below the 200 SMA; -58% from 52-week high
+  HTZ        66  50 SMA falling; below the 200 SMA; -73% from 52-week high
+  ODD        58  -51% from 52-week high
+  WIX        55  -44% from 52-week high
+  CCB        51  50 SMA falling; below the 200 SMA; -62% from 52-week high
+  GTM        50  below the 200 SMA; -65% from 52-week high
+  PGY        49  below the 50 SMA; 50 SMA falling; -38% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
