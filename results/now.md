@@ -1,8 +1,8 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Fri Oct 23, 5:03 PM PT (market closed, prices are the latest close)
+- **Snapshot taken:** Mon Oct 26, 12:01 PM PT (MARKET OPEN, prices are live)
 - **Nightly scan used for levels:** Fri Oct 23, 5:03 PM PT
-- **Last intraday check:** 10:41 AM PT
+- **Last intraday check:** 12:01 PM PT
 
 ## Market
 
@@ -14,26 +14,26 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **nan** | 21.83 | +nanR | +nan | 18.78 | 10 SMA 20.53 | STOPPED |
-| NBIS | 7 | 253.38 | **nan** | 155.86 | +nanR | +nan | 237.00 | 10 SMA 185.03 | STOP HIT today (low 155.86 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **25.65** | 24.32 | +5.67R | +707 | 18.78 | 10 SMA 20.53 | STOPPED |
+| NBIS | 7 | 253.38 | **159.02** | 149.49 | -5.76R | -660 | 237.00 | 10 SMA 185.03 | STOP HIT today (low 149.49 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
 | Ticker | Score | RS | Entry | Stop | Now | vs entry | Today | Verdict now |
 |---|---|---|---|---|---|---|---|---|
-| BOLT | 80 | 92 | 6.27 | 5.99 | **nan** | +nan% | +nan% | FAILED — traded below the stop |
-| SPT | 78 | 98 | 13.11 | 12.73 | **nan** | +nan% | +nan% | Still buyable near entry |
+| BOLT | 80 | 92 | 6.27 | 5.99 | **6.56** | +4.6% | +4.6% | Still buyable near entry |
+| SPT | 78 | 98 | 13.11 | 12.73 | **12.64** | -3.6% | -3.6% | FAILED — traded below the stop |
 
 ## Alerts (trigger = higher of base high and today's opening-range high)
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| RCEL | **nan** | 15.64 | nan% | 15.61 | 1.04x | Waiting |
-| LIFE | **nan** | 44.83 | nan% | 44.99 | 0.73x | Waiting |
-| FIVN | **nan** | 37.79 | nan% | 38.34 | 1.33x | Waiting |
-| CAI | **nan** | 32.89 | nan% | 32.16 | 0.63x | WAITING |
-| GTLB | **nan** | 57.89 | nan% | 57.13 | 0.82x | Waiting |
-| TENB | **nan** | 42.69 | nan% | 44.72 | 1.47x | Waiting |
+| FIVN | **37.53** | 37.89 | 0.9% | 38.56 | 0.49x | WAITING |
+| CAI | **32.17** | 32.77 | 1.9% | 32.57 | 0.37x | WAITING |
+| RCEL | **15.23** | 15.64 | 2.7% | 15.53 | 0.61x | WAITING |
+| TENB | **47.23** | 45.93 | -2.8% | 47.85 | 1.16x | TRIGGERED at 12:01 PM |
+| GTLB | **56.18** | 57.89 | 3.0% | 57.15 | 0.64x | WAITING |
+| LIFE | **42.20** | 44.83 | 6.2% | 43.99 | 0.32x | WAITING |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
