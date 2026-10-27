@@ -1,46 +1,46 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6241 · with data 6241 · passed filters 713  (2026-10-24T00:03:01+00:00)
-MARKET:  SPY 10>20 ✓ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
+Scanned 6239 · with data 6239 · passed filters 714  (2026-10-27T00:49:26+00:00)
+MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   STOPPED      121 sh  last    22.20   +2.3R  +$289
+  NTSK   STOPPED      121 sh  last    24.28   +4.3R  +$541
            Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
-  NBIS   STOPPED        7 sh  last   159.17   -5.8R  -$659
+  NBIS   STOPPED        7 sh  last   158.74   -5.8R  -$662
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
 
-BREAKOUTS (2)
+BREAKOUTS (3)
 ------------------------------------------------------------------------------
   TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
-  SPT        78  Take      13.11    12.73  2.9%    15.01    16.65  1.44  98
+  QLYS       76  Take     216.70   206.49  4.7%   267.75   280.64  1.70  98
+  RPD        81  Take      14.91    14.52  2.6%    16.86    20.89  2.01  97  EARNINGS 8d
   BOLT       80  Take       6.27     5.99  4.5%     7.67     5.88 19.34  92
 
-COILING — setup formed, not yet broken out (6)
+COILING — setup formed, not yet broken out (5)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  RCEL     41/50      15.64  -1.4%    163%  5.8%    13.71
-  LIFE     36/50      44.83  -2.9%    112%  6.7%    39.69
-  FIVN     39/50      37.79  -0.5%     40%  6.0%    34.71
-  CAI      40/50      32.77  -2.3%    106%  6.9%    30.97
+  RCEL     42/50      15.68  -1.1%    169%  6.0%    13.94  EARNINGS 9d · WIDE STOP 1.3xADR
+  HTFL     38/50      57.25  -0.9%    101%  5.8%    52.41
+  FIVN     39/50      37.79  -0.5%     40%  6.0%    34.71  EARNINGS 9d
+  CAI      40/50      32.77  -2.3%    106%  6.9%    30.97  EARNINGS 8d
   GTLB     37/50      57.89  -2.8%     49%  5.1%    54.44
-  TENB     38/50      42.69  -1.6%     27%  5.7%    39.89
 
-WIDE STOP — watch only (2): broke out, but the stop is farther than a normal day
+WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  QLYS       76  entry 208.20  stop 197.06  (1.0x ADR)
-  RPD        83  entry 14.73  stop 13.62  (1.1x ADR)
+  TENB       77  entry 44.59  stop 41.67  (1.2x ADR)
+  ASTL       75  entry 4.74  stop 4.41  (1.3x ADR)
+  REF        76  entry 15.58  stop 14.51  (1.1x ADR)
 
-SKIPPED — COUNTER-TREND (7): scored well, but not in a long-term uptrend
+SKIPPED — COUNTER-TREND (6): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  XLAB       77  50 SMA falling; below the 200 SMA; -58% from 52-week high
-  HTZ        66  50 SMA falling; below the 200 SMA; -73% from 52-week high
-  ODD        58  -51% from 52-week high
-  WIX        55  -44% from 52-week high
+  UWMC       84  50 SMA falling; below the 200 SMA; -75% from 52-week high
+  JDZG       58  50 SMA falling; below the 200 SMA; -99% from 52-week high
+  WIX        56  -45% from 52-week high
+  PGY        53  below the 50 SMA; 50 SMA falling; -39% from 52-week high
   CCB        51  50 SMA falling; below the 200 SMA; -62% from 52-week high
   GTM        50  below the 200 SMA; -65% from 52-week high
-  PGY        49  below the 50 SMA; 50 SMA falling; -38% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
