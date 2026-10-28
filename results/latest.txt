@@ -1,46 +1,44 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6239 · with data 6239 · passed filters 714  (2026-10-27T00:49:26+00:00)
+Scanned 6239 · with data 6239 · passed filters 719  (2026-10-28T00:46:14+00:00)
 MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   STOPPED      121 sh  last    24.28   +4.3R  +$541
+  NTSK   STOPPED      121 sh  last    25.21   +5.2R  +$653
            Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
-  NBIS   STOPPED        7 sh  last   158.74   -5.8R  -$662
+  NBIS   STOPPED        7 sh  last   153.27   -6.1R  -$701
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
 
-BREAKOUTS (3)
+BREAKOUTS (1)
 ------------------------------------------------------------------------------
   TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
-  QLYS       76  Take     216.70   206.49  4.7%   267.75   280.64  1.70  98
-  RPD        81  Take      14.91    14.52  2.6%    16.86    20.89  2.01  97  EARNINGS 8d
-  BOLT       80  Take       6.27     5.99  4.5%     7.67     5.88 19.34  92
+  ASTL       83  Take       4.86     4.62  4.9%     6.06     6.21  3.50  77  EARNINGS 0d · LOW-PRICED
 
-COILING — setup formed, not yet broken out (5)
+COILING — setup formed, not yet broken out (7)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  RCEL     42/50      15.68  -1.1%    169%  6.0%    13.94  EARNINGS 9d · WIDE STOP 1.3xADR
-  HTFL     38/50      57.25  -0.9%    101%  5.8%    52.41
-  FIVN     39/50      37.79  -0.5%     40%  6.0%    34.71  EARNINGS 9d
-  CAI      40/50      32.77  -2.3%    106%  6.9%    30.97  EARNINGS 8d
-  GTLB     37/50      57.89  -2.8%     49%  5.1%    54.44
+  CVI      41/50      63.51  -2.3%     74%  5.3%    60.95  EARNINGS 6d · WIDE STOP 1.1xADR
+  HTFL     37/50      57.74  -1.3%    101%  5.7%    53.05
+  CAI      45/50      32.75  -0.9%    106%  6.8%    31.24  EARNINGS 7d
+  FIVN     39/50      38.34  -1.6%     40%  6.0%    34.92  EARNINGS 8d
+  FET      36/50      89.93  -1.2%     38%  5.3%    83.66  EARNINGS 1d
+  ASAN     35/50      12.07  -0.5%     23%  5.9%    10.74
+  REF      36/50      15.96  -0.7%     21%  6.1%    14.47  EARNINGS 8d
 
-WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
+WIDE STOP — watch only (2): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  TENB       77  entry 44.59  stop 41.67  (1.2x ADR)
-  ASTL       75  entry 4.74  stop 4.41  (1.3x ADR)
-  REF        76  entry 15.58  stop 14.51  (1.1x ADR)
+  RPD        90  entry 17.93  stop 14.88  (2.3x ADR)
+  TENB       79  entry 48.21  stop 44.80  (1.2x ADR)
 
-SKIPPED — COUNTER-TREND (6): scored well, but not in a long-term uptrend
+SKIPPED — COUNTER-TREND (5): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  UWMC       84  50 SMA falling; below the 200 SMA; -75% from 52-week high
-  JDZG       58  50 SMA falling; below the 200 SMA; -99% from 52-week high
-  WIX        56  -45% from 52-week high
-  PGY        53  below the 50 SMA; 50 SMA falling; -39% from 52-week high
-  CCB        51  50 SMA falling; below the 200 SMA; -62% from 52-week high
-  GTM        50  below the 200 SMA; -65% from 52-week high
+  TNDM       76  50 SMA falling; below the 200 SMA; -36% from 52-week high
+  SKYA       52  -47% from 52-week high
+  VCYT       46  50 SMA falling
+  KVYO       40  50 SMA falling; -38% from 52-week high
+  PGY        40  below the 50 SMA; 50 SMA falling; -37% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
