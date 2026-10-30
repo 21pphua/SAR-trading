@@ -1,40 +1,45 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6239 · with data 6239 · passed filters 745  (2026-10-29T01:17:57+00:00)
+Scanned 6240 · with data 6240 · passed filters 753  (2026-10-30T01:26:10+00:00)
 MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   STOPPED      121 sh  last    26.15   +6.2R  +$767
+  NTSK   STOPPED      121 sh  last    26.52   +6.5R  +$812
            Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
-  NBIS   STOPPED        7 sh  last   170.47   -5.1R  -$580
+  NBIS   STOPPED        7 sh  last   182.34   -4.3R  -$497
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
 
-BREAKOUTS (1)
+BREAKOUTS (0)
 ------------------------------------------------------------------------------
-  TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
-  RCEL       80  Take      16.08    15.11  6.0%    20.93    23.57  1.33  99
+  none today
 
-COILING — setup formed, not yet broken out (4)
+COILING — setup formed, not yet broken out (9)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  RPD      35/50      18.11  -2.8%     35%  7.4%    14.32
-  RBRK     37/50     136.19  -0.3%     55%  5.1%   121.19
-  ASAN     37/50      12.07  -1.7%     22%  5.7%    10.94
-  REF      35/50      16.21  -1.3%     21%  6.1%    14.69
+  OABI     44/50       5.13   2.9%    152%  7.4%     4.82  BROKE ON LOW VOLUME ·
+  HTFL     38/50      59.90  -1.3%     87%  6.0%    54.77
+  PLSE     41/50      55.00  -2.4%     46%  6.5%    50.50
+  RBRK     36/50     138.00  -1.4%     43%  5.2%   123.40
+  MRVI     39/50       8.74  -2.7%     58%  7.1%     7.44
+  SMWB     42/50       9.30  -2.2%     28%  5.0%     8.82
+  FIVN     39/50      38.56  -2.4%     36%  6.1%    35.55
+  OBX      44/50      14.70  -0.7%     27%  8.8%    13.37
+  REF      35/50      16.21  -2.5%     21%  6.0%    14.92
 
-WIDE STOP — watch only (1): broke out, but the stop is farther than a normal day
+WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
 ------------------------------------------------------------------------------
-  PRME       78  entry 4.35  stop 3.57  (1.7x ADR)
+  REPL       83  entry 16.06  stop 12.50  (2.9x ADR)
+  GMAB       75  entry 57.29  stop 44.35  (3.9x ADR)
+  PRME       79  entry 5.36  stop 4.11  (1.9x ADR)
 
-SKIPPED — COUNTER-TREND (5): scored well, but not in a long-term uptrend
+SKIPPED — COUNTER-TREND (4): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  NUWE       89  50 SMA falling; below the 200 SMA; -97% from 52-week high
-  UWMC       82  50 SMA falling; below the 200 SMA; -73% from 52-week high
-  CRML       77  below the 200 SMA; -63% from 52-week high
-  GTM        65  below the 200 SMA; -65% from 52-week high
-  SKYA       51  -45% from 52-week high
+  BEAM       75  50 SMA falling
+  CHSN       75  50 SMA falling; below the 200 SMA; -100% from 52-week high
+  BMGL       63  50 SMA falling; below the 200 SMA; -76% from 52-week high
+  KVYO       46  -38% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.

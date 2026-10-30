@@ -1,36 +1,39 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Thu Oct 29, 4:05 PM PT (market closed, prices are the latest close)
-- **Nightly scan used for levels:** Wed Oct 28, 6:17 PM PT
+- **Snapshot taken:** Thu Oct 29, 6:26 PM PT (market closed, prices are the latest close)
+- **Nightly scan used for levels:** Thu Oct 29, 6:26 PM PT
 - **Last intraday check:** 11:47 AM PT
 
 ## Market
 
 - Trend: SPY 10<20 · QQQ 10<20
-- Breadth: 37% of stocks above their 50 SMA
-- **Sizing today: Breadth 37% (weak): no new trades**
+- Breadth: 39% of stocks above their 50 SMA
+- **Sizing today: Breadth 39% (weak): no new trades**
 
 ## Open positions
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **26.19** | 24.66 | +6.19R | +772 | 18.78 | 10 SMA 21.84 | STOPPED |
-| NBIS | 7 | 253.38 | **171.99** | 168.76 | -4.97R | -570 | 237.00 | 10 SMA 169.48 | STOP HIT today (low 168.76 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **nan** | 24.66 | +nanR | +nan | 18.78 | 10 SMA 22.49 | STOPPED |
+| NBIS | 7 | 253.38 | **nan** | 168.76 | +nanR | +nan | 237.00 | 10 SMA 169.11 | STOP HIT today (low 168.76 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
-| Ticker | Score | RS | Entry | Stop | Now | vs entry | Today | Verdict now |
-|---|---|---|---|---|---|---|---|---|
-| RCEL | 80 | 99 | 16.08 | 15.11 | **16.71** | +3.9% | +1.3% | Still buyable near entry |
+None.
 
 ## Alerts (trigger = higher of base high and today's opening-range high)
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| REF | **16.22** | 16.63 | 2.5% | 16.61 | 2.80x | WAITING |
-| RBRK | **133.63** | 139.79 | 4.6% | 139.75 | 1.15x | WAITING |
-| RPD | **17.08** | 18.11 | 6.0% | 17.76 | 1.28x | WAITING |
-| ASAN | **11.26** | 12.07 | 7.2% | 11.41 | 1.03x | WAITING |
+| OABI | **nan** | 5.13 | nan% | 5.41 | 1.22x | Waiting |
+| HTFL | **nan** | 59.90 | nan% | 60.56 | 0.78x | Waiting |
+| PLSE | **nan** | 55.00 | nan% | 56.51 | 0.88x | Waiting |
+| RBRK | **nan** | 139.79 | nan% | 139.75 | 1.13x | WAITING |
+| MRVI | **nan** | 8.74 | nan% | 8.62 | 0.52x | Waiting |
+| SMWB | **nan** | 9.30 | nan% | 9.10 | 0.56x | Waiting |
+| FIVN | **nan** | 38.56 | nan% | 37.70 | 0.72x | Waiting |
+| OBX | **nan** | 14.70 | nan% | 15.87 | 0.78x | Waiting |
+| REF | **nan** | 16.63 | nan% | 16.61 | 2.89x | WAITING |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
