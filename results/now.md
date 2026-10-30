@@ -1,8 +1,8 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Thu Oct 29, 6:26 PM PT (market closed, prices are the latest close)
+- **Snapshot taken:** Fri Oct 30, 11:25 AM PT (MARKET OPEN, prices are live)
 - **Nightly scan used for levels:** Thu Oct 29, 6:26 PM PT
-- **Last intraday check:** 11:47 AM PT
+- **Last intraday check:** 11:25 AM PT
 
 ## Market
 
@@ -14,8 +14,8 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **nan** | 24.66 | +nanR | +nan | 18.78 | 10 SMA 22.49 | STOPPED |
-| NBIS | 7 | 253.38 | **nan** | 168.76 | +nanR | +nan | 237.00 | 10 SMA 169.11 | STOP HIT today (low 168.76 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **23.77** | 23.75 | +3.85R | +480 | 18.78 | 10 SMA 22.49 | STOPPED |
+| NBIS | 7 | 253.38 | **151.13** | 150.96 | -6.24R | -716 | 237.00 | 10 SMA 169.11 | STOP HIT today (low 150.96 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
@@ -25,15 +25,15 @@ None.
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| OABI | **nan** | 5.13 | nan% | 5.41 | 1.22x | Waiting |
-| HTFL | **nan** | 59.90 | nan% | 60.56 | 0.78x | Waiting |
-| PLSE | **nan** | 55.00 | nan% | 56.51 | 0.88x | Waiting |
-| RBRK | **nan** | 139.79 | nan% | 139.75 | 1.13x | WAITING |
-| MRVI | **nan** | 8.74 | nan% | 8.62 | 0.52x | Waiting |
-| SMWB | **nan** | 9.30 | nan% | 9.10 | 0.56x | Waiting |
-| FIVN | **nan** | 38.56 | nan% | 37.70 | 0.72x | Waiting |
-| OBX | **nan** | 14.70 | nan% | 15.87 | 0.78x | Waiting |
-| REF | **nan** | 16.63 | nan% | 16.61 | 2.89x | WAITING |
+| HTFL | **57.38** | 59.90 | 4.4% | 59.44 | 0.87x | WAITING |
+| PLSE | **51.83** | 55.00 | 6.1% | 54.69 | 0.65x | WAITING |
+| OBX | **13.85** | 14.70 | 6.2% | 14.64 | 0.77x | WAITING |
+| OABI | **4.82** | 5.13 | 6.5% | 4.97 | 1.30x | WAITING |
+| SMWB | **8.73** | 9.30 | 6.6% | 8.92 | 0.54x | WAITING |
+| REF | **15.57** | 16.75 | 7.5% | 16.75 | 0.54x | WAITING |
+| FIVN | **35.52** | 38.56 | 8.6% | 36.88 | 0.54x | WAITING |
+| MRVI | **7.70** | 8.74 | 13.4% | 8.48 | 0.40x | WAITING |
+| RBRK | **120.98** | 138.00 | 14.1% | 134.35 | 1.78x | WAITING |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
