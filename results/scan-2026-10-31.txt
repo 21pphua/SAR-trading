@@ -1,0 +1,45 @@
+
+SAR BREAKOUT SCAN
+==============================================================================
+Scanned 6239 · with data 6239 · passed filters 757  (2026-10-31T01:02:54+00:00)
+MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
+
+YOUR POSITIONS (2)
+------------------------------------------------------------------------------
+  NTSK   STOPPED      121 sh  last    26.19   +6.2R  +$772
+           Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
+  NBIS   STOPPED        7 sh  last   171.99   -5.0R  -$570
+           Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
+
+BREAKOUTS (2)
+------------------------------------------------------------------------------
+  TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
+  REPL       85  Take      17.39    16.19  6.9%    23.36    21.58  2.18  99
+  REF        75  Take      16.22    15.80  2.6%    18.32    19.56  2.70   0
+
+COILING — setup formed, not yet broken out (4)
+------------------------------------------------------------------------------
+  TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
+  CAI      46/50      36.50  -1.0%     96%  6.8%    32.62
+  OABI     44/50       5.29  -1.1%    148%  7.4%     4.87
+  ELMT     45/50      24.60  -2.1%     46%  7.8%    21.27
+  SG       37/50      11.61  -1.8%     65%  5.3%    10.39
+
+WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
+------------------------------------------------------------------------------
+  TENB       79  entry 51.78  stop 45.42  (2.0x ADR)
+  BHC        77  entry 8.91  stop 7.58  (2.9x ADR)
+  CSTL       80  entry 38.51  stop 36.08  (1.2x ADR)
+
+SKIPPED — COUNTER-TREND (5): scored well, but not in a long-term uptrend
+------------------------------------------------------------------------------
+  PCLA       87  -43% from 52-week high
+  FWRD       78  50 SMA falling; -43% from 52-week high
+  NUWE       66  50 SMA falling; below the 200 SMA; -97% from 52-week high
+  ONT        51  below the 50 SMA; 50 SMA falling; below the 200 SMA; -50% from 52-week high
+  SKYA       43  -35% from 52-week high
+
+FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
+one normal day's range (size down or skip) · LOW-PRICED = under $5.
+Rules-based rating only — not a trade signal. Verify each chart before acting.
+
