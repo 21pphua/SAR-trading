@@ -1,8 +1,8 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Fri Oct 30, 6:02 PM PT (market closed, prices are the latest close)
+- **Snapshot taken:** Mon Nov 2, 2:07 PM PT (market closed, prices are the latest close)
 - **Nightly scan used for levels:** Fri Oct 30, 6:02 PM PT
-- **Last intraday check:** 11:25 AM PT
+- **Last intraday check:** none today
 
 ## Market
 
@@ -14,24 +14,24 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **nan** | 23.73 | +nanR | +nan | 18.78 | 10 SMA 23.06 | STOPPED |
-| NBIS | 7 | 253.38 | **nan** | 149.99 | +nanR | +nan | 237.00 | 10 SMA 167.47 | STOP HIT today (low 149.99 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **22.00** | 21.90 | +2.13R | +265 | 18.78 | 10 SMA 23.06 | BELOW 10 SMA — sell if it closes here |
+| NBIS | 7 | 253.38 | **141.39** | 140.60 | -6.84R | -784 | 237.00 | 10 SMA 167.47 | STOP HIT today (low 140.60 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
 | Ticker | Score | RS | Entry | Stop | Now | vs entry | Today | Verdict now |
 |---|---|---|---|---|---|---|---|---|
-| REPL | 85 | 99 | 17.39 | 16.19 | **nan** | +nan% | +nan% | Still buyable near entry |
-| REF | 75 | None | 16.22 | 15.80 | **nan** | +nan% | +nan% | FAILED — traded below the stop |
+| REPL | 85 | 99 | 17.39 | 16.19 | **19.49** | +12.1% | +10.7% | SKIP — 12.1% above entry, stop too far now |
+| REF | 75 | None | 16.22 | 15.80 | **15.90** | -2.0% | +0.5% | FAILED — traded below the stop |
 
 ## Alerts (trigger = higher of base high and today's opening-range high)
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| CAI | **nan** | 36.50 | nan% | 35.71 | 1.02x | Waiting |
-| OABI | **nan** | 5.13 | nan% | 5.11 | 1.55x | WAITING |
-| ELMT | **nan** | 24.60 | nan% | 23.41 | 0.66x | Waiting |
-| SG | **nan** | 11.61 | nan% | 11.60 | 0.77x | Waiting |
+| SG | **11.47** | 11.61 | 1.3% | 11.95 | 1.11x | Waiting |
+| OABI | **5.09** | 5.29 | 3.9% | 5.31 | 1.58x | Waiting |
+| ELMT | **22.13** | 24.60 | 11.2% | 23.90 | 0.57x | Waiting |
+| CAI | **32.10** | 36.50 | 13.7% | 35.05 | 0.91x | Waiting |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
