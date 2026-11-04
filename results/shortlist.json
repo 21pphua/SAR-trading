@@ -1,14 +1,14 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-11-03T03:08:27+00:00",
+ "generated": "2026-11-04T01:42:17+00:00",
  "live": null,
- "scanned": 6237,
+ "scanned": 6233,
  "passed_filters": 813,
  "regime": {
   "SPY": false,
   "QQQ": false
  },
- "breadth": 42.3,
+ "breadth": 42.1,
  "size_mult": 0.5,
  "size_note": "Half size (breadth 42% and SPY down)",
  "counter_trend": [
@@ -20,7 +20,7 @@
   {
    "ticker": "SKYA",
    "score": 41,
-   "why": "-34% from 52-week high"
+   "why": "-31% from 52-week high"
   }
  ],
  "too_tight": [],
@@ -145,7 +145,7 @@
     }
    ],
    "earnings_date": "2026-11-05",
-   "days_to_earnings": 2,
+   "days_to_earnings": 1,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 8.543200016021729,
@@ -187,20 +187,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": 0.0195,
+   "sector_1m": 0.0197,
    "kind": "coiling",
    "risk_adr": 0.51,
    "wide_stop": false,
    "earnings_soon": true,
    "bars": [
-    [
-     "2025-11-03",
-     6.27,
-     6.51,
-     6.2,
-     6.41,
-     6127800
-    ],
     [
      "2025-11-04",
      6.25,
@@ -2259,10 +2251,10 @@
     {
      "key": "breakvol",
      "title": "On high volume",
-     "frac": 0.47725874720247335,
+     "frac": 0.4835132267010486,
      "points": 10,
      "max_points": 20,
-     "metric": "1.38x avg vol",
+     "metric": "1.39x avg vol",
      "status": "partial"
     },
     {
@@ -2283,9 +2275,9 @@
    "run_high": 3.4000000953674316,
    "runup_pct": 0.3940678424137982,
    "adr_pct": 0.05683799259835594,
-   "dollar_vol": 62878913.26625466,
+   "dollar_vol": 62896952.716578245,
    "sma10": 3.015000009536743,
-   "volx": 1.3818069977619787,
+   "volx": 1.386810581360839,
    "targets": [
     {
      "label": "+1 ADR",
@@ -2331,7 +2323,7 @@
     }
    ],
    "earnings_date": "2026-11-04",
-   "days_to_earnings": 1,
+   "days_to_earnings": 0,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 2.824000015258789,
@@ -2373,20 +2365,12 @@
      "exit": "sma"
     }
    },
-   "sector_1m": 0.0195,
+   "sector_1m": 0.0197,
    "kind": "coiling",
    "risk_adr": 0.83,
    "wide_stop": false,
    "earnings_soon": true,
    "bars": [
-    [
-     "2025-11-03",
-     2.59,
-     2.64,
-     2.52,
-     2.58,
-     24246500
-    ],
     [
      "2025-11-04",
      2.55,
@@ -4385,10 +4369,10 @@
      3.26,
      3.04,
      3.19,
-     29068300
+     29181400
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -4517,7 +4501,7 @@
     }
    ],
    "earnings_date": "2026-12-03",
-   "days_to_earnings": 30,
+   "days_to_earnings": 29,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 85.69260025024414,
@@ -4559,20 +4543,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": 0.0195,
+   "sector_1m": 0.0197,
    "kind": "coiling",
    "risk_adr": 0.24,
    "wide_stop": false,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-03",
-     35.49,
-     36.645,
-     34.9,
-     36.01,
-     2420900
-    ],
     [
      "2025-11-04",
      35.13,
@@ -6574,7 +6550,7 @@
      1529200
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -6709,7 +6685,7 @@
     }
    ],
    "earnings_date": "2026-11-04",
-   "days_to_earnings": 1,
+   "days_to_earnings": 0,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 1.5682000064849853,
@@ -6757,14 +6733,6 @@
    "wide_stop": false,
    "earnings_soon": true,
    "bars": [
-    [
-     "2025-11-03",
-     1.37,
-     1.43,
-     1.36,
-     1.4,
-     3269300
-    ],
     [
      "2025-11-04",
      1.37,
@@ -8766,7 +8734,7 @@
      3081600
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -8898,7 +8866,7 @@
    "rs_rank": 99,
    "sector": "Health Care",
    "group": "Biotechnology: Biological Products (No Diagnostic Substances)",
-   "group_rank": 24,
+   "group_rank": 22,
    "base_days": 42,
    "contractions": [
     0.0841,
@@ -8937,14 +8905,6 @@
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-03",
-     9.35,
-     9.55,
-     8.255,
-     9.305,
-     6544900
-    ],
     [
      "2025-11-04",
      9.19,
@@ -11122,14 +11082,6 @@
    "earnings_soon": false,
    "bars": [
     [
-     "2025-11-03",
-     26.14,
-     26.57,
-     25.4,
-     26.53,
-     2859100
-    ],
-    [
      "2025-11-04",
      26.14,
      26.21,
@@ -13155,14 +13107,6 @@
    "pnl": 264.9900000000002,
    "bars": [
     [
-     "2025-11-03",
-     23.86,
-     24.98,
-     23.52,
-     24.26,
-     2791600
-    ],
-    [
      "2025-11-04",
      23.5,
      23.58,
@@ -15184,14 +15128,6 @@
    "pnl": -783.9300042724609,
    "bars": [
     [
-     "2025-11-03",
-     134.0,
-     134.93,
-     119.75,
-     120.47,
-     17247000
-    ],
-    [
      "2025-11-04",
      112.355,
      116.78,
@@ -17189,25 +17125,21 @@
      155.355,
      140.6,
      141.39,
-     20280200
+     20434700
     ]
    ]
   }
  ],
  "previous": {
-  "generated": "2026-10-31T01:02:54+00:00",
+  "generated": "2026-11-03T03:08:27+00:00",
   "breakouts": [
-   "REPL",
-   "REF",
-   "TENB",
-   "BHC",
-   "CSTL"
+   "REPL"
   ],
   "coiling": [
-   "CAI",
-   "OABI",
-   "ELMT",
-   "SG"
+   "SG",
+   "AMC",
+   "VSXY",
+   "OPK"
   ]
  }
 }
