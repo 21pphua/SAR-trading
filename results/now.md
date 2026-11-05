@@ -1,6 +1,6 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Wed Nov 4, 12:16 PM PT (MARKET OPEN, prices are live)
+- **Snapshot taken:** Wed Nov 4, 4:58 PM PT (market closed, prices are the latest close)
 - **Nightly scan used for levels:** Tue Nov 3, 5:42 PM PT
 - **Last intraday check:** 12:16 PM PT
 
@@ -14,8 +14,8 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **22.72** | 21.61 | +2.83R | +352 | 18.78 | 10 SMA 23.85 | BELOW 10 SMA — sell if it closes here |
-| NBIS | 7 | 253.38 | **141.12** | 140.44 | -6.85R | -786 | 237.00 | 10 SMA 163.45 | STOP HIT today (low 140.44 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **22.77** | 21.62 | +2.87R | +358 | 18.78 | 10 SMA 23.85 | BELOW 10 SMA — sell if it closes here |
+| NBIS | 7 | 253.38 | **141.52** | 140.02 | -6.83R | -783 | 237.00 | 10 SMA 163.45 | STOP HIT today (low 140.02 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
@@ -25,10 +25,10 @@ None.
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| SG | **11.74** | 11.80 | 0.5% | 11.84 | 1.40x | ABOVE BASE |
-| AMC | **3.44** | 3.46 | 0.6% | 3.56 | 3.24x | ABOVE BASE |
-| OPK | **1.76** | 1.78 | 0.8% | 1.80 | 0.48x | WAITING |
-| VSXY | **108.42** | 106.20 | -2.0% | 109.82 | 1.48x | TRIGGERED at 12:16 PM |
+| SG | **11.80** | 11.80 | 0.0% | 11.83 | 0.92x | ABOVE BASE |
+| OPK | **1.77** | 1.78 | 0.6% | 1.80 | 0.86x | WAITING |
+| AMC | **3.52** | 3.46 | -1.7% | 3.56 | 2.03x | Above trigger now (wait for the next live check to confirm) |
+| VSXY | **108.95** | 106.20 | -2.5% | 109.77 | 1.28x | TRIGGERED at 12:16 PM |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
