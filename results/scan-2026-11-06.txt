@@ -1,0 +1,50 @@
+
+SAR BREAKOUT SCAN
+==============================================================================
+Scanned 6232 · with data 6232 · passed filters 880  (2026-11-06T01:50:01+00:00)
+MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
+
+YOUR POSITIONS (2)
+------------------------------------------------------------------------------
+  NTSK   STOPPED      121 sh  last    22.77   +2.9R  +$358
+           Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
+  NBIS   STOPPED        7 sh  last   141.52   -6.8R  -$783
+           Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
+
+BREAKOUTS (1)
+------------------------------------------------------------------------------
+  TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
+  AMC        85  Take       3.52     3.33  5.4%     4.47     4.40  1.92  98  LOW-PRICED
+
+COILING — setup formed, not yet broken out (5)
+------------------------------------------------------------------------------
+  TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
+  CHPT     42/50      11.13   2.5%     99%  7.9%     9.36  BROKE ON LOW VOLUME ·  WIDE STOP 1.0xADR
+  SG       36/50      11.95  -1.2%     70%  5.5%    10.86
+  OPK      35/50       1.81  -2.2%     27%  5.4%     1.66  LOW-PRICED
+  ALEC     45/50       2.32  -1.7%     39%  9.5%     2.08  LOW-PRICED
+  ADIG     37/50      19.20  -1.5%     10%  6.0%    17.50  EARNINGS 6d
+
+WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
+------------------------------------------------------------------------------
+  PLSE       82  entry 57.06  stop 52.85  (1.1x ADR)
+  FOSL       78  entry 7.62  stop 6.91  (1.8x ADR)
+  VCYT       82  entry 52.52  stop 49.29  (1.2x ADR)
+
+SKIPPED — COUNTER-TREND (10): scored well, but not in a long-term uptrend
+------------------------------------------------------------------------------
+  OMH        89  50 SMA falling; below the 200 SMA; -86% from 52-week high
+  BETA       86  50 SMA falling; -36% from 52-week high
+  GMRS       85  50 SMA falling
+  CAPR       84  below the 200 SMA; -78% from 52-week high
+  EVER       75  50 SMA falling
+  VERA       60  50 SMA falling; below the 200 SMA; -43% from 52-week high
+  AMLX       55  below the 50 SMA; -29% from 52-week high
+  PSIG       54  -57% from 52-week high
+  BMGL       47  50 SMA falling; below the 200 SMA; -72% from 52-week high
+  SKYA       43  -29% from 52-week high
+
+FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
+one normal day's range (size down or skip) · LOW-PRICED = under $5.
+Rules-based rating only — not a trade signal. Verify each chart before acting.
+
