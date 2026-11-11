@@ -1,7 +1,7 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6229 · with data 6229 · passed filters 1107  (2026-11-10T03:48:20+00:00)
+Scanned 6229 · with data 6229 · passed filters 1108  (2026-11-11T01:30:48+00:00)
 MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
@@ -20,10 +20,10 @@ BREAKOUTS (2)
 COILING — setup formed, not yet broken out (6)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  KOD      45/50     103.73   3.2%    217%  7.5%    98.04  BROKE ON LOW VOLUME ·  EARNINGS 2d
+  KOD      45/50     103.73   3.2%    217%  7.5%    98.04  BROKE ON LOW VOLUME ·  EARNINGS 1d
   OABI     42/50       5.41  -1.9%     49%  7.3%     5.12
   PLSE     41/50      58.17   0.0%     24%  7.6%    54.13  WIDE STOP 1.1xADR
-  MANE     38/50     146.58  -1.8%     34%  6.7%   137.91  EARNINGS 2d · WIDE STOP 1.3xADR
+  MANE     38/50     146.58  -1.8%     34%  6.7%   137.91  WIDE STOP 1.3xADR
   TEM      37/50      84.47  -0.0%     72%  9.5%    76.16  WIDE STOP 1.0xADR
   SRZN     47/50      32.80  -2.4%    108%  8.2%    30.12
 
@@ -35,7 +35,7 @@ WIDE STOP — watch only (3): broke out, but the stop is farther than a normal d
 
 SKIPPED — COUNTER-TREND (13): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  CAPR       81  below the 200 SMA; -76% from 52-week high
+  CAPR       82  below the 200 SMA; -76% from 52-week high
   TTD        81  50 SMA falling; below the 200 SMA; -67% from 52-week high
   DC         80  50 SMA falling
   ETON       79  50 SMA falling

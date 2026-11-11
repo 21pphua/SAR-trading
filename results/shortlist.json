@@ -1,20 +1,20 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-11-10T03:48:20+00:00",
+ "generated": "2026-11-11T01:30:48+00:00",
  "live": null,
  "scanned": 6229,
- "passed_filters": 1107,
+ "passed_filters": 1108,
  "regime": {
   "SPY": false,
   "QQQ": false
  },
- "breadth": 48.4,
+ "breadth": 47.3,
  "size_mult": 0.5,
- "size_note": "Half size (breadth 48% and SPY down)",
+ "size_note": "Half size (breadth 47% and SPY down)",
  "counter_trend": [
   {
    "ticker": "CAPR",
-   "score": 81,
+   "score": 82,
    "why": "below the 200 SMA; -76% from 52-week high"
   },
   {
@@ -207,9 +207,9 @@
    "sma200": 7.649199979305267,
    "pct_from_high": -0.005018815922963271,
    "rs_rank": 99,
-   "sector": "Health Care",
-   "group": "Biotechnology: Pharmaceutical Preparations",
-   "group_rank": 9,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 21,
    "contractions": [
     0.05,
@@ -242,20 +242,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "breakout",
    "risk_adr": 0.88,
    "wide_stop": false,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     7.54,
-     7.75,
-     7.22,
-     7.72,
-     3527300
-    ],
     [
      "2025-11-11",
      7.73,
@@ -2257,7 +2249,7 @@
      5935200
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -2387,9 +2379,9 @@
    "sma200": 9.674350030422211,
    "pct_from_high": -0.05111263218552642,
    "rs_rank": 97,
-   "sector": "Health Care",
-   "group": "Biotechnology: Biological Products (No Diagnostic Substances)",
-   "group_rank": 21,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 25,
    "contractions": [
     0.0983,
@@ -2422,20 +2414,12 @@
      "exit": "sma"
     }
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "breakout",
    "risk_adr": 0.75,
    "wide_stop": false,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     5.3,
-     5.415,
-     5.22,
-     5.37,
-     1570400
-    ],
     [
      "2025-11-11",
      5.35,
@@ -4437,7 +4421,7 @@
      7122500
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -4560,16 +4544,16 @@
     }
    ],
    "earnings_date": "2026-11-12",
-   "days_to_earnings": 2,
+   "days_to_earnings": 1,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 70.9481997680664,
    "sma200": 44.249399948120114,
    "pct_from_high": -0.003998886915811739,
    "rs_rank": 99,
-   "sector": "Health Care",
-   "group": "Biotechnology: Biological Products (No Diagnostic Substances)",
-   "group_rank": 21,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 21,
    "contractions": [
     0.2344,
@@ -4602,20 +4586,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "coiling",
    "risk_adr": 0.94,
    "wide_stop": false,
    "earnings_soon": true,
    "bars": [
-    [
-     "2025-11-10",
-     18.38,
-     19.06,
-     18.19,
-     18.49,
-     450600
-    ],
     [
      "2025-11-11",
      20.02,
@@ -6617,7 +6593,7 @@
      1128100
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -6759,9 +6735,9 @@
    "sma200": 2.796824997663498,
    "pct_from_high": -0.027522866748595165,
    "rs_rank": 99,
-   "sector": "Health Care",
-   "group": "Biotechnology: Commercial Physical & Biological Resarch",
-   "group_rank": 99,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 47,
    "contractions": [
     0.0622,
@@ -6794,20 +6770,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "coiling",
    "risk_adr": 0.75,
    "wide_stop": false,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     1.4,
-     1.5,
-     1.4,
-     1.49,
-     510100
-    ],
     [
      "2025-11-11",
      1.5,
@@ -8809,7 +8777,7 @@
      2474100
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -8945,9 +8913,9 @@
    "sma200": 32.55092505455017,
    "pct_from_high": -0.01306414108762366,
    "rs_rank": 99,
-   "sector": "Health Care",
-   "group": "Medical/Dental Instruments",
-   "group_rank": 52,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 39,
    "contractions": [
     0.0444,
@@ -8980,20 +8948,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "coiling",
    "risk_adr": 1.09,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     15.6,
-     16.13,
-     15.23,
-     15.355,
-     126000
-    ],
     [
      "2025-11-11",
      15.43,
@@ -10995,7 +10955,7 @@
      534700
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -11123,17 +11083,17 @@
      "note": "breakout-day low"
     }
    ],
-   "earnings_date": "2026-11-12",
-   "days_to_earnings": 2,
+   "earnings_date": null,
+   "days_to_earnings": null,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 118.67680038452148,
    "sma200": null,
    "pct_from_high": -0.017942453608670306,
    "rs_rank": 99,
-   "sector": "Health Care",
-   "group": "Biotechnology: Pharmaceutical Preparations",
-   "group_rank": 9,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 21,
    "contractions": [
     0.2117,
@@ -11166,11 +11126,11 @@
      "exit": "sma"
     }
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "coiling",
    "risk_adr": 1.3,
    "wide_stop": true,
-   "earnings_soon": true,
+   "earnings_soon": false,
    "bars": [
     [
      "2026-02-04",
@@ -12717,7 +12677,7 @@
      492100
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -12774,7 +12734,7 @@
     {
      "key": "breakvol",
      "title": "On high volume",
-     "frac": 0.2861070667250473,
+     "frac": 0.2886841122571332,
      "points": 6,
      "max_points": 20,
      "metric": "1.23x avg vol",
@@ -12798,9 +12758,9 @@
    "run_high": 89.08999633789062,
    "runup_pct": 0.7236629007093667,
    "adr_pct": 0.09453654129173372,
-   "dollar_vol": 479554542.8605652,
+   "dollar_vol": 479615761.8623352,
    "sma10": 76.1630012512207,
-   "volx": 1.2288856533800379,
+   "volx": 1.2309472898057066,
    "targets": [
     {
      "label": "Resistance 1",
@@ -12859,9 +12819,9 @@
    "sma200": 57.22709997177124,
    "pct_from_high": -0.052194343782980934,
    "rs_rank": 97,
-   "sector": "Technology",
-   "group": "Computer Software: Programming Data Processing",
-   "group_rank": 23,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 30,
    "contractions": [
     0.1076,
@@ -12894,20 +12854,12 @@
      "exit": "sma"
     }
    },
-   "sector_1m": -0.0924,
+   "sector_1m": null,
    "kind": "coiling",
    "risk_adr": 1.0,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     75.84,
-     75.85,
-     71.63,
-     71.78,
-     6132600
-    ],
     [
      "2025-11-11",
      71.6,
@@ -14906,10 +14858,10 @@
      85.75,
      76.43,
      84.44,
-     8111100
+     8125600
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -15051,9 +15003,9 @@
    "sma200": 25.429825019836425,
    "pct_from_high": -0.15411053525957885,
    "rs_rank": 90,
-   "sector": "Health Care",
-   "group": "Biotechnology: Biological Products (No Diagnostic Substances)",
-   "group_rank": 21,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 32,
    "contractions": [
     0.1127,
@@ -15078,20 +15030,12 @@
     "n": 0,
     "years": 5.8
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "coiling",
    "risk_adr": 0.35,
    "wide_stop": false,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     12.0,
-     12.281,
-     11.66,
-     11.8,
-     15100
-    ],
     [
      "2025-11-11",
      11.88,
@@ -17093,7 +17037,7 @@
      120800
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -17223,9 +17167,9 @@
    "sma200": 21.438850002288817,
    "pct_from_high": -0.18967814516932247,
    "rs_rank": 99,
-   "sector": "Technology",
-   "group": "Computer Software: Prepackaged Software",
-   "group_rank": 85,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 20,
    "contractions": [
     0.0439,
@@ -17250,20 +17194,12 @@
     "n": 0,
     "years": 1.2
    },
-   "sector_1m": -0.0924,
+   "sector_1m": null,
    "kind": "wide",
    "risk_adr": 3.15,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     51.32,
-     52.25,
-     50.26,
-     51.56,
-     219300
-    ],
     [
      "2025-11-11",
      51.24,
@@ -19265,7 +19201,7 @@
      1421300
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -19401,9 +19337,9 @@
    "sma200": 17.122249937057497,
    "pct_from_high": -0.011545275421604217,
    "rs_rank": 99,
-   "sector": "Health Care",
-   "group": "Biotechnology: Pharmaceutical Preparations",
-   "group_rank": 9,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 25,
    "contractions": [
     0.0977,
@@ -19436,20 +19372,12 @@
      "exit": "sma"
     }
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "wide",
    "risk_adr": 1.38,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     18.27,
-     18.7,
-     18.08,
-     18.29,
-     1183300
-    ],
     [
      "2025-11-11",
      18.29,
@@ -21451,7 +21379,7 @@
      2705200
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
@@ -21574,16 +21502,16 @@
     }
    ],
    "earnings_date": "2026-12-10",
-   "days_to_earnings": 30,
+   "days_to_earnings": 29,
    "trend_ok": true,
    "trend_note": "uptrend",
    "sma50": 5.025800008773803,
    "sma200": 3.799200006723404,
    "pct_from_high": -0.035928164913695326,
    "rs_rank": 99,
-   "sector": "Consumer Discretionary",
-   "group": "Apparel",
-   "group_rank": 36,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 20,
    "contractions": [
     0.0792,
@@ -21608,20 +21536,12 @@
     "n": 0,
     "years": 16.0
    },
-   "sector_1m": 0.0231,
+   "sector_1m": null,
    "kind": "wide",
    "risk_adr": 1.83,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     2.38,
-     2.41,
-     2.34,
-     2.35,
-     96200
-    ],
     [
      "2025-11-11",
      2.36,
@@ -23623,13 +23543,13 @@
      1248300
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   },
   {
    "ticker": "CAPR",
    "date": "2026-11-09",
-   "score": 81,
+   "score": 82,
    "verdict": "Take",
    "steps": [
     {
@@ -23680,10 +23600,10 @@
     {
      "key": "breakvol",
      "title": "On high volume",
-     "frac": 0.5220411124908364,
-     "points": 10,
+     "frac": 0.5315242798156974,
+     "points": 11,
      "max_points": 20,
-     "metric": "1.42x avg vol",
+     "metric": "1.43x avg vol",
      "status": "partial"
     },
     {
@@ -23703,10 +23623,10 @@
    "run_low": 6.010000228881836,
    "run_high": 11.0,
    "runup_pct": 0.5993641463636883,
-   "adr_pct": 0.09731834304370661,
-   "dollar_vol": 24821629.03359413,
+   "adr_pct": 0.09731834304370665,
+   "dollar_vol": 24835074.284114838,
    "sma10": 7.719000053405762,
-   "volx": 1.4176328899926691,
+   "volx": 1.425219423852558,
    "targets": [
     {
      "label": "Resistance 1",
@@ -23765,9 +23685,9 @@
    "sma200": 20.212750067710875,
    "pct_from_high": -0.7560069199385075,
    "rs_rank": 95,
-   "sector": "Health Care",
-   "group": "Biotechnology: Pharmaceutical Preparations",
-   "group_rank": 9,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 51,
    "contractions": [
     0.2101,
@@ -23800,20 +23720,12 @@
      "exit": "sma"
     }
    },
-   "sector_1m": -0.0224,
+   "sector_1m": null,
    "kind": "counter",
    "risk_adr": 1.36,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     6.0,
-     6.27,
-     5.43,
-     5.56,
-     3939200
-    ],
     [
      "2025-11-11",
      5.89,
@@ -25812,7 +25724,7 @@
      10.01,
      8.55,
      9.85,
-     4737800
+     4765100
     ]
    ],
    "new": true,
@@ -25875,7 +25787,7 @@
      "frac": 1.0,
      "points": 20,
      "max_points": 20,
-     "metric": "5.19x avg vol",
+     "metric": "5.33x avg vol",
      "status": "met"
     },
     {
@@ -25896,9 +25808,9 @@
    "run_high": 15.305000305175781,
    "runup_pct": 0.15809673536708235,
    "adr_pct": 0.050333627413188545,
-   "dollar_vol": 246824626.9661665,
+   "dollar_vol": 249308381.81693554,
    "sma10": 13.01200008392334,
-   "volx": 5.194364241564795,
+   "volx": 5.325743784174174,
    "targets": [
     {
      "label": "Resistance 1",
@@ -25957,9 +25869,9 @@
    "sma200": 19.39072507381439,
    "pct_from_high": -0.6718681251609718,
    "rs_rank": 30,
-   "sector": "Technology",
-   "group": "Computer Software: Programming Data Processing",
-   "group_rank": 23,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 46,
    "contractions": [
     0.0977,
@@ -25976,7 +25888,7 @@
     "Daily range went from 4.4% to 4.6% (widening). Base is 46 trading days old (long, can be sloppy). Pullbacks: 10% \u2192 6% \u2192 6% \u2192 8%.",
     "Volume in the base was 67% of the run-up's (dried up: sellers gone).",
     "Closed +9.1% vs the base high 13.68 (broke out).",
-    "Volume 5.2\u00d7 normal (strong; 1.3\u00d7 needed).",
+    "Volume 5.3\u00d7 normal (strong; 1.3\u00d7 needed).",
     "Closed at 77% of the day's range (top quarter: buyers held it)."
    ],
    "refine_pts": 0,
@@ -25992,20 +25904,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": -0.0924,
+   "sector_1m": null,
    "kind": "counter",
    "risk_adr": 1.57,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     44.05,
-     44.87,
-     42.01,
-     43.26,
-     23444600
-    ],
     [
      "2025-11-11",
      43.31,
@@ -28004,7 +27908,7 @@
      15.29,
      13.75,
      14.93,
-     96518300
+     99845500
     ]
    ],
    "new": true,
@@ -28148,10 +28052,10 @@
    "sma50": 5.849999980926514,
    "sma200": 5.5692500042915345,
    "pct_from_high": -0.11034485389446391,
-   "rs_rank": 58,
-   "sector": "Basic Materials",
-   "group": "Metal Mining",
-   "group_rank": 1,
+   "rs_rank": 59,
+   "sector": "",
+   "group": "",
+   "group_rank": null,
    "base_days": 34,
    "contractions": [
     0.0669,
@@ -28184,20 +28088,12 @@
      "exit": "stop"
     }
    },
-   "sector_1m": -0.0565,
+   "sector_1m": null,
    "kind": "counter",
    "risk_adr": 0.75,
    "wide_stop": false,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-10",
-     4.2,
-     4.265,
-     4.1,
-     4.21,
-     707000
-    ],
     [
      "2025-11-11",
      4.24,
@@ -30224,14 +30120,6 @@
    "pnl": 324.27997230529803,
    "bars": [
     [
-     "2025-11-10",
-     22.6,
-     23.19,
-     22.435,
-     22.5,
-     1055400
-    ],
-    [
      "2025-11-11",
      22.5,
      22.81,
@@ -32253,14 +32141,6 @@
    "pnl": -783.5100213623047,
    "bars": [
     [
-     "2025-11-10",
-     115.18,
-     118.37,
-     108.72,
-     109.95,
-     21363600
-    ],
-    [
      "2025-11-11",
      114.13,
      114.56,
@@ -34258,17 +34138,27 @@
      143.39,
      128.51,
      141.45,
-     18860800
+     19053600
     ]
    ]
   }
  ],
  "previous": {
-  "generated": "2026-11-07T01:11:07+00:00",
+  "generated": "2026-11-10T03:48:20+00:00",
   "breakouts": [
-   "CERT",
-   "FOSL"
+   "XERS",
+   "VIR",
+   "VIA",
+   "SDGR",
+   "VRA"
   ],
-  "coiling": []
+  "coiling": [
+   "KOD",
+   "OABI",
+   "PLSE",
+   "MANE",
+   "TEM",
+   "SRZN"
+  ]
  }
 }
