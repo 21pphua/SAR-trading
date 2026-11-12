@@ -1,52 +1,36 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6229 · with data 6229 · passed filters 1108  (2026-11-11T01:30:48+00:00)
+Scanned 6226 · with data 6226 · passed filters 1121  (2026-11-12T02:31:01+00:00)
 MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   STOPPED      121 sh  last    22.49   +2.6R  +$324
+  NTSK   STOPPED      121 sh  last    21.44   +1.6R  +$197
            Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
-  NBIS   STOPPED        7 sh  last   141.45   -6.8R  -$784
+  NBIS   STOPPED        7 sh  last   134.00   -7.3R  -$836
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
 
-BREAKOUTS (2)
+BREAKOUTS (0)
 ------------------------------------------------------------------------------
-  TICKER  SCORE  VERDICT    ENTRY     STOP    R%       5R       MM  VOLx  RS  FLAGS
-  XERS       77  Take      15.86    15.09  4.9%    19.71    19.14  1.83  99
-  VIR        76  Take      13.65    13.00  4.7%    16.87    15.42  3.59  97
+  none today
 
-COILING — setup formed, not yet broken out (6)
+COILING — setup formed, not yet broken out (3)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  KOD      45/50     103.73   3.2%    217%  7.5%    98.04  BROKE ON LOW VOLUME ·  EARNINGS 1d
-  OABI     42/50       5.41  -1.9%     49%  7.3%     5.12
-  PLSE     41/50      58.17   0.0%     24%  7.6%    54.13  WIDE STOP 1.1xADR
-  MANE     38/50     146.58  -1.8%     34%  6.7%   137.91  WIDE STOP 1.3xADR
-  TEM      37/50      84.47  -0.0%     72%  9.5%    76.16  WIDE STOP 1.0xADR
-  SRZN     47/50      32.80  -2.4%    108%  8.2%    30.12
+  VIA      35/50      44.98  -0.7%     30%  6.4%    38.37  WIDE STOP 1.0xADR
+  CHPT     42/50      12.45  -1.6%     99%  8.5%    10.73
+  SRZN     44/50      33.50  -2.6%    108%  8.0%    30.43
 
-WIDE STOP — watch only (3): broke out, but the stop is farther than a normal day
+SKIPPED — COUNTER-TREND (7): scored well, but not in a long-term uptrend
 ------------------------------------------------------------------------------
-  VIA        83  entry 42.55  stop 34.20  (3.2x ADR)
-  SDGR       82  entry 33.39  stop 29.45  (1.4x ADR)
-  VRA        81  entry 8.05  stop 7.00  (1.8x ADR)
-
-SKIPPED — COUNTER-TREND (13): scored well, but not in a long-term uptrend
-------------------------------------------------------------------------------
-  CAPR       82  below the 200 SMA; -76% from 52-week high
-  TTD        81  50 SMA falling; below the 200 SMA; -67% from 52-week high
-  DC         80  50 SMA falling
-  ETON       79  50 SMA falling
-  SMMT       78  -39% from 52-week high
-  BETA       77  50 SMA falling
-  RHLD       77  50 SMA falling; -31% from 52-week high
-  SFIX       60  50 SMA falling; below the 200 SMA; -49% from 52-week high
-  AMLX       59  50 SMA falling; -27% from 52-week high
-  YSS        57  below the 50 SMA; 50 SMA falling; -84% from 52-week high
-  BMGL       52  50 SMA falling; below the 200 SMA; -71% from 52-week high
-  ADIG       46  50 SMA falling; -38% from 52-week high
+  ZIP        82  50 SMA falling
+  TANH       78  50 SMA falling; -49% from 52-week high
+  SMX        75  below the 50 SMA; 50 SMA falling; below the 200 SMA; -100% from 52-week high
+  ALEC       66  50 SMA falling
+  PSIG       54  -55% from 52-week high
+  SMMT       46  -39% from 52-week high
+  YSS        44  below the 50 SMA; 50 SMA falling; -84% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
