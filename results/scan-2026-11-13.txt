@@ -1,0 +1,41 @@
+
+SAR BREAKOUT SCAN
+==============================================================================
+Scanned 6224 · with data 6224 · passed filters 1121  (2026-11-13T02:10:32+00:00)
+MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
+
+YOUR POSITIONS (2)
+------------------------------------------------------------------------------
+  NTSK   STOPPED      121 sh  last    22.37   +2.5R  +$310
+           Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
+  NBIS   STOPPED        7 sh  last   154.69   -6.0R  -$691
+           Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
+
+BREAKOUTS (0)
+------------------------------------------------------------------------------
+  none today
+
+COILING — setup formed, not yet broken out (1)
+------------------------------------------------------------------------------
+  TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
+  VNCE     42/50      13.90  -2.4%    166%  9.3%    12.49
+
+WIDE STOP — watch only (1): broke out, but the stop is farther than a normal day
+------------------------------------------------------------------------------
+  AZTA       82  entry 48.90  stop 43.67  (1.7x ADR)
+
+SKIPPED — COUNTER-TREND (8): scored well, but not in a long-term uptrend
+------------------------------------------------------------------------------
+  CAPR       92  below the 200 SMA; -72% from 52-week high
+  AMLX       76  50 SMA falling
+  ALEC       65  50 SMA falling
+  LMB        57  below the 200 SMA; -50% from 52-week high
+  PSIG       53  -55% from 52-week high
+  YSS        51  below the 50 SMA; 50 SMA falling; -84% from 52-week high
+  IRD        48  below the 50 SMA; -39% from 52-week high
+  ADIG       47  50 SMA falling; -37% from 52-week high
+
+FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
+one normal day's range (size down or skip) · LOW-PRICED = under $5.
+Rules-based rating only — not a trade signal. Verify each chart before acting.
+
