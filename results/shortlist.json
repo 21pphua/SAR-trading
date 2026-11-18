@@ -1,17 +1,23 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-11-17T04:12:33+00:00",
+ "generated": "2026-11-18T03:11:02+00:00",
  "live": null,
- "scanned": 6226,
- "passed_filters": 1122,
+ "scanned": 6225,
+ "passed_filters": 1131,
  "regime": {
   "SPY": false,
   "QQQ": false
  },
- "breadth": 39.9,
+ "breadth": 35.7,
  "size_mult": 0.0,
- "size_note": "Breadth 40% (weak): no new trades",
- "counter_trend": [],
+ "size_note": "Breadth 36% (weak): no new trades",
+ "counter_trend": [
+  {
+   "ticker": "BRBR",
+   "score": 75,
+   "why": "50 SMA falling; below the 200 SMA; -67% from 52-week high"
+  }
+ ],
  "too_tight": [],
  "results": [],
  "positions": [
@@ -23,25 +29,17 @@
    "date": "2026-10-06",
    "status": "STOPPED",
    "action": "Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.",
-   "last": 21.860000610351562,
-   "last_date": "2026-11-16",
-   "sma10": 21.979000091552734,
-   "sma20": 22.913500022888183,
+   "last": 20.850000381469727,
+   "last_date": "2026-11-17",
+   "sma10": 21.880000114440918,
+   "sma20": 22.965000057220458,
    "exit_line": "10 SMA",
    "stop_now": 18.78,
    "target_5r": 24.959999999999987,
    "hit_5r_date": "",
-   "r_now": 1.9902918547102608,
-   "pnl": 248.0500738525392,
+   "r_now": 1.0097091082230392,
+   "pnl": 125.84004615783707,
    "bars": [
-    [
-     "2025-11-17",
-     19.94,
-     20.145,
-     18.68,
-     19.33,
-     1454800
-    ],
     [
      "2025-11-18",
      18.87,
@@ -2041,6 +2039,14 @@
      20.93,
      21.86,
      4351000
+    ],
+    [
+     "2026-11-17",
+     21.81,
+     22.295,
+     20.152,
+     20.85,
+     5291500
     ]
    ]
   },
@@ -2052,25 +2058,17 @@
    "date": "2026-10-06",
    "status": "STOPPED",
    "action": "Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.",
-   "last": 107.12999725341797,
-   "last_date": "2026-11-16",
-   "sma10": 132.48100051879882,
-   "sma20": 147.9670009613037,
+   "last": 106.03500366210938,
+   "last_date": "2026-11-17",
+   "sma10": 127.92050094604492,
+   "sma20": 144.69625129699708,
    "exit_line": "10 SMA",
    "stop_now": 237.0,
    "target_5r": 335.28,
    "hit_5r_date": "",
-   "r_now": -8.928571596250432,
-   "pnl": -1023.7500192260742,
+   "r_now": -8.995421021849246,
+   "pnl": -1031.4149743652342,
    "bars": [
-    [
-     "2025-11-17",
-     83.82,
-     89.65,
-     83.59,
-     85.98,
-     23478700
-    ],
     [
      "2025-11-18",
      83.78,
@@ -4069,13 +4067,21 @@
      111.55,
      104.75,
      107.13,
-     29940300
+     30200700
+    ],
+    [
+     "2026-11-17",
+     108.87,
+     111.9,
+     102.25,
+     106.035,
+     30546000
     ]
    ]
   }
  ],
  "previous": {
-  "generated": "2026-11-14T01:46:33+00:00",
+  "generated": "2026-11-17T04:12:33+00:00",
   "breakouts": [],
   "coiling": []
  }
