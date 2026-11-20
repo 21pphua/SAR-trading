@@ -1,8 +1,8 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Thu Nov 19, 6:36 PM PT (market closed, prices are the latest close)
+- **Snapshot taken:** Fri Nov 20, 12:54 PM PT (MARKET OPEN, prices are live)
 - **Nightly scan used for levels:** Thu Nov 19, 6:36 PM PT
-- **Last intraday check:** 1:10 PM PT
+- **Last intraday check:** 12:54 PM PT
 
 ## Market
 
@@ -14,8 +14,8 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **nan** | 24.25 | +nanR | +nan | 18.78 | 10 SMA 21.95 | STOPPED |
-| NBIS | 7 | 253.38 | **nan** | 96.54 | +nanR | +nan | 237.00 | 10 SMA 124.46 | STOP HIT today (low 96.54 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **23.79** | 23.14 | +3.86R | +482 | 18.78 | 10 SMA 21.95 | STOPPED |
+| NBIS | 7 | 253.38 | **82.21** | 81.99 | -10.45R | -1,198 | 237.00 | 10 SMA 124.46 | STOP HIT today (low 81.99 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
