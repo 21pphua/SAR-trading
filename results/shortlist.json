@@ -1,16 +1,16 @@
 {
  "format": "sar-shortlist/1",
- "generated": "2026-11-19T02:48:31+00:00",
+ "generated": "2026-11-20T02:36:53+00:00",
  "live": null,
- "scanned": 6224,
- "passed_filters": 1166,
+ "scanned": 6223,
+ "passed_filters": 1159,
  "regime": {
   "SPY": false,
   "QQQ": false
  },
- "breadth": 35.3,
+ "breadth": 32.5,
  "size_mult": 0.0,
- "size_note": "Breadth 35% (weak): no new trades",
+ "size_note": "Breadth 32% (weak): no new trades",
  "counter_trend": [
   {
    "ticker": "LMB",
@@ -77,7 +77,7 @@
      "frac": 1.0,
      "points": 20,
      "max_points": 20,
-     "metric": "8.41x avg vol",
+     "metric": "8.48x avg vol",
      "status": "met"
     },
     {
@@ -97,10 +97,10 @@
    "run_low": 1.2599999904632568,
    "run_high": 2.9200000762939453,
    "runup_pct": 1.2677166596017169,
-   "adr_pct": 0.08822329796437908,
-   "dollar_vol": 5753659.683872461,
+   "adr_pct": 0.08822329796437912,
+   "dollar_vol": 5796838.835068941,
    "sma10": 2.793000030517578,
-   "volx": 8.410371048370063,
+   "volx": 8.481031481530078,
    "targets": [
     {
      "label": "+1 ADR",
@@ -149,7 +149,7 @@
    "rs_rank": 99,
    "sector": "Health Care",
    "group": "Medical/Dental Instruments",
-   "group_rank": 44,
+   "group_rank": 45,
    "base_days": 20,
    "contractions": [
     0.0342,
@@ -165,7 +165,7 @@
     "Daily range went from 1.9% to 5.3% (widening). Base is 20 trading days old (2\u20138 weeks: ideal). Pullbacks: 3% \u2192 4% \u2192 32%.",
     "Volume in the base was 64% of the run-up's (dried up: sellers gone).",
     "Closed +37.9% vs the base high 2.99 (broke out).",
-    "Volume 8.4\u00d7 normal (strong; 1.3\u00d7 needed).",
+    "Volume 8.5\u00d7 normal (strong; 1.3\u00d7 needed).",
     "Closed at 89% of the day's range (top quarter: buyers held it)."
    ],
    "refine_pts": 0,
@@ -173,20 +173,12 @@
     "n": 0,
     "years": 4.6
    },
-   "sector_1m": -0.0652,
+   "sector_1m": -0.0705,
    "kind": "wide",
    "risk_adr": 5.5,
    "wide_stop": true,
    "earnings_soon": false,
    "bars": [
-    [
-     "2025-11-19",
-     3.08,
-     3.134,
-     2.86,
-     2.97,
-     96900
-    ],
     [
      "2025-11-20",
      3.03,
@@ -2185,10 +2177,10 @@
      4.39,
      2.125,
      4.13,
-     14334300
+     14543400
     ]
    ],
-   "new": true,
+   "new": false,
    "fired": false
   }
  ],
@@ -2212,14 +2204,6 @@
    "r_now": 3.5873778259870015,
    "pnl": 447.09489845275897,
    "bars": [
-    [
-     "2025-11-19",
-     18.56,
-     18.7,
-     17.56,
-     17.66,
-     2539400
-    ],
     [
      "2025-11-20",
      18.13,
@@ -4218,7 +4202,7 @@
      23.743,
      20.76,
      23.505,
-     6636100
+     6647300
     ]
    ]
   },
@@ -4241,14 +4225,6 @@
    "r_now": -8.938949994842941,
    "pnl": -1024.9400064086913,
    "bars": [
-    [
-     "2025-11-19",
-     93.005,
-     96.72,
-     91.8,
-     95.07,
-     22040600
-    ],
     [
      "2025-11-20",
      99.43,
@@ -6247,14 +6223,16 @@
      110.22,
      100.8,
      106.96,
-     26212300
+     26588000
     ]
    ]
   }
  ],
  "previous": {
-  "generated": "2026-11-18T03:11:02+00:00",
-  "breakouts": [],
+  "generated": "2026-11-19T02:48:31+00:00",
+  "breakouts": [
+   "SKYA"
+  ],
   "coiling": []
  }
 }
