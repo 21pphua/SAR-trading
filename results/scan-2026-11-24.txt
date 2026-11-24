@@ -1,0 +1,25 @@
+
+SAR BREAKOUT SCAN
+==============================================================================
+Scanned 6219 · with data 6219 · passed filters 1233  (2026-11-24T05:31:58+00:00)
+MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
+
+YOUR POSITIONS (2)
+------------------------------------------------------------------------------
+  NTSK   STOPPED      121 sh  last    25.82   +5.8R  +$727
+           Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
+  NBIS   STOPPED        7 sh  last    97.80   -9.5R  -$1,089
+           Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
+
+BREAKOUTS (0)
+------------------------------------------------------------------------------
+  none today
+
+COILING — setup formed, not yet broken out (0)
+------------------------------------------------------------------------------
+  none
+
+FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
+one normal day's range (size down or skip) · LOW-PRICED = under $5.
+Rules-based rating only — not a trade signal. Verify each chart before acting.
+
