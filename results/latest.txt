@@ -1,14 +1,14 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6219 · with data 6219 · passed filters 1233  (2026-11-24T05:31:58+00:00)
+Scanned 6219 · with data 6219 · passed filters 1261  (2026-11-25T04:35:22+00:00)
 MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
 ------------------------------------------------------------------------------
-  NTSK   STOPPED      121 sh  last    25.82   +5.8R  +$727
+  NTSK   STOPPED      121 sh  last    25.53   +5.6R  +$692
            Stop 18.78 was hit on 2026-10-16. Close the position if your broker hasn't already.
-  NBIS   STOPPED        7 sh  last    97.80   -9.5R  -$1,089
+  NBIS   STOPPED        7 sh  last    87.31  -10.1R  -$1,162
            Stop 237.00 was hit on 2026-10-07. Close the position if your broker hasn't already.
 
 BREAKOUTS (0)
@@ -18,6 +18,18 @@ BREAKOUTS (0)
 COILING — setup formed, not yet broken out (0)
 ------------------------------------------------------------------------------
   none
+
+WIDE STOP — watch only (1): broke out, but the stop is farther than a normal day
+------------------------------------------------------------------------------
+  KOD        82  entry 114.68  stop 105.63  (1.1x ADR)
+
+SKIPPED — COUNTER-TREND (5): scored well, but not in a long-term uptrend
+------------------------------------------------------------------------------
+  EMBC       84  -44% from 52-week high
+  RARE       65  50 SMA falling; below the 200 SMA; -55% from 52-week high
+  LQDA       62  50 SMA falling; -37% from 52-week high
+  IRD        59  50 SMA falling; -37% from 52-week high
+  VKTX       50  50 SMA falling; below the 200 SMA; -32% from 52-week high
 
 FLAGS: EARNINGS = report within the next few days (gap risk) · WIDE STOP = stop farther than
 one normal day's range (size down or skip) · LOW-PRICED = under $5.
