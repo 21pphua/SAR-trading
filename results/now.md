@@ -1,6 +1,6 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Wed Nov 25, 7:48 PM PT (market closed, prices are the latest close)
+- **Snapshot taken:** Thu Nov 26, 2:06 PM PT (market closed, prices are the latest close)
 - **Nightly scan used for levels:** Wed Nov 25, 7:48 PM PT
 - **Last intraday check:** none today
 
