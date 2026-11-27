@@ -1,6 +1,6 @@
 # SAR — current snapshot
 
-- **Snapshot taken:** Thu Nov 26, 7:49 PM PT (market closed, prices are the latest close)
+- **Snapshot taken:** Fri Nov 27, 1:48 PM PT (market closed, prices are the latest close)
 - **Nightly scan used for levels:** Thu Nov 26, 7:49 PM PT
 - **Last intraday check:** none today
 
@@ -14,8 +14,8 @@
 
 | Ticker | Shares | Entry | Now | Day low | R now | P&L | Stop | Exit line | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| NTSK | 121 | 19.81 | **26.44** | 23.99 | +6.44R | +802 | 18.78 | 10 SMA 23.68 | STOPPED |
-| NBIS | 7 | 253.38 | **84.99** | 75.60 | -10.28R | -1,179 | 237.00 | 10 SMA 101.30 | STOP HIT today (low 75.60 ≤ 237.00) |
+| NTSK | 121 | 19.81 | **28.50** | 26.38 | +8.44R | +1,051 | 18.78 | 10 SMA 23.68 | STOPPED |
+| NBIS | 7 | 253.38 | **89.46** | 83.88 | -10.01R | -1,147 | 237.00 | 10 SMA 101.30 | STOP HIT today (low 83.88 ≤ 237.00) |
 
 ## Breakouts (from last night's scan, priced now)
 
@@ -25,9 +25,9 @@ None.
 
 | Ticker | Now | Trigger | Away | Day high | Vol pace | Status |
 |---|---|---|---|---|---|---|
-| NTSK | **26.44** | 26.71 | 1.0% | 27.09 | 1.39x | Waiting |
-| CNXC | **33.53** | 33.93 | 1.2% | 34.06 | 1.12x | Waiting |
-| SAIL | **22.87** | 23.54 | 2.9% | 22.90 | 1.08x | Waiting |
+| SAIL | **23.52** | 23.54 | 0.1% | 23.95 | 0.54x | Waiting |
+| CNXC | **35.37** | 33.93 | -4.1% | 36.07 | 1.08x | Above trigger now (wait for the next live check to confirm) |
+| NTSK | **28.50** | 26.71 | -6.3% | 28.84 | 1.22x | Above trigger now (wait for the next live check to confirm) |
 
 ---
 Rules-based summary, not a trade signal. Check each chart before acting.
