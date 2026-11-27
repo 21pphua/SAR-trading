@@ -1,7 +1,7 @@
 
 SAR BREAKOUT SCAN
 ==============================================================================
-Scanned 6218 · with data 6218 · passed filters 1294  (2026-11-26T03:48:37+00:00)
+Scanned 6218 · with data 6218 · passed filters 1294  (2026-11-27T03:49:01+00:00)
 MARKET:  SPY 10<20 ✗ · QQQ 10<20 ✗  ->  UNFAVORABLE — expect a lower win rate
 
 YOUR POSITIONS (2)
@@ -18,7 +18,7 @@ BREAKOUTS (0)
 COILING — setup formed, not yet broken out (3)
 ------------------------------------------------------------------------------
   TICKER   PREP    ALERT >    GAP  RUN-UP   ADR   10 SMA  FLAGS
-  NTSK     39/50      26.71  -1.0%     93%  8.7%    23.68  EARNINGS 6d · WIDE STOP 1.1xADR
+  NTSK     39/50      26.71  -1.0%     93%  8.7%    23.68  EARNINGS 5d · WIDE STOP 1.1xADR
   SAIL     35/50      23.54  -2.8%     30%  6.7%    21.51  WIDE STOP 1.3xADR
   CNXC     35/50      33.93  -1.2%     38%  6.0%    31.10  WIDE STOP 1.3xADR
 
